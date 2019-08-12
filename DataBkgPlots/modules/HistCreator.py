@@ -186,7 +186,6 @@ class CreateHists(object):
                 #This is for debugging
                 set_trace()
 
-            # set_trace()
             if cfg.is_singlefake == True:
                 norm_cut  = self.hist_cfg.region.SF_LL
                 self.norm_cut_LL  = self.hist_cfg.region.SF_LL
@@ -229,7 +228,8 @@ class CreateHists(object):
                 # norm_cut = self.hist_cfg.region.nonprompt + " && (l1_gen_match_isPromptFinalState==1 && l2_gen_match_isPromptFinalState==1)"
                 # norm_cut = self.hist_cfg.region.nonprompt
                 # norm_cut  = self.hist_cfg.region.MC
-                norm_cut  = self.hist_cfg.region.MC_contamination_pass
+                norm_cut  = self.hist_cfg.region.MC_contamination_fail
+
             
             weight = self.hist_cfg.weight
             if cfg.weight_expr:
@@ -278,15 +278,15 @@ class CreateHists(object):
         plot = self.plots[vcfg.name]
 
         if (not cfg.is_data) and (not cfg.is_doublefake) and (not cfg.is_singlefake) and (not cfg.is_nonprompt):
-            weight = weight + ' * ' + str(self.hist_cfg.lumi*cfg.xsec/cfg.sumweights)
+            # weight = weight + ' * ' + str(self.hist_cfg.lumi*cfg.xsec/cfg.sumweights)
+            weight = '1.0'
 
         gSystem.Load("modules/DDE_doublefake_h.so")
         gSystem.Load("modules/DDE_singlefake_h.so")
-
-        dataframe =   dataframe\
-                                .Define('norm_count','1.')\
-                                .Define('l0_pt_cone','l0_pt * (1 + l0_reliso_rho_03)')\
-                                .Define('pt_cone','(  ( hnl_hn_vis_pt * (hnl_iso03_rel_rhoArea<0.2) ) + ( (hnl_iso03_rel_rhoArea>=0.2) * ( hnl_hn_vis_pt * (1. + hnl_iso03_rel_rhoArea - 0.2) ) )  )')\
+	dataframe =   dataframe\
+				.Define('norm_count','1.')\
+                                # .Define('l0_pt_cone','l0_pt * (1 + l0_reliso_rho_03)')\
+                                # .Define('pt_cone','(  ( hnl_hn_vis_pt * (hnl_iso03_rel_rhoArea<0.2) ) + ( (hnl_iso03_rel_rhoArea>=0.2) * ( hnl_hn_vis_pt * (1. + hnl_iso03_rel_rhoArea - 0.2) ) )  )')\
                                 # .Define('eta_hnl_l0','hnl_hn_eta - l0_eta')\
                                 # .Define('abs_dphi_hnvis0','abs(hnl_dphi_hnvis0)')\
                                 # .Define('abs_hnl_hn_eta','abs(hnl_hn_eta)')\
@@ -315,7 +315,7 @@ class CreateHists(object):
                                         .Define('doubleFakeWeight','doubleFakeRate/(1.0-doubleFakeRate)')
                                         # .Filter('doubleFakeRate != 1')\
 
-            if cfg.is_nonprompt:
+            if cfg.is_nonprompt or cfg.is_contamination:
                 dataframe =   dataframe\
                                         .Define('nonprompt_FakeRate','nonprompt.ml_fr')\
                                         .Define('nonprompt_FakeWeight','nonprompt_FakeRate/(1.0-nonprompt_FakeRate)')
@@ -329,40 +329,6 @@ class CreateHists(object):
 
         # define additional columns for the ptcone correction
         gSystem.Load("modules/pt_ConeCorrection_h.so")
-        dataframe =   dataframe\
-                                .Define('l0_px_ConeCorrected','pt_ConeCorrection::pCone(l0_px, l0_reliso_rho_03)')\
-                                .Define('l0_py_ConeCorrected','pt_ConeCorrection::pCone(l0_py, l0_reliso_rho_03)')\
-                                .Define('l0_pz_ConeCorrected','pt_ConeCorrection::pCone(l0_pz, l0_reliso_rho_03)')\
-                                .Define('l0_e_ConeCorrected' ,'pt_ConeCorrection::pCone(l0_e , l0_reliso_rho_03)')\
-                                .Define('l1_px_ConeCorrected','pt_ConeCorrection::pCone(l1_px, l1_reliso_rho_03)')\
-                                .Define('l1_py_ConeCorrected','pt_ConeCorrection::pCone(l1_py, l1_reliso_rho_03)')\
-                                .Define('l1_pz_ConeCorrected','pt_ConeCorrection::pCone(l1_pz, l1_reliso_rho_03)')\
-                                .Define('l1_e_ConeCorrected' ,'pt_ConeCorrection::pCone(l1_e , l1_reliso_rho_03)')\
-                                .Define('l2_px_ConeCorrected','pt_ConeCorrection::pCone(l2_px, l2_reliso_rho_03)')\
-                                .Define('l2_py_ConeCorrected','pt_ConeCorrection::pCone(l2_py, l2_reliso_rho_03)')\
-                                .Define('l2_pz_ConeCorrected','pt_ConeCorrection::pCone(l2_pz, l2_reliso_rho_03)')\
-                                .Define('l2_e_ConeCorrected' ,'pt_ConeCorrection::pCone(l2_e , l2_reliso_rho_03)')\
-                                .Define('hnl_m_12_ConeCorrected','pt_ConeCorrection::dimass(\
-                                        l1_px_ConeCorrected,\
-                                        l1_py_ConeCorrected,\
-                                        l1_pz_ConeCorrected,\
-                                        l1_e_ConeCorrected,\
-                                        l2_px_ConeCorrected,\
-                                        l2_py_ConeCorrected,\
-                                        l2_pz_ConeCorrected,\
-                                        l2_e_ConeCorrected\
-                                        )')\
-                                .Define('hnl_m_12_ConeCorrected_test','pt_ConeCorrection::dimass(\
-                                        l1_px,\
-                                        l1_py,\
-                                        l1_pz,\
-                                        l1_e,\
-                                        l2_px,\
-                                        l2_py,\
-                                        l2_pz,\
-                                        l2_e\
-                                        )')
-                                
 
 
         if cfg.is_singlefake:
@@ -459,9 +425,9 @@ class CreateHists(object):
             all the data/MC scale-factors applied).
             '''
 
-            weight = weight + ' * (-1)'
-            # weight = weight 
-            # weight = '(-1)'
+            # weight = weight + ' * (-1)'
+	    # weight = weight 
+	    weight = '(-1) * nonprompt_FakeWeight'
             # weight = 'contamination_FakeWeight'
             # dataframe =   dataframe\
                                     # .Define('contamination_FakeRate','-1')\
@@ -471,6 +437,7 @@ class CreateHists(object):
 
         
         if not cfg.is_singlefake:
+	    if cfg.name == 'data_2017B': weight = '1.0'
             if 'nbinsx' in vcfg.binning.keys():
                 hists[vcfg.name] =   dataframe\
                                         .Define('w',weight)\

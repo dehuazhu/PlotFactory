@@ -465,13 +465,13 @@ def createSampleLists(analysis_dir='',
         SampleCfg(name='doublefake_F', dir_name=dataF_name, ana_dir=data_dir, tree_prod_name=tree_prod_name, is_data=False, is_doublefake=True, norm_cut=add_data_cut),                                
     ]
 
-    samples_data = [
-        SampleCfg(name='data_2017B', dir_name=dataB_name, ana_dir=data_dir, tree_prod_name=tree_prod_name, is_data=True, norm_cut=add_data_cut),                                         #nevents =  5265969 
-        SampleCfg(name='data_2017C', dir_name=dataC_name, ana_dir=data_dir, tree_prod_name=tree_prod_name, is_data=True, norm_cut=add_data_cut),                                         #nevents = 10522062 
-        SampleCfg(name='data_2017D', dir_name=dataD_name, ana_dir=data_dir, tree_prod_name=tree_prod_name, is_data=True, norm_cut=add_data_cut),                                           #nevents =  3829353
-        SampleCfg(name='data_2017E', dir_name=dataE_name, ana_dir=data_dir, tree_prod_name=tree_prod_name, is_data=True, norm_cut=add_data_cut),                                         #nevents = 10926946 
-        SampleCfg(name='data_2017F', dir_name=dataF_name, ana_dir=data_dir, tree_prod_name=tree_prod_name, is_data=True, norm_cut=add_data_cut),                                         #nevents = 19122658 ; SUM of BCDEF = 49'666'988
-    ]
+    # samples_data = [
+        # SampleCfg(name='data_2017B', dir_name=dataB_name, ana_dir=data_dir, tree_prod_name=tree_prod_name, is_data=True, norm_cut=add_data_cut),                                         #nevents =  5265969 
+        # SampleCfg(name='data_2017C', dir_name=dataC_name, ana_dir=data_dir, tree_prod_name=tree_prod_name, is_data=True, norm_cut=add_data_cut),                                         #nevents = 10522062 
+        # SampleCfg(name='data_2017D', dir_name=dataD_name, ana_dir=data_dir, tree_prod_name=tree_prod_name, is_data=True, norm_cut=add_data_cut),                                           #nevents =  3829353
+        # SampleCfg(name='data_2017E', dir_name=dataE_name, ana_dir=data_dir, tree_prod_name=tree_prod_name, is_data=True, norm_cut=add_data_cut),                                         #nevents = 10926946 
+        # SampleCfg(name='data_2017F', dir_name=dataF_name, ana_dir=data_dir, tree_prod_name=tree_prod_name, is_data=True, norm_cut=add_data_cut),                                         #nevents = 19122658 ; SUM of BCDEF = 49'666'988
+    # ]
 
     samples_nonprompt = [
         SampleCfg(name='nonprompt_B', dir_name=dataB_name, ana_dir=data_dir, tree_prod_name=tree_prod_name, is_data=False, is_nonprompt=True, norm_cut=add_data_cut),                                
@@ -481,6 +481,49 @@ def createSampleLists(analysis_dir='',
         SampleCfg(name='nonprompt_F', dir_name=dataF_name, ana_dir=data_dir, tree_prod_name=tree_prod_name, is_data=False, is_nonprompt=True, norm_cut=add_data_cut),                                
     ]
 
+    samples_nonprompt = [
+        SampleCfg(name='nonprompt_B', 
+            dir_name='PromptSubtraction', 
+            ana_dir='/home/dehuazhu/HNL/CMSSW_9_4_6_patch1/src/PlotFactory/DataBkgPlots/playground/', 
+            tree_prod_name='', 
+            is_data=False,
+            is_nonprompt=True,
+            norm_cut=add_data_cut,
+            )
+        ]
+
+    samples_data = [
+        SampleCfg(name='data_2017B', 
+            dir_name='PromptSubtraction', 
+            ana_dir='/home/dehuazhu/HNL/CMSSW_9_4_6_patch1/src/PlotFactory/DataBkgPlots/playground/', 
+            tree_prod_name='', 
+            is_data=True,
+            is_nonprompt=False,
+            norm_cut=add_data_cut,
+            )
+        ]
+
+    samples_mc = [
+        SampleCfg(name='WZ_contamination', 
+            dir_name='PromptSubtraction', 
+            ana_dir='/home/dehuazhu/HNL/CMSSW_9_4_6_patch1/src/PlotFactory/DataBkgPlots/playground/', 
+            tree_prod_name='', 
+            xsec=12.14, 
+            sumweights=None, 
+	    is_nonprompt = True,
+            is_contamination=True),
+        ]
+
+    samples_Diboson = [
+	    SampleCfg(name='WZ', 
+		dir_name='PromptSubtraction', 
+		ana_dir='/home/dehuazhu/HNL/CMSSW_9_4_6_patch1/src/PlotFactory/DataBkgPlots/playground/', 
+		tree_prod_name='', 
+		xsec=12.14, 
+		sumweights=None, 
+		# is_MC=True,
+		is_MC=True),
+            ]
 
     # samples_mc =  samples_DY + samples_WJets + samples_TTJets + samples_Diboson + samples_SingleConversions + samples_SingleTop 
     # samples_mc =  samples_DY + samples_TTJets + samples_Diboson + samples_SingleConversions + samples_SingleTop 
@@ -495,11 +538,14 @@ def createSampleLists(analysis_dir='',
     # samples_mc =  samples_Diboson + samples_Conversions 
     # samples_mc =  samples_Diboson 
     # samples_bkg =  samples_nonprompt_promptRemoved + samples_mc
-    samples_mc =  samples_Conversions + samples_TTJets + samples_Diboson 
-    samples_bkg =  samples_nonprompt + samples_mc
+
+    # # samples_mc =  samples_Conversions + samples_TTJets + samples_Diboson 
+    samples_bkg =  samples_nonprompt + samples_mc + samples_Diboson
 
 
-    samples_all = samples_bkg + samples_data + samples_signal
+    # # samples_all = samples_bkg + samples_data + samples_signal
+
+    samples_all = samples_bkg + samples_data
     # samples_all = samples_singlefake + samples_doublefake +tttmples_data
     # samples_all = samples_singlefake + samples_data
     # samples_all = samples_singlefake
@@ -512,6 +558,7 @@ def createSampleLists(analysis_dir='',
     # samples_all = samples_data + samples_Conversions
     # samples_all = samples_nonprompt
     # samples_all = samples_signal
+
 
 
     return samples_all, samples_singlefake, samples_doublefake, samples_nonprompt, samples_mc
@@ -527,6 +574,7 @@ def getSumWeight(sample, weight_dir='SkimAnalyzerCount', norm=True):
                 if f1[i].find('Sum Norm Weights') != -1: 
                     return float(f1[i].split()[3])
     except:
+        if sample.name == 'nonprompt_B' or sample.name == 'WZ_contamination' or sample.name == 'WZ': return 1.0
         print 'Warning: could not find sum weights information or the following file does not even exist: %s'%(sumNormWeights_file_dir)
         set_trace()
 

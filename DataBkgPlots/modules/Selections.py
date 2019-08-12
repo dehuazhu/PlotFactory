@@ -502,3 +502,10 @@ class Region(object):
         self.MC_contamination_pass      = self.MC        + Prompt_extension
         self.MC_contamination_fail      = self.nonprompt + Prompt_extension
 
+        self.data = '((ele_iso<2) & (ele_iso<0.15 & ele_id>0.5))'
+        self.nonprompt = '((ele_iso<2) & !(ele_iso<0.15 & ele_id>0.5))'
+        Prompt_extension ='((ele_genPartFlav == 1) + (ele_genPartFlav == 15) + (ele_genPartFlav == 22))'
+                        
+        self.MC_contamination_pass = self.data + ' * ' +  Prompt_extension
+        self.MC_contamination_fail = self.nonprompt + ' * ' + Prompt_extension
+

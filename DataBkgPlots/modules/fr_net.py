@@ -46,7 +46,7 @@ os.environ['TF_CPP_MIN_LOG_LEVEL']='2' #used to deactivate Tensorflow minor warn
 
 ROOT.EnableImplicitMT()
 # fix random seed for reproducibility (FIXME! not really used by Keras)
-np.random.seed(1986)
+# np.random.seed(1986)
 
 def f(q,key):
     q.put([key, None, 'hello'])
@@ -164,6 +164,8 @@ def createArrays(features, branches, path_to_NeuralNet, faketype = 'DoubleFake',
         selection_passing_MC = region.MC_contamination_pass
         selection_failing_MC = region.MC_contamination_fail
 
+
+
     # convert TChain object into numpy arrays for the training
     start = time.time()
     if multiprocess == True:
@@ -214,7 +216,8 @@ def createArrays(features, branches, path_to_NeuralNet, faketype = 'DoubleFake',
     
     #giving data the contamination weight '1' (i.e. ignore it)
     for array in [df_pass, df_fail]:
-        array['contamination_weight'] = array.weight * array.lhe_weight 
+        # array['contamination_weight'] = array.weight * array.lhe_weight 
+        array['contamination_weight'] = 1.0 
 
     # adding MC prompt contamination
     print 'now adding MC prompt contamination to the training'
@@ -242,20 +245,21 @@ def createArrays(features, branches, path_to_NeuralNet, faketype = 'DoubleFake',
             xsec        = sample[2]
             sumweights  = sample[3]
             try:
-                array['contamination_weight'] = array.weight * array.lhe_weight * lumi * (-1) *  xsec / sumweights
+                array['contamination_weight'] =  (-1) 
+                # array['contamination_weight'] = array.weight * array.lhe_weight * lumi * (-1) *  xsec / sumweights
                 # array['contamination_weight'] = array.weight * array.lhe_weight * lumi *  xsec /sumweights 
             except:
                 set_trace()
 
             
             if sample[0] == 'pass':
-                df_pass = pd.concat([df_pass,array]) 
-                # df_fail = pd.concat([df_fail,array])
+                # df_pass = pd.concat([df_pass,array]) 
+		df_fail = pd.concat([df_fail,array])
                 print 'added pass events to df_pass: %d'%len(array)
 
             if sample[0] == 'fail':
-                df_pass = pd.concat([df_pass,array]) 
-                # df_fail = pd.concat([df_fail,array])
+                # df_fail = pd.concat([df_fail,array]) 
+		df_fail = pd.concat([df_fail,array])
                 print 'added fail events to df_pass: %d'%len(array)
 
 
@@ -750,6 +754,13 @@ def get_features_nonprompt():
         # 'pfmet_pt',
         'sv_prob',
     ]
+    features = [
+	'ele_pt',
+	'ele_eta',
+	'ele_dxy', 
+	'ele_dz',
+	'ele_phi',
+    ]
     return features
 
 def get_branches_nonprompt(features):
@@ -776,6 +787,15 @@ def get_branches_nonprompt(features):
         # 'l2_pt',
         # 'l1_eta',
         # 'l2_eta',
+    ]
+    branches = features + [
+	    'ele_genPartFlav',
+	    'ele_iso',
+	    'ele_id',
+	    'z_eta',
+	    'z_pt',
+	    'z_mass',
+	    'z_phi',
     ]
     return branches
 
@@ -811,11 +831,11 @@ def path_to_NeuralNet(faketype ='nonprompt',channel = 'mmm'):
 	    # path_to_NeuralNet = 'NN/mmm_nonprompt_v8_SubtractConversion/'
             # path_to_NeuralNet = 'NN/mmm_nonprompt_v10_TrainWithM12/'
             # path_to_NeuralNet = 'NN/mmm_nonprompt_v11_OnlyForTesting/'
-            # path_to_NeuralNet = 'NN/mmm_nonprompt_v12_CorrectSubtraction/'
+            path_to_NeuralNet = 'NN/mmm_nonprompt_v12_CorrectSubtraction/'
             # path_to_NeuralNet = 'NN/mmm_nonprompt_v13_OneVariable/'
             # path_to_NeuralNet = 'NN/mmm_nonprompt_v14_TrainWithM12DispOnly/'
             # path_to_NeuralNet = 'NN/mmm_nonprompt_v15_TrainWithM12Only/'
-            path_to_NeuralNet = 'NN/mmm_nonprompt_v15_TrainWithSmallSetVariables/'
+            # path_to_NeuralNet = 'NN/mmm_nonprompt_v15_TrainWithSmallSetVariables/'
 
         
         if channel == 'eee':
@@ -868,21 +888,21 @@ if __name__ == '__main__':
 
 
 
-    # train(
-            # features,
-            # branches,
-            # path_to_NeuralNet,
-            # newArrays = True,
-            # faketype = faketype,
-            # channel = channel,	
-            # multiprocess = True,
-            # )
+    train(
+	    features,
+	    branches,
+	    path_to_NeuralNet,
+	    newArrays = True,
+	    faketype = faketype,
+	    channel = channel,	
+	    multiprocess = True,
+	    )
 
     make_all_friendtrees(
-            multiprocess = True,
-            server = hostname,
-            analysis_dir = analysis_dir,
-            channel=channel,
-            path_to_NeuralNet = path_to_NeuralNet,
-            overwrite = False,
-            )
+	    multiprocess = False,
+	    server = hostname,
+	    analysis_dir = analysis_dir,
+	    channel=channel,
+	    path_to_NeuralNet = path_to_NeuralNet,
+	    overwrite = True,
+	    )
