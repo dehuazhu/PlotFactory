@@ -32,7 +32,7 @@ class SampleCfg(object):
         tree_prod_name='HNLTreeProducer', tree_name=None,
         scale=1., weight_expr=None, norm_cut=None, shape_cut=None, 
         xsec=1., sumweights=1., is_signal=False, is_MC=False, is_DY=False, is_SingleConversions=False , is_DoubleConversions=False, is_Conversions = False, is_data=False, is_dde=False,
-        is_doublefake=False, is_singlefake=False, is_nonprompt=False, is_contamination = False,
+        is_doublefake=False, is_singlefake=False, is_nonprompt=False, is_contamination = False, is_mcdata = False,
         cut_replace_func=None,fr_tree_path=''):
         self.name = name
         self.dir_name = name if dir_name is None else dir_name
@@ -63,6 +63,7 @@ class SampleCfg(object):
         self.is_nonprompt = is_nonprompt
         self.is_contamination = is_contamination
         self.fr_tree_path = fr_tree_path 
+        self.is_mcdata = is_mcdata
 
 
 class HistogramCfg(object):

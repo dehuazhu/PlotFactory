@@ -832,11 +832,12 @@ def path_to_NeuralNet(faketype ='nonprompt',channel = 'mmm'):
             # path_to_NeuralNet = 'NN/mmm_nonprompt_v25_TrainWithMC/'
             # path_to_NeuralNet = 'NN/mmm_nonprompt_v26_relaxRelIso2/'
             # path_to_NeuralNet = 'NN/mmm_nonprompt_v27_2Layers/'
-            path_to_NeuralNet = 'NN/mmm_nonprompt_v28_ReproducibilityTest/'
+            # path_to_NeuralNet = 'NN/mmm_nonprompt_v28_ReproducibilityTest/'
             # path_to_NeuralNet = 'NN/mmm_nonprompt_v29_LowM12Disp23/'
             # path_to_NeuralNet = 'NN/mmm_nonprompt_v30_WithDropout2Layers/'
             # path_to_NeuralNet = 'NN/mmm_nonprompt_v31_DropoutWholeRange/'
             # path_to_NeuralNet = 'NN/mmm_nonprompt_v32_DropoutM12_80/'
+            path_to_NeuralNet = 'NN/mmm_nonprompt_v33_Dropout_1Layer/'
         
         if channel == 'eee':
             path_to_NeuralNet = 'NN/eee_nonprompt_v1/'
@@ -913,7 +914,7 @@ if __name__ == '__main__':
             newArrays = True,
             faketype = faketype,
             channel = channel,	
-            multiprocess = False,
+            multiprocess = True,
             )
 
     # make_all_friendtrees(

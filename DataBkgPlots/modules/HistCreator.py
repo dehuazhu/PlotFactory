@@ -222,6 +222,9 @@ class CreateHists(object):
             if cfg.is_data == True:
                 norm_cut  = self.hist_cfg.region.data
 
+            if cfg.is_mcdata == True:
+                norm_cut  = self.hist_cfg.region.data
+
             if cfg.is_signal == True:
                 norm_cut  = self.hist_cfg.region.signal
 
@@ -255,7 +258,7 @@ class CreateHists(object):
             for vcfg in self.vcfgs:
                 var_hist_tuples.append('{var} >> {hist}'.format(var=vcfg.drawname, hist=hists[vcfg.name].GetName()))
 
-            stack = all_stack or (not cfg.is_data and not cfg.is_signal)
+            stack = all_stack or (not cfg.is_data and not cfg.is_signal and not cfg.is_mcdata)
 
 
             # Produce all histograms using the RootDataFrame FW and add them to self.plots

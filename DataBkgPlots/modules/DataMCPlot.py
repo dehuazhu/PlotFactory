@@ -577,10 +577,13 @@ class DataMCPlot(object):
 
     def _ApplyPrefs(self):
         for hist in self.histos:
-            pref = self._GetHistPref(hist.name)
-            hist.layer = pref['layer']
-            hist.SetStyle(pref['style'])
-            hist.legendLine = pref['legend']
+            try:
+                pref = self._GetHistPref(hist.name)
+                hist.layer = pref['layer']
+                hist.SetStyle(pref['style'])
+                hist.legenLine = pref['legend']
+            except:
+                set_trace()
 
     def __str__(self):
         if self.stack is None:

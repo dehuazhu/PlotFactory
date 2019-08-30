@@ -408,9 +408,9 @@ def MR_SF2_closure(channel):
 
 
 def getSelection(channel, selection_name):
-    capping_value = '0.8';
+    # capping_value = '0.8';
     # capping_value = '100.0';
-    # capping_value = '2.0';
+    capping_value = '2.0';
 
     #testing the old version
     if selection_name == 'baseline':
@@ -631,8 +631,10 @@ class Region(object):
                                           ]) + ')' 
                                             
 
-        self.MC_Conversions             = self.MC        + Prompt_extension
-        self.MC_contamination_pass      = self.MC        + Prompt_extension
-        self.MC_contamination_fail      = self.nonprompt + Prompt_extension
+        # self.MC_contamination_pass      = self.MC        + Prompt_extension
+        # self.MC_contamination_fail      = self.nonprompt + Prompt_extension
+
+        self.MC_contamination_pass      = self.MC       
+        self.MC_contamination_fail      = self.nonprompt 
 
 

@@ -360,6 +360,72 @@ def createSampleLists(analysis_dir='',
                 is_MC=True),
             ]
 
+    samples_TTJets_data = [
+            SampleCfg(name='TTJets_data', 
+                dir_name='TTJets', 
+                ana_dir=analysis_dir+bkg_dir, 
+                tree_prod_name=tree_prod_name, 
+                xsec=831.76, 
+                # sumweights=TTJets.nGenEvents, 
+                sumweights=None, 
+                is_mcdata=True,
+                ),
+            ]
+
+    samples_Conversions_data = [
+            SampleCfg(name='Conversions_DYJetsToLL_M10to50_data',
+                dir_name='DYJetsToLL_M10to50', 
+                ana_dir=analysis_dir+bkg_dir, 
+                tree_prod_name=tree_prod_name, 
+                xsec=18610.0, 
+                sumweights=None, 
+                is_mcdata=True,
+                ),
+            SampleCfg(name='Conversions_DYJets_M50_data', 
+                dir_name='DYJetsToLL_M50', 
+                ana_dir=analysis_dir+bkg_dir, 
+                tree_prod_name=tree_prod_name, 
+                xsec=2075.14*3, 
+                sumweights=None, 
+                is_mcdata=True,
+                ),
+            SampleCfg(name='Conversions_DYJets_M50_ext_data', 
+                dir_name='DYJetsToLL_M50_ext', 
+                ana_dir=analysis_dir+bkg_dir, 
+                tree_prod_name=tree_prod_name, 
+                xsec=2075.14*3, 
+                sumweights=None, 
+                is_mcdata=True,
+                ),
+            ]
+
+    samples_Diboson_data = [
+            SampleCfg(name='ZZ_data', 
+                dir_name='ZZ', 
+                ana_dir=analysis_dir+bkg_dir, 
+                tree_prod_name=tree_prod_name, 
+                xsec=12.14, 
+                sumweights=None, 
+                is_mcdata=True,
+                ),
+            SampleCfg(name='WZ_data', 
+                dir_name='WZ', 
+                ana_dir=analysis_dir+bkg_dir, 
+                tree_prod_name=tree_prod_name, 
+                xsec=27.6, 
+                sumweights=None, 
+                is_mcdata=True,
+                ),
+            SampleCfg(name='WW_data', 
+                dir_name='WW', 
+                ana_dir=analysis_dir+bkg_dir, 
+                tree_prod_name=tree_prod_name, 
+                xsec=75.88, 
+                sumweights=None, 
+                is_mcdata=True,
+                ),
+            ]
+
     CH = None #TODO check if the exact same couplings are used for e** and m** samples
     if channel[0] == 'm': CH = 'mu'
     if channel[0] == 'e': CH = 'e'
@@ -498,11 +564,17 @@ def createSampleLists(analysis_dir='',
     # samples_mc =  samples_Diboson + samples_SingleConversions 
     # samples_bkg =  samples_nonprompt + samples_mc
 
-    samples_mc =  samples_Conversions + samples_TTJets + samples_Diboson 
-    samples_mc_contamination = samples_Conversions_contamination + samples_TTJets_contamination + samples_Diboson_contamination
-    samples_nonprompt = samples_nonprompt + samples_mc_contamination 
-    samples_bkg = samples_nonprompt + samples_mc
-    # samples_bkg = samples_mc
+    # MC_Closure
+    samples_mc =  samples_DY + samples_TTJets + samples_Diboson 
+    samples_mc_data = samples_Conversions_data + samples_TTJets_data + samples_Diboson_data
+    samples_data = samples_mc_data
+    samples_bkg = samples_mc
+
+    # # regular production
+    # samples_mc =  samples_Conversions + samples_TTJets + samples_Diboson 
+    # samples_mc_contamination = samples_Conversions_contamination + samples_TTJets_contamination + samples_Diboson_contamination
+    # samples_nonprompt = samples_nonprompt + samples_mc_contamination 
+    # samples_bkg = samples_nonprompt + samples_mc
 
 
     samples_all = samples_bkg + samples_data #for the closureplots

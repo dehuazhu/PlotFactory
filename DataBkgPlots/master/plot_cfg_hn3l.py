@@ -52,22 +52,22 @@ gr.SetBatch(True) # NEEDS TO BE SET FOR MULTIPROCESSING OF plot.Draw()
 # Golden JSON Int.Lumi: from https://twiki.cern.ch/twiki/bin/viewauth/CMS/PdmVAnalysisSummaryTable
 
 # 2016
-int_lumi = 35920.0 # pb
+# int_lumi = 35920.0 # pb
 
 # 2017
 int_lumi = 41530.0 # pb ### (all eras), 
 # int_lumi =  4792.0 # pb (era B)
 
 # 2018
-int_lumi = 59740.0 #pb
+# int_lumi = 59740.0 #pb
 
 
 def prepareRegions(channel):
     regions = []
     # regions.append(Region('SR',channel,'SR'))
-    # regions.append(Region('MR_nonprompt',channel,'SR'))
+    regions.append(Region('MR_nonprompt',channel,'SR'))
     # regions.append(Region('MR_nonprompt_disp1',channel,'SR_disp1'))
-    regions.append(Region('MR_nonprompt_disp2',channel,'SR_disp2'))
+    # regions.append(Region('MR_nonprompt_disp2',channel,'SR_disp2'))
     # regions.append(Region('MR_nonprompt_disp3',channel,'SR_disp3'))
     # regions.append(Region('SR',channel,'SR'))
     # regions.append(Region('SR_disp1',channel,'SR_disp1'))
@@ -171,15 +171,16 @@ def makePlots(plotDir,channel_name,variables, regions, total_weight, sample_dict
             HISTS = CreateHists(cfg_main, analysis_dir,channel_dir,server,useNeuralNetwork)
             plots = HISTS.createHistograms(cfg_main, verbose=False, multiprocess = multiprocess)
             plot = plots[var.name]
-            plot.Group('data_obs', ['data_2017B', 'data_2017C', 'data_2017D', 'data_2017E', 'data_2017F'])
+            # plot.Group('data_obs', ['data_2017B', 'data_2017C', 'data_2017D', 'data_2017E', 'data_2017F'])
+            plot.Group('data_mc',['Conversions_DYJetsToLL_M10to50_data','Conversions_DYJets_M50_data','Conversions_DYJets_M50_ext_data','WZTo3LNu_data','ZZTo4L_data','WW_data','WZ_data','ZZ_data','TTJets_data'])
             # plot.Group('doublefake', ['doublefake_B', 'doublefake_C', 'doublefake_D', 'doublefake_E', 'doublefake_F'])
             # plot.Group('singlefake', ['singlefake_B', 'singlefake_C', 'singlefake_D', 'singlefake_E', 'singlefake_F'])
-            plot.Group('nonprompt', ['nonprompt_B', 'nonprompt_C', 'nonprompt_D', 'nonprompt_E', 'nonprompt_F','Conversions_DYJetsToLL_M10to50_contamination','Conversions_DYJets_M50_contamination','Conversions_DYJets_M50_ext_contamination','WZTo3LNu_contamination','ZZTo4L_contamination','WW_contamination','WZ_contamination','ZZ_contamination','TTJets_contamination'])
-            plot.Group('prompt',['Conversions_DYJetsToLL_M10to50','Conversions_DYJets_M50','Conversions_DYJets_M50_ext','WZTo3LNu','ZZTo4L','WW','WZ','ZZ','TTJets'])
+            # plot.Group('nonprompt', ['nonprompt_B', 'nonprompt_C', 'nonprompt_D', 'nonprompt_E', 'nonprompt_F','Conversions_DYJetsToLL_M10to50_contamination','Conversions_DYJets_M50_contamination','Conversions_DYJets_M50_ext_contamination','WZTo3LNu_contamination','ZZTo4L_contamination','WW_contamination','WZ_contamination','ZZ_contamination','TTJets_contamination'])
+            # plot.Group('prompt',['Conversions_DYJetsToLL_M10to50','Conversions_DYJets_M50','Conversions_DYJets_M50_ext','WZTo3LNu','ZZTo4L','WW','WZ','ZZ','TTJets'])
             # plot.Group('contamination', ['conversionsSingle_DYJets_M50_contamination', 'conversionsSingle_DYJets_M50_ext_contamination', 'conversionsSingle_DYJetsToLL_M10to50_contamination','WW_contamination','WZ_contamination','ZZ_contamination'])
-            # plot.Group('Diboson', ['WZTo3LNu','ZZTo4L','WW','WZ','ZZ'])
+            plot.Group('Diboson', ['WZTo3LNu','ZZTo4L','WW','WZ','ZZ'])
             # plot.Group('Single t', ['STbar_tch_inc','ST_tch_inc','ST_sch_lep'])
-            # plot.Group('DY', ['DYJets_M50_ext','DYJets_M50','DYJetsToLL_M10to50'])
+            plot.Group('DY', ['DYJets_M50_ext','DYJets_M50','DYJetsToLL_M10to50'])
             # plot.Group('QCD',['QCD_pt_15to20_mu', 'QCD_pt_20to30_mu', 'QCD_pt_30to50_mu', 'QCD_pt_50to80_mu', 'QCD_pt_80to120_mu'])
             # plot.Group('WJets', ['WJetsToLNu','WJetsToLNu_ext','W1JetsToLNu', 'W2JetsToLNu', 'W3JetsToLNu', 'W4JetsToLNu'])
             # plot.Group('Conversions', ['Conversions_DYJetsToLL_M10to50','Conversions_DYJets_M50','Conversions_DYJets_M50_ext'])

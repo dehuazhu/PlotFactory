@@ -151,6 +151,7 @@ histPref['HNL_M8_*'] = {'style':sHNL_M8_Vp002, 'layer':2999, 'legend':'M = 8 GeV
 # histPref['HNL*'] = {'style':sHNL_HN, 'layer':2999, 'legend':'#splitline{M = 2GeV, V=.002}{c#tau = 14.6cm}'}#times 300}{c#tau = 14.6cm}'}
 histPref['Data*'] = {'style':sData, 'layer':2999, 'legend':'Data'}
 histPref['data_*'] = {'style':sData, 'layer':2999, 'legend':'Data'}
+histPref['*_data'] = {'style':sData, 'layer':2999, 'legend':'Data'}
 histPref['ZTT*'] = {'style':sHNL_DYJets, 'layer':4, 'legend':'Z#rightarrow#tau#tau'}
 histPref['DY*'] = {'style':sHNL_DYJets, 'layer':4, 'legend':'DY'}
 # histPref['DYJets'] = {'style':sHNL_DYJets, 'layer':4, 'legend':'DYM50'}
@@ -158,7 +159,9 @@ histPref['DY*'] = {'style':sHNL_DYJets, 'layer':4, 'legend':'DY'}
 # histPref['DYJetsToLL_M10to50*'] = {'style':sHNL_DYJets_low, 'layer':4, 'legend':'DYM10'}
 # histPref['DYBB'] = {'style':sHNL_DYJets_bb, 'layer':4, 'legend':'DYBB'}
 # histPref['ConversionsSingle*'] = {'style':sHNL_ConversionsSingle, 'layer':3.5, 'legend':'Single Conversions'}
-histPref['Conversions*'] = {'style':sHNL_ConversionsSingle, 'layer':0.6, 'legend':'Conversions'}
+histPref['Conversions_DYJetsToLL_M10to50'] = {'style':sHNL_ConversionsSingle, 'layer':0.6, 'legend':'Conversions'}
+histPref['Conversions_DYJets_M50'] = {'style':sHNL_ConversionsSingle, 'layer':0.6, 'legend':'Conversions'}
+histPref['Conversions_DYJets_M50_ext'] = {'style':sHNL_ConversionsSingle, 'layer':0.6, 'legend':'Conversions'}
 histPref['ConversionsSingle*'] = {'style':sHNL_ConversionsSingle, 'layer':0.6, 'legend':'Conversions'}
 histPref['ConversionsDouble*'] = {'style':sHNL_ConversionsDouble, 'layer':0.6, 'legend':'Double Conversions'}
 histPref['embed_*'] = {'style':sViolet, 'layer':4.1, 'legend':None}
