@@ -111,10 +111,11 @@ def createArrays(features, branches, path_to_NeuralNet, faketype = 'DoubleFake',
     sample_dict     = {}
 
     # call samples
-    samples_all, samples_singlefake, samples_doublefake, samples_nonprompt, samples_mc, samples_data = createSampleLists(analysis_dir=analysis_dir, server = hostname, channel=channel)
-    working_samples = samples_data
+    samples_all, samples_singlefake, samples_doublefake, samples_nonprompt, samples_mc, samples_data, samples_mc_contamination = createSampleLists(analysis_dir=analysis_dir, server = hostname, channel=channel)
+    # working_samples = samples_data
     # working_samples = samples_nonprompt
     # working_samples = samples_mc
+    working_samples = samples_mc_contamination
 
     # necessary if you want to compare data with MC
     working_samples = setSumWeights(working_samples)
@@ -164,53 +165,57 @@ def createArrays(features, branches, path_to_NeuralNet, faketype = 'DoubleFake',
 
     # convert TChain object into numpy arrays for the training
     start = time.time()
-    if multiprocess == True:
-        queue = multiprocessing.Queue()
-        result = []
-        processes =[]
+    # if multiprocess == True:
+        # queue = multiprocessing.Queue()
+        # result = []
+        # processes =[]
 
-        for key in ['pass','fail']:
-            if key == 'pass': selection = selection_passing
-            if key == 'fail': selection = selection_failing
-            processes.append(multiprocessing.Process(target=tree2array_process, args=(queue, chain, branches, selection, key)))
+        # for key in ['pass','fail']:
+            # if key == 'pass': selection = selection_passing_MC
+            # if key == 'fail': selection = selection_failing_MC
+            # processes.append(multiprocessing.Process(target=tree2array_process, args=(queue, chain, branches, selection, key)))
 
-        for p in processes: 
-            p.start()
+        # for p in processes: 
+            # p.start()
 
-        for p in processes: 
-            result.append(queue.get())
-            p.join()
+        # for p in processes: 
+            # result.append(queue.get())
+            # p.join()
 
-        for r in result:
-            if r[0] == 'pass':
-                array_pass = r[1]
-            if r[0] == 'fail':
-                array_fail = r[1]
+        # for r in result:
+            # if r[0] == 'pass':
+                # array_pass = r[1]
+            # if r[0] == 'fail':
+                # array_fail = r[1]
 
-    if multiprocess == False:
-        print 'converting .root ntuples to numpy arrays... (passed events)'
-        array_pass = tree2array(chain, branches = branches, selection = selection_passing)
-        print 'nevents from array_pass: '+ str(array_pass.size)
+    # if multiprocess == False:
+        # print 'converting .root ntuples to numpy arrays... (passed events)'
+        # array_pass = tree2array(chain, branches = branches, selection = selection_passing)
+        # print 'nevents from array_pass: '+ str(array_pass.size)
 
-        print 'converting .root ntuples to numpy arrays... (failed events)'
-        array_fail = tree2array(chain, branches = branches, selection = selection_failing)
-        print 'nevents from array_fail: '+ str(array_fail.size)
+        # print 'converting .root ntuples to numpy arrays... (failed events)'
+        # array_fail = tree2array(chain, branches = branches, selection = selection_failing)
+        # print 'nevents from array_fail: '+ str(array_fail.size)
     
     delta = time.time() - start
     print 'It took %.2f seconds to create the arrays'%delta
 
-    df_pass    = pd.DataFrame(array_pass)
-    df_fail    = pd.DataFrame(array_fail)
+    # df_pass    = pd.DataFrame(array_pass)
+    # df_fail    = pd.DataFrame(array_fail)
+    
+    df_pass    = pd.DataFrame()
+    df_fail    = pd.DataFrame()
     
     #giving data the contamination weight '1' (i.e. ignore it)
+    lumi = 41530 # all eras
+    # lumi = 4792 # only era B
     for array in [df_pass, df_fail]:
-        array['contamination_weight'] = array.weight * array.lhe_weight 
+        # array['contamination_weight'] = array.weight * array.lhe_weight
         # array['contamination_weight'] = array.weight * array.lhe_weight * lumi *  xsec / sumweights
+        array['contamination_weight'] = np.zeros(array.shape[0]).astype(np.int)
 
     # adding MC prompt contamination
     print 'now adding MC prompt contamination to the training'
-    lumi = 41530 # all eras
-    # lumi = 4792 # only era B
 
     if multiprocess == True:
         pool = multiprocessing.Pool(len(samples_mc))
@@ -232,7 +237,8 @@ def createArrays(features, branches, path_to_NeuralNet, faketype = 'DoubleFake',
             xsec        = sample[2]
             sumweights  = sample[3]
             try:
-                array['contamination_weight'] = array.weight * array.lhe_weight * lumi * (-1) *  xsec / sumweights
+                # array['contamination_weight'] = array.weight * array.lhe_weight * lumi * (-1) *  xsec / sumweights
+                array['contamination_weight'] = array.weight * array.lhe_weight * lumi *  xsec / sumweights
                 # array['contamination_weight'] = array.weight * array.lhe_weight * lumi *  xsec /sumweights 
                 # array['contamination_weight'] = array.weight * array.lhe_weight 
             except:
@@ -428,8 +434,9 @@ def make_all_friendtrees(multiprocess,server,analysis_dir,channel,path_to_Neural
     print 'making friendtrees for all datasamples'
     start = time.time()
     # call samples
-    samples_all, samples_singlefake, samples_doublefake, samples_nonprompt, samples_mc, samples_data = createSampleLists(analysis_dir=analysis_dir, server = server, channel=channel)
-    working_samples = samples_nonprompt
+    samples_all, samples_singlefake, samples_doublefake, samples_nonprompt, samples_mc, samples_data, samples_mc_contamination = createSampleLists(analysis_dir=analysis_dir, server = server, channel=channel)
+    # working_samples = samples_nonprompt
+    working_samples = samples_mc_contamination
     for w in working_samples: print('{:<20}{:<20}'.format(*[w.name,('path: '+w.ana_dir)]))
 
     if multiprocess == True:
@@ -829,7 +836,7 @@ def path_to_NeuralNet(faketype ='nonprompt',channel = 'mmm'):
             # path_to_NeuralNet = 'NN/mmm_nonprompt_v22_NewFWwFinalStates/'
             # path_to_NeuralNet = 'NN/mmm_nonprompt_v23_WithDPhi12/'
             # path_to_NeuralNet = 'NN/mmm_nonprompt_v24_TrainWithRightSideband/'
-            # path_to_NeuralNet = 'NN/mmm_nonprompt_v25_TrainWithMC/'
+            path_to_NeuralNet = 'NN/mmm_nonprompt_v25_TrainWithMC/'
             # path_to_NeuralNet = 'NN/mmm_nonprompt_v26_relaxRelIso2/'
             # path_to_NeuralNet = 'NN/mmm_nonprompt_v27_2Layers/'
             # path_to_NeuralNet = 'NN/mmm_nonprompt_v28_ReproducibilityTest/'
@@ -837,7 +844,7 @@ def path_to_NeuralNet(faketype ='nonprompt',channel = 'mmm'):
             # path_to_NeuralNet = 'NN/mmm_nonprompt_v30_WithDropout2Layers/'
             # path_to_NeuralNet = 'NN/mmm_nonprompt_v31_DropoutWholeRange/'
             # path_to_NeuralNet = 'NN/mmm_nonprompt_v32_DropoutM12_80/'
-            path_to_NeuralNet = 'NN/mmm_nonprompt_v33_Dropout_1Layer/'
+            # path_to_NeuralNet = 'NN/mmm_nonprompt_v33_Dropout_1Layer/'
         
         if channel == 'eee':
             path_to_NeuralNet = 'NN/eee_nonprompt_v1/'

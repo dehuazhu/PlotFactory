@@ -587,6 +587,7 @@ def getSelection(channel, selection_name):
 class Region(object):
     def __init__(self,name,channel,CR):
         Prompt_extension                = ' && (l0_gen_match_isPromptFinalState == 1 && l1_gen_match_isPromptFinalState == 1 && l2_gen_match_isPromptFinalState == 1)'
+        nonPrompt_extension             = ' && !(l0_gen_match_isPromptFinalState == 1 && l1_gen_match_isPromptFinalState == 1 && l2_gen_match_isPromptFinalState == 1)'
         self.name                       = name
         self.channel                    = channel
         self.CR                         = CR
@@ -631,10 +632,10 @@ class Region(object):
                                           ]) + ')' 
                                             
 
-        # self.MC_contamination_pass      = self.MC        + Prompt_extension
+        # self.MC_contamination_pass      = self.data      + Prompt_extension
         # self.MC_contamination_fail      = self.nonprompt + Prompt_extension
 
-        self.MC_contamination_pass      = self.MC       
-        self.MC_contamination_fail      = self.nonprompt 
+        self.MC_contamination_pass      = self.data        + Prompt_extension
+        self.MC_contamination_fail      = self.nonprompt   + nonPrompt_extension 
 
 

@@ -467,7 +467,7 @@ class CreateHists(object):
             all the data/MC scale-factors applied).
             '''
 
-            weight += '* (-1)'
+            # weight += '* (-1)'
             weight += '* nonprompt_FakeWeight'
 
         

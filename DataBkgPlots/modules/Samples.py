@@ -565,10 +565,11 @@ def createSampleLists(analysis_dir='',
     # samples_bkg =  samples_nonprompt + samples_mc
 
     # MC_Closure
-    samples_mc =  samples_DY + samples_TTJets + samples_Diboson 
+    samples_mc =  samples_Conversions + samples_TTJets + samples_Diboson 
+    samples_mc_contamination = samples_Conversions_contamination + samples_TTJets_contamination + samples_Diboson_contamination
     samples_mc_data = samples_Conversions_data + samples_TTJets_data + samples_Diboson_data
     samples_data = samples_mc_data
-    samples_bkg = samples_mc
+    samples_bkg = samples_mc + samples_mc_contamination
 
     # # regular production
     # samples_mc =  samples_Conversions + samples_TTJets + samples_Diboson 
@@ -595,7 +596,7 @@ def createSampleLists(analysis_dir='',
     # samples_all = samples_signal
 
 
-    return samples_all, samples_singlefake, samples_doublefake, samples_nonprompt, samples_mc, samples_data
+    return samples_all, samples_singlefake, samples_doublefake, samples_nonprompt, samples_mc, samples_data, samples_mc_contamination
 
 
 def getSumWeight(sample, weight_dir='SkimAnalyzerCount', norm=True):
@@ -642,9 +643,12 @@ def setSumWeights(samples, weight_dir='SkimAnalyzerCount', norm=True):
                 sample_DYJets_M50        = [s for s in samples if s.name == 'Conversions_DYJets_M50_contamination'    ][0]
                 sample_DYJets_M50_ext    = [s for s in samples if s.name == 'Conversions_DYJets_M50_ext_contamination'][0]
 
-            sumweight_DYJets_M50     = getSumWeight(sample_DYJets_M50)
-            sumweight_DYJets_M50_ext = getSumWeight(sample_DYJets_M50_ext) 
-            sample.sumweights = sumweight_DYJets_M50 + sumweight_DYJets_M50_ext 
+            try:
+                sumweight_DYJets_M50     = getSumWeight(sample_DYJets_M50)
+                sumweight_DYJets_M50_ext = getSumWeight(sample_DYJets_M50_ext) 
+                sample.sumweights = sumweight_DYJets_M50 + sumweight_DYJets_M50_ext 
+            except:
+                set_trace()
 
         elif 'WJetsToLNu' in sample.name or 'WJetsToLNu_ext' in sample.name:
             sample_WJetsToLNu        = [s for s in samples if s.name == 'WJetsToLNu'    ][0]

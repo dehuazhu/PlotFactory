@@ -395,6 +395,7 @@ essential_vars = [
             # VCfg(name='n_vtx', binning={'nbinsx':30, 'xmin':0, 'xmax':60}, unit=None, xtitle='N_{vertices}'),
             # VCfg(name='pfmet_pt'         , binning={'nbinsx':40, 'xmin':0., 'xmax':300.}, unit='GeV', xtitle='E_{T}^{miss} (PF) (GeV)'),
             # VCfg(name='sv_prob'          , binning={'nbinsx':40 , 'xmin':0   , 'xmax':1   }, unit=None, xtitle='SV probability'),
+            # VCfg(name='l0_reliso_rho_03', binning={'nbinsx':20, 'xmin':0., 'xmax':0.5}, unit=None, xtitle='prompt muon relative isolation cone 0.3'),
             # VCfg(name='l1_reliso_rho_03', binning={'nbinsx':20, 'xmin':0., 'xmax':0.5}, unit=None, xtitle='1st muon relative isolation cone 0.3'),
             # VCfg(name='l2_reliso_rho_03', binning={'nbinsx':20, 'xmin':0., 'xmax':0.5}, unit=None, xtitle='2nd muon relative isolation cone 0.3'),
             # VCfg(name='hnl_dphi_01'  ,drawname='abs_dphi_01', binning={'nbinsx':40, 'xmin': 0, 'xmax':pi+0.3}, unit=None, xtitle='|#Delta#phi (l_{0}, l_{1})|'),
@@ -414,8 +415,12 @@ essential_vars = [
             # VCfg(name='hnl_q_01'     , drawname='hnl_q_01', binning={'nbinsx':7, 'xmin':-3, 'xmax':4}, unit='', xtitle='hnl_q_01'),
             # VCfg(name='hnl_q_02'     , drawname='hnl_q_02', binning={'nbinsx':7, 'xmin':-3, 'xmax':4}, unit='', xtitle='hnl_q_02'),
             # VCfg(name='hnl_dphi_12'  ,drawname='hnl_dphi_12', binning={'nbinsx':40, 'xmin': -(pi+0.3), 'xmax':pi+0.3}, unit=None, xtitle='#Delta#phi (l_{1}, l_{2})'),
-
             # VCfg(name='hnl_2d_disp_sig', drawname='hnl_2d_disp_sig', binning={'nbinsx':20, 'xmin':0., 'xmax':1000. }, unit=None , xtitle='hnl_2d_disp_sig'),
+
+            # VCfg(name='abs_l0_dz', drawname = 'abs_l0_dz', binning={'bins': np.logspace(-7,1.5,100)}, unit=None, xtitle='|l0 dz|'),
+            # VCfg(name='abs_l1_dz', drawname = 'abs_l1_dz', binning={'bins': np.logspace(-7,1.5,100)}, unit=None, xtitle='|l1 dz|'),
+            # VCfg(name='abs_l2_dz', drawname = 'abs_l2_dz', binning={'bins': np.logspace(-7,1.5,100)}, unit=None, xtitle='|l2 dz|'),
+
             # VCfg(name='hnl_m_12_money_2bins' , drawname='hnl_m_12', binning={'nbinsx':2, 'xmin':0   , 'xmax':12.  }, unit='GeV', xtitle='dilepton mass (GeV)'),
             # VCfg(name='hnl_m_12_money_6bins' , drawname='hnl_m_12', binning={'nbinsx':6, 'xmin':0   , 'xmax':12.  }, unit='GeV', xtitle='dilepton mass (GeV)'),
             # VCfg(name='hnl_m_12_money_12bins' , drawname='hnl_m_12', binning={'nbinsx':12, 'xmin':0   , 'xmax':12.  }, unit='GeV', xtitle='dilepton mass (GeV)'),
@@ -426,8 +431,6 @@ essential_vars = [
             # VCfg(name='hnl_dphi_hnvis0_wide'  ,drawname='abs_dphi_hnvis0', binning={'nbinsx':40, 'xmin': 0, 'xmax':pi+0.3}, unit=None, xtitle='|#Delta#phi (dilepton, l_{0})|'),
             # VCfg(name='l1_dz'      , binning={'nbinsx':40, 'xmin':-100  , 'xmax':100}, unit='GeV', xtitle='1st lepton dz'),
             # VCfg(name='l2_dz'      , binning={'nbinsx':40, 'xmin':-100  , 'xmax':100}, unit='GeV', xtitle='2nd lepton dz'),
-            # VCfg(name='abs_l1_dz', drawname = 'abs_l1_dz', binning={'bins': np.logspace(-7,1.5,100)}, unit=None, xtitle='|l1 dz|'),
-            # VCfg(name='abs_l2_dz', drawname = 'abs_l2_dz', binning={'bins': np.logspace(-7,1.5,100)}, unit=None, xtitle='|l2 dz|'),
             # VCfg(name='abs_l1_dz', drawname = 'abs_l1_dz', binning={'bins': np.logspace(-7,1.5,20)}, unit=None, xtitle='|l1 dz|'),
             # VCfg(name='abs_l2_dz', drawname = 'abs_l2_dz', binning={'bins': np.logspace(-7,1.5,20)}, unit=None, xtitle='|l2 dz}'),
 	    # VCfg(name='hnl_m_12_cone_wide' , drawname='hnl_m_12_ConeCorrected2', binning={'nbinsx':120, 'xmin':0   , 'xmax':120  }, unit='GeV', xtitle='dilepton mass (cone corrected)'),
