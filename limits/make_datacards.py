@@ -15,6 +15,8 @@ from pdb import set_trace
 from copy import deepcopy
 from glob import glob
 from os import system
+import os
+
 
 
 class dataCards(object):
@@ -63,9 +65,9 @@ class dataCards(object):
             print('jmax    %s     number of samples minus one' %n_samples,file=f)
             print('kmax    *     number of nuisance parameters',file=f)
             print('---------------------------------------------------------',file=f)
-            print('shapes *             %s   hnl_mll_combine_input_aug_20_%s.root %s/$PROCESS %s/$PROCESS_$SYSTEMATIC' %(disp_bins[0], ch, disp_bins[0], disp_bins[0]),file=f  )
-            print('shapes *             %s   hnl_mll_combine_input_aug_20_%s.root %s/$PROCESS %s/$PROCESS_$SYSTEMATIC' %(disp_bins[1], ch, disp_bins[1], disp_bins[1]),file=f  )
-            print('shapes *             %s   hnl_mll_combine_input_aug_20_%s.root %s/$PROCESS %s/$PROCESS_$SYSTEMATIC' %(disp_bins[2], ch, disp_bins[2], disp_bins[2]),file=f  )
+            print('shapes *             %s   hnl_mll_combine_input_%s.root %s/$PROCESS %s/$PROCESS_$SYSTEMATIC' %(disp_bins[0], ch, disp_bins[0], disp_bins[0]),file=f  )
+            print('shapes *             %s   hnl_mll_combine_input_%s.root %s/$PROCESS %s/$PROCESS_$SYSTEMATIC' %(disp_bins[1], ch, disp_bins[1], disp_bins[1]),file=f  )
+            print('shapes *             %s   hnl_mll_combine_input_%s.root %s/$PROCESS %s/$PROCESS_$SYSTEMATIC' %(disp_bins[2], ch, disp_bins[2], disp_bins[2]),file=f  )
             print('---------------------------------------------------------',file=f)
             print('bin                  %s\t\t\t %s\t\t\t %s\t\t\t' %(disp_bins[0], disp_bins[1], disp_bins[2]),file=f)
             print('observation          %.2f \t\t\t%.2f \t\t\t     %.2f '%(rate_obs_d1, rate_obs_d2, rate_obs_d3),file=f)
@@ -157,14 +159,27 @@ class dataCards(object):
 
         rates = OrderedDict()
 
-        fout = rt.TFile.Open(self.out_folder + 'hnl_mll_combine_input_aug_20_%s.root' %self.ch, 'recreate')
+        fout = rt.TFile.Open(self.out_folder + 'hnl_mll_combine_input_%s.root' %self.ch, 'recreate')
 
         self.disp_bins = []
-        for in_folder in self.in_folders:
-            disp_bin = sub('.*disp', 'disp', sub('/root.*','', in_folder))
+
+        # #2017
+        # for in_folder in self.in_folders:
+            # disp_bin = sub('.*disp', 'disp', sub('/root.*','', in_folder))
+            # fin = rt.TFile(in_folder + 'hnl_m_12_money.root')
+
+        #2018
+        in_folder = self.in_folders[0]
+        for disp_bin in ['disp1','disp2','disp3']:
+            fin_name = ''
+            for fileName in os.listdir(in_folder): 
+                if disp_bin in fileName: fin_name = fileName
+            if fin_name == '': set_trace()
+            fin = rt.TFile(in_folder + fin_name)
+        # end 2017/2018 difference
+
             self.disp_bins.append(disp_bin)
             if verbose: print (disp_bin)
-            fin = rt.TFile(in_folder + 'hnl_m_12_money.root')
 
             can = fin.Get('can')
             pad = can.GetPrimitive('can_1')
@@ -189,19 +204,24 @@ class dataCards(object):
 
             for h in h_list:
                 h_name = h.GetName()
-                if 'TFrame' in h_name: continue
-                if 'HN3L' in h_name: 
+                if ('TFrame' in h_name) or ('TPave' in h_name): continue
+                elif 'Dirac' in h_name: continue  
+                elif 'HN3L' in h_name: 
                     h_name = sub('.*HN3L_M_', 'M', h_name)
                     h_name = sub('_V_0', '_V', h_name)
                     h_name = sub('_mu_massiveAndCKM_LO', '', h_name)
                     h_name = sub('_e_massiveAndCKM_LO', '', h_name)
                     h.SetName(h_name)
                     h_dict[h_name] = h
-                elif 'data' in h_name: 
-                    h.SetName('data_obs')
-                    h_dict['data_obs'] = h
+                elif 'stack' in h_name:
+                    stack = pad.GetPrimitive(h_name)
+                else: 
+                    # set_trace()
+                    continue
+                # elif 'data' in h_name: 
+                    # h.SetName('data_obs')
+                    # h_dict['data_obs'] = h
 
-            stack = pad.GetPrimitive('hnl_m_12_money_stack')
 
             for h in stack.GetHists():
                 h_name = h.GetName()
@@ -264,9 +284,26 @@ class dataCards(object):
         print('datacards generated to %s'%self.out_folder)
 
 if __name__ == '__main__':
-    channel = 'mmm'
-    in_folders = glob('/work/dezhu/3_figures/1_DataMC/FinalStates/0_datacards_v2_NewBinning/*%s_disp*/root/linear/' %channel)
-    out_folder = '/work/dezhu/3_figures/2_Limits/20191119_limits/datacards/'
-    dc = dataCards(channel, in_folders, out_folder)
-    dc.make_inputs(verbose=False)
+    # channel = 'mmm'
+    channel = 'mem_OS'
+    # channel = 'mem_SS'
+    # channel = 'eee'
+    # channel = 'eem_OS'
+    # channel = 'eem_SS'
+
+    #original 2017
+    # in_folders = glob('/work/dezhu/3_figures/1_DataMC/FinalStates/0_datacards_v2_NewBinning/*%s_disp*/root/linear/' %channel)
+    out_base = '/work/dezhu/3_figures/2_Limits/2017/mmm/20191119_limits'
+    
+    #new 2018
+    in_folders = glob('/work/dezhu/3_figures/1_DataMC/FinalStates/2018/0_datacards_v1/%s/root/linear/' %channel)
+    output_base = '/work/dezhu/3_figures/2_Limits/2018/%s/20191120_Aachen'%channel
+    
+    output_folder = output_base + '/datacards/'
+
+    if not os.path.isdir(output_base): os.mkdir(output_base)
+    if not os.path.isdir(output_folder): os.mkdir(output_folder)
+
+    DC = dataCards(channel, in_folders, output_folder)
+    DC.make_inputs(verbose=False)
     

@@ -100,7 +100,7 @@ def setpfstyle():
     pfstyle.SetPaperSize(20,26)
     pfstyle.SetPadTopMargin(0.08)
     pfstyle.SetPadRightMargin(0.17)
-    pfstyle.SetPadBottomMargin(0.12)
+    pfstyle.SetPadBottomMargin(0.16)
     pfstyle.SetPadLeftMargin(0.15)
 
     # Use large fonts
@@ -139,7 +139,8 @@ def setpfstyle():
     pfstyle.SetLabelSize(tsize,"z")
     pfstyle.SetTitleSize(tsize,"z")
 
-    pfstyle.SetTitleOffset(1.1,"x")
+    # pfstyle.SetTitleOffset(1.1,"x")
+    pfstyle.SetTitleOffset(1.6,"x")
     pfstyle.SetTitleOffset(1.3,"y")
     pfstyle.SetTitleOffset(1.35,"z")
 
