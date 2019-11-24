@@ -54,7 +54,8 @@ def path_to_NeuralNet(faketype ='nonprompt',channel = 'mmm', dataset = '2017', h
                         # path_to_NeuralNet = 'NN/2018/mmm_nonprompt_v4_BigNetBigFeatures/'
                         # path_to_NeuralNet = 'NN/2018/mmm_nonprompt_v5_LogAbsVariables/'
                         # path_to_NeuralNet = 'NN/2018/mmm_nonprompt_v6_2018Oct27Ntuples/'
-                        path_to_NeuralNet = 'NN/2018/mmm_nonprompt_v7_GhentSelection/'
+                        # path_to_NeuralNet = 'NN/2018/mmm_nonprompt_v7_GhentSelection/'
+                        path_to_NeuralNet = 'NN/2018/mmm_nonprompt_v8_Endgame/'
                 
             if channel == 'eee':
                 # path_to_NeuralNet = 'NN/eee_nonprompt_v1/'
@@ -62,22 +63,33 @@ def path_to_NeuralNet(faketype ='nonprompt',channel = 'mmm', dataset = '2017', h
                 # path_to_NeuralNet = 'NN/eee_nonprompt_v3_TrainWithMC'
                 # path_to_NeuralNet = 'NN/eee_nonprompt_v4_relasRelIso2/'
                 path_to_NeuralNet = 'NN/eee_nonprompt_v5_MartinaRegion/'
+                if dataset == '2018':
+                    path_to_NeuralNet = 'NN/2018/eee_nonprompt_v1_Endgame/'
+
 
             if channel == 'eem_OS':
                 # path_to_NeuralNet = 'NN/eem_OS_nonprompt_v1/'
                 path_to_NeuralNet = 'NN/eem_OS_nonprompt_v2_MartinaRegion/'
+                if dataset == '2018':
+                    path_to_NeuralNet = 'NN/2018/eem_OS_nonprompt_v1_Endgame/'
 
             if channel == 'eem_SS':
                 # path_to_NeuralNet = 'NN/eem_SS_nonprompt_v1/'
                 path_to_NeuralNet = 'NN/eem_SS_nonprompt_v2_MartinaRegion/'
+                if dataset == '2018':
+                    path_to_NeuralNet = 'NN/2018/eem_SS_nonprompt_v1_Endgame/'
 
             if channel == 'mem_OS':
                 # path_to_NeuralNet = 'NN/mem_OS_nonprompt_v1/'
                 path_to_NeuralNet = 'NN/mem_OS_nonprompt_v2_MartinaRegion/'
+                if dataset == '2018':
+                    path_to_NeuralNet = 'NN/2018/mem_OS_nonprompt_v1_Endgame/'
         
             if channel == 'mem_SS':
                 # path_to_NeuralNet = 'NN/mem_SS_nonprompt_v1/'
                 path_to_NeuralNet = 'NN/mem_SS_nonprompt_v2_MartinaRegion/'
+                if dataset == '2018':
+                    path_to_NeuralNet = 'NN/2018/mem_SS_nonprompt_v1_Endgame/'
 
     if 'lxplus' in hostname:
         if channel == 'mmm':
