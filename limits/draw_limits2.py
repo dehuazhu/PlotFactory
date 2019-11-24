@@ -134,19 +134,6 @@ def get_lim_dict(input_file, output_dir, ch='mem', verbose=False):
         if '_mu_' in line:  mode = 'mu' 
         if '_tau_' in line: mode = 'tau'
 
-        # if 'hnl' in line:
-            # # mass = re.sub(r'.*M([0-9])_V.*',r'\1', line)
-            # mass = re.sub('.*_M','',line)
-            # mass = re.sub('_.*','',mass)
-            # v    = re.sub('.*Vp', '', line)
-            # v    = re.sub('_.*', '', v)
-            # v    = '0.' + v
-            # Mass, V = mass, v
-            # try:
-                # massNumber = int(Mass)
-                # if massNumber not in masses:
-                    # masses.append(massNumber) 
-            # except: pass
         if 'hnl' in line:
             mass = re.sub('.*_m_','',line)
             mass = re.sub('_.*','',mass)
@@ -165,6 +152,9 @@ def get_lim_dict(input_file, output_dir, ch='mem', verbose=False):
                 lim_dict['M' + Mass + '_V' + V + '_' + mode]['V']    = float(V)
             except: 
                 lim_dict['M' + Mass + '_V' + V + '_' + mode] = OrderedDict()
+                lim_dict['M' + Mass + '_V' + V + '_' + mode]['mass'] = float(Mass)
+                lim_dict['M' + Mass + '_V' + V + '_' + mode]['V']    = float(V)
+
 
         ep1s = None; ep2s = None; em1s = None; em2s = None; om1s = None; op1s = None; obs = None; exp = None
         line = re.sub(' ', '', line)
@@ -233,10 +223,10 @@ def draw_limits(input_file, output_dir, ch='mmm', twoD=False, verbose=False):
                 y_ep2s.append(limits [v2]['ep2s']) 
                 y_em1s.append(limits [v2]['em1s']) 
                 y_em2s.append(limits [v2]['em2s']) 
-                set_trace()
                 try:
-                    b_V2  .append(signals[v2]['V2']) 
-                except: set_trace()
+                    b_V2  .append(limits [v2]['V']) 
+                except:
+                    set_trace()
 
         if len(b_V2) == 0: 
             print('combine failed processing this channel, continue doing to next one')
