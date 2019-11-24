@@ -244,46 +244,46 @@ class HistDrawer:
             padr.SetLogx(False)
 #        return ratio
 
-        #VS 10/30/19: dump all histo's in a root file (=datacard)
-        s_pad  = can.GetPrimitive('can_1')
-        s_list = pad.GetListOfPrimitives()
+        # #VS 10/30/19: dump all histo's in a root file (=datacard)
+        # s_pad  = can.GetPrimitive('can_1')
+        # s_list = pad.GetListOfPrimitives()
 
-        if server == "starseeker":
-            if dataset == '2017':
-                t3_dir='/home/dehuazhu/t3work/3_figures/1_DataMC/FinalStates/'+channel_dir+'/'+region.name 
-            if dataset == '2018':
-                t3_dir='/home/dehuazhu/t3work/3_figures/1_DataMC/FinalStates/2018/'+channel_dir+'/'+region.name 
-            datacard = TFile.Open(t3_dir + '/datacards/' + plotname  + '.datacard.root', 'recreate')
-        else:
-            datacard = TFile.Open(plot_dir + '/datacards/' + plotname  + '.datacard.root', 'recreate')
+        # if server == "starseeker":
+            # if dataset == '2017':
+                # t3_dir='/home/dehuazhu/t3work/3_figures/1_DataMC/FinalStates/'+channel_dir+'/'+region.name 
+            # if dataset == '2018':
+                # t3_dir='/home/dehuazhu/t3work/3_figures/1_DataMC/FinalStates/2018/'+channel_dir+'/'+region.name 
+            # datacard = TFile.Open(t3_dir + '/datacards/' + plotname  + '.datacard.root', 'recreate')
+        # else:
+            # datacard = TFile.Open(plot_dir + '/datacards/' + plotname  + '.datacard.root', 'recreate')
 
-        datacard.cd()
+        # datacard.cd()
 
-        for s_h in s_list:
-            s_h_name = s_h.GetName()
-            if 'HN3L' in s_h_name:
-                s_h_name = re.sub('.*HN3L_M_', 'M', s_h_name)
-                s_h_name = re.sub('_V_0', '_V', s_h_name)
-                s_h_name = re.sub('_mu_massiveAndCKM_LO', '_maj', s_h_name)
-                s_h_name = re.sub('_mu_Dirac_massiveAndCKM_LO', '_dir', s_h_name)
-                s_h_name = re.sub('_mu_Dirac_cc_massiveAndCKM_LO', '_dir_cc', s_h_name)
-                s_h_name = re.sub('_e_massiveAndCKM_LO', '_maj', s_h_name)
-                s_h_name = re.sub('_e_Dirac_massiveAndCKM_LO', '_dir', s_h_name)
-                s_h_name = re.sub('_e_Dirac_cc_massiveAndCKM_LO', '_dir_cc', s_h_name)
-                s_h.SetName(s_h_name)
-                s_h.Write()
-            elif 'data' in s_h_name:
-                s_h.SetName('data_obs')
-                s_h.Write()
-            elif 'stack' in s_h_name:
-                s_h.SetName('stack')
-                s_h.Write()
-            elif 'TFrame' in s_h_name:
-                continue
-            else: 
-                continue #ToDo
-        datacard.ls()
-        datacard.Close()
+        # for s_h in s_list:
+            # s_h_name = s_h.GetName()
+            # if 'HN3L' in s_h_name:
+                # s_h_name = re.sub('.*HN3L_M_', 'M', s_h_name)
+                # s_h_name = re.sub('_V_0', '_V', s_h_name)
+                # s_h_name = re.sub('_mu_massiveAndCKM_LO', '_maj', s_h_name)
+                # s_h_name = re.sub('_mu_Dirac_massiveAndCKM_LO', '_dir', s_h_name)
+                # s_h_name = re.sub('_mu_Dirac_cc_massiveAndCKM_LO', '_dir_cc', s_h_name)
+                # s_h_name = re.sub('_e_massiveAndCKM_LO', '_maj', s_h_name)
+                # s_h_name = re.sub('_e_Dirac_massiveAndCKM_LO', '_dir', s_h_name)
+                # s_h_name = re.sub('_e_Dirac_cc_massiveAndCKM_LO', '_dir_cc', s_h_name)
+                # s_h.SetName(s_h_name)
+                # s_h.Write()
+            # elif 'data' in s_h_name:
+                # s_h.SetName('data_obs')
+                # s_h.Write()
+            # elif 'stack' in s_h_name:
+                # s_h.SetName('stack')
+                # s_h.Write()
+            # elif 'TFrame' in s_h_name:
+                # continue
+            # else: 
+                # continue #ToDo
+        # datacard.ls()
+        # datacard.Close()
 
     drawRatio = draw
 

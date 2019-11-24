@@ -28,15 +28,15 @@ from itertools import product
 
 from root_numpy import root2array, tree2array
 
-from tensorflow.keras.models import Sequential, Model, load_model
-from tensorflow.keras.layers import Dense, Input, Dropout, BatchNormalization
-from tensorflow.keras.utils import plot_model
-from tensorflow.keras.callbacks import EarlyStopping, Callback, ReduceLROnPlateau, ModelCheckpoint
-from tensorflow.keras import backend as K
-from tensorflow.keras.activations import softmax
-from tensorflow.keras.constraints import unit_norm
-from tensorflow.keras.utils import to_categorical
-from tensorflow.keras.optimizers import SGD, Adam
+from keras.models import Sequential, Model, load_model
+from keras.layers import Dense, Input, Dropout, BatchNormalization
+from keras.utils import plot_model
+from keras.callbacks import EarlyStopping, Callback, ReduceLROnPlateau, ModelCheckpoint
+from keras import backend as K
+from keras.activations import softmax
+from keras.constraints import unit_norm
+from keras.utils import to_categorical
+from keras.optimizers import SGD, Adam
 
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import roc_curve, roc_auc_score
@@ -214,7 +214,12 @@ def createArrays(features, branches, path_to_NeuralNet, faketype = 'DoubleFake',
         # array['contamination_weight'] = array.weight * array.lhe_weight * lumi *  xsec / sumweights
 
     # adding MC prompt contamination
-    print ('now adding MC prompt contamination to the training')
+    print('###########################################################')
+    print('now adding MC prompt contamination to the training')
+    print('# %d samples to be used:'%(len(samples_mc)))
+    print('###########################################################')
+    for w in samples_mc: print('{:<20}{:<20}'.format(*[w.name,('path: '+w.ana_dir)]))
+
     lumi = 41530 # all eras
     # lumi = 4792 # only era B
 
@@ -449,17 +454,17 @@ def train(features,branches,path_to_NeuralNet,newArrays = False, faketype = 'Dou
     plt.savefig(path_to_NeuralNet + 'accuracy_history_weighted.pdf')
     plt.clf()
 
-    # plot mean absolute error 
-    plt.title('mean absolute error')
-    plt.plot(history.history['mae'], label='train')
-    plt.plot(history.history['val_mae'], label='test')
-    plt.legend()
-    center = min(history.history['val_mae'] + history.history['mae'])
-    plt.ylim((center*0.98, center*1.5))
-    # plt.yscale('log')
-    plt.grid(True)
-    plt.savefig(path_to_NeuralNet + 'mean_absolute_error_history_weighted.pdf')
-    plt.clf()
+    # # plot mean absolute error 
+    # plt.title('mean absolute error')
+    # plt.plot(history.history['mae'], label='train')
+    # plt.plot(history.history['val_mae'], label='test')
+    # plt.legend()
+    # center = min(history.history['val_mae'] + history.history['mae'])
+    # plt.ylim((center*0.98, center*1.5))
+    # # plt.yscale('log')
+    # plt.grid(True)
+    # plt.savefig(path_to_NeuralNet + 'mean_absolute_error_history_weighted.pdf')
+    # plt.clf()
 
     # calculate predictions on the data sample
     print ('predicting on ', data.shape[0], 'events')
@@ -954,12 +959,12 @@ def get_branches_nonprompt2(features):
 if __name__ == '__main__':
 
     ## select here the channel you want to analyze
-    channel = 'mmm'    
+    # channel = 'mmm'    
     # channel = 'eee'    
     # channel = 'eem_OS'
     # channel = 'eem_SS'
     # channel = 'mem_OS'
-    # channel = 'mem_SS'
+    channel = 'mem_SS'
 
 
     ## select the dataset 
@@ -971,9 +976,9 @@ if __name__ == '__main__':
     if dataset == '2017':
         analysis_dir    = '/home/dehuazhu/SESSD/4_production/'
     if dataset == '2018':
-        # analysis_dir    = '/mnt/StorageElement1/4_production/2018/'
+        analysis_dir    = '/mnt/StorageElement1/4_production/2018/'
         # analysis_dir = '/home/dehuazhu/SESSD/4_production/2018/'
-        analysis_dir = '/work/dezhu/4_production/2018/'
+        # analysis_dir = '/work/dezhu/4_production/2018/'
 
     pf.setpfstyle()
 
