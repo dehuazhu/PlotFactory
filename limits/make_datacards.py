@@ -203,6 +203,7 @@ class dataCards(object):
                     # h_dict['data_obs'] = h
 
             for h in h_list:
+                set_trace()
                 h_name = h.GetName()
                 if ('TFrame' in h_name) or ('TPave' in h_name): continue
                 elif 'Dirac' in h_name: continue  
@@ -284,8 +285,8 @@ class dataCards(object):
         print('datacards generated to %s'%self.out_folder)
 
 if __name__ == '__main__':
-    # channel = 'mmm'
-    channel = 'mem_OS'
+    channel = 'mmm'
+    # channel = 'mem_OS'
     # channel = 'mem_SS'
     # channel = 'eee'
     # channel = 'eem_OS'
@@ -293,11 +294,14 @@ if __name__ == '__main__':
 
     #original 2017
     # in_folders = glob('/work/dezhu/3_figures/1_DataMC/FinalStates/0_datacards_v2_NewBinning/*%s_disp*/root/linear/' %channel)
-    out_base = '/work/dezhu/3_figures/2_Limits/2017/mmm/20191119_limits'
+    # out_base = '/work/dezhu/3_figures/2_Limits/2017/mmm/20191119_limits'
     
     #new 2018
-    in_folders = glob('/work/dezhu/3_figures/1_DataMC/FinalStates/2018/0_datacards_v1/%s/root/linear/' %channel)
-    output_base = '/work/dezhu/3_figures/2_Limits/2018/%s/20191120_Aachen'%channel
+    # in_folders = glob('/work/dezhu/3_figures/1_DataMC/FinalStates/2018/0_datacards_v1/%s/root/linear/' %channel)
+    in_folders = glob('/work/dezhu/3_figures/1_DataMC/FinalStates/2018/0_datacards_v2_SignalReweight/%s/root/linear/' %channel)
+
+    # output_base = '/work/dezhu/3_figures/2_Limits/2018/%s/20191120_Aachen'%channel
+    out_base = '/work/dezhu/3_figures/2_Limits/2018/%s/20191125_SignalReweight'%(channel)
     
     output_folder = output_base + '/datacards/'
 
