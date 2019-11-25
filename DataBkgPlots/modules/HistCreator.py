@@ -54,7 +54,7 @@ class CreateHists(object):
                 print ('Adding variable with same name twice', vcfg.name, 'not yet foreseen; taking the last')
             self.plots[vcfg.name] = plot
 
-    def createHistograms(self, hist_cfg, all_stack=False, verbose=False,  vcfgs=None, multiprocess = True, useNeuralNetwork = False):
+    def createHistograms(self, hist_cfg, all_stack=False, verbose=False,  vcfgs=None, multiprocess = True, useNeuralNetwork = False, signalReweight = False):
         if multiprocess == True:
             #using multiprocess to create the histograms
             nSamples = len(self.hist_cfg.cfgs)
@@ -69,23 +69,23 @@ class CreateHists(object):
                             ,result[vcfg.name].histos[0].obj\
                             ,stack=result[vcfg.name].histos[0].stack)
             
-            reweightCfgs = reweightSignals(self.plots, useMultiprocess = True, ana_dir = self.analysis_dir, hist_cfg = self.hist_cfg, channel = self.channel)
+            if signalReweight:
+                reweightCfgs = reweightSignals(self.plots, useMultiprocess = True, ana_dir = self.analysis_dir, hist_cfg = self.hist_cfg, channel = self.channel)
 
-            #adding reweighting for multiprocessing
-            reweightPool = Pool(processes=len(reweightCfgs))
-            reWeightResults = reweightPool.map(self.makealltheplots, reweightCfgs) 
-            reweightPool.terminate()
-            for vcfg in self.vcfgs:
-                for reWeightResult in reWeightResults: 
-                    self.plots[vcfg.name].AddHistogram(\
-                            reWeightResult[vcfg.name].histos[nSamples].name\
-                            ,reWeightResult[vcfg.name].histos[nSamples].obj\
-                            ,stack=reWeightResult[vcfg.name].histos[nSamples].stack)
+                #adding reweighting for multiprocessing
+                reweightPool = Pool(processes=len(reweightCfgs))
+                reWeightResults = reweightPool.map(self.makealltheplots, reweightCfgs) 
+                reweightPool.terminate()
+                for vcfg in self.vcfgs:
+                    for reWeightResult in reWeightResults: 
+                        self.plots[vcfg.name].AddHistogram(\
+                                reWeightResult[vcfg.name].histos[nSamples].name\
+                                ,reWeightResult[vcfg.name].histos[nSamples].obj\
+                                ,stack=reWeightResult[vcfg.name].histos[nSamples].stack)
 
-
-            # #adding reweighting for non multiprocessing
-            # for cfg in reweightCfgs:
-                # result = self.makealltheplots(cfg)
+                # #adding reweighting for non multiprocessing
+                # for cfg in reweightCfgs:
+                    # result = self.makealltheplots(cfg)
 
        
         if multiprocess == False:

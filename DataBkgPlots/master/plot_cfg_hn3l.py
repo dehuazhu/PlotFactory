@@ -122,7 +122,7 @@ def createVariables(rebin=None):
 
     return variables
 
-def makePlots(plotDir,channel_name,variables, regions, total_weight, sample_dict, make_plots=True, create_trees=False, multiprocess=False, useNeuralNetwork=False, dataframe=True, server = 'starseeker', channel_dir = 'mmm', analysis_dir='/home/dehuazhu/SESSD/4_production/', dataset = '2017'):
+def makePlots(plotDir,channel_name,variables, regions, total_weight, sample_dict, make_plots=True, create_trees=False, multiprocess=False, useNeuralNetwork=False, dataframe=True, server = 'starseeker', channel_dir = 'mmm', analysis_dir='/home/dehuazhu/SESSD/4_production/', dataset = '2017', signalReweight = 'False'):
 
     # get the lumis from here: https://twiki.cern.ch/twiki/bin/viewauth/CMS/PdmV2017Analysis
     # Golden JSON Int.Lumi: from https://twiki.cern.ch/twiki/bin/viewauth/CMS/PdmVAnalysisSummaryTable
@@ -170,6 +170,8 @@ def makePlots(plotDir,channel_name,variables, regions, total_weight, sample_dict
             # print '# Path to Neural Network for SingleFakes2:\t' + fr_net.path_to_NeuralNet('SingleFake2',channel_dir,dataset)
             # print '# Path to Neural Network for DoubleFakes:\t' + fr_net.path_to_NeuralNet('DoubleFake',channel_dir,dataset)
             print('# Path to Neural Network for nonprompt:\t\t' + fr_net.path_to_NeuralNet('nonprompt',channel_dir,dataset))
+        if signalReweight:
+            print('# making datacards including reweighted signal samples')
         print('#############################################################################')
 
         i_var = 0
@@ -180,7 +182,7 @@ def makePlots(plotDir,channel_name,variables, regions, total_weight, sample_dict
             start_plot = time.time()
             cfg_main.vars = [var]
             HISTS = CreateHists(cfg_main, analysis_dir,channel_dir,server,useNeuralNetwork,dataset)
-            plots = HISTS.createHistograms(cfg_main, verbose=False, multiprocess = multiprocess)
+            plots = HISTS.createHistograms(cfg_main, verbose=False, multiprocess = multiprocess, signalReweight = signalReweight)
             plot = plots[var.name]
             plot.Group('data_obs', ['data_2017A','data_2017B', 'data_2017C', 'data_2017D', 'data_2017E', 'data_2017F'])
             # plot.Group('doublefake', ['doublefake_B', 'doublefake_C', 'doublefake_D', 'doublefake_E', 'doublefake_F'])
@@ -369,6 +371,7 @@ def producePlots(promptLeptonType, L1L2LeptonType, dataset, option = None, multi
         channel_dir=channel,
         analysis_dir=analysis_dir,
         dataset = dataset,
+        signalReweight = True,
     )
 
     end_time = time.time()
