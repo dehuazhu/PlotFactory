@@ -13,12 +13,14 @@ from modules.path_to_NeuralNet import path_to_NeuralNet
 # from modules.nn import run_nn 
 # import modules.fr_net as fr_net
 # from CMGTools.RootTools.DataMC.Histogram import Histogram
+from modules.SignalReweighter import reweightSignals
 from pdb import set_trace
 
 from ROOT import ROOT, RDataFrame, TH1F, TFile, TTree, TTreeFormula, gInterpreter, gROOT, gSystem
 
 # Enable ROOT's implicit multi-threading for all objects that provide an internal parallelisation mechanism
-ROOT.EnableImplicitMT(40)
+# ROOT.EnableImplicitMT(40)
+ROOT.EnableImplicitMT()
 
 def initHist(hist, vcfg):
     hist.Sumw2()
@@ -52,10 +54,11 @@ class CreateHists(object):
                 print ('Adding variable with same name twice', vcfg.name, 'not yet foreseen; taking the last')
             self.plots[vcfg.name] = plot
 
-    def createHistograms(self, hist_cfg, all_stack=False, verbose=False,  vcfgs=None, multiprocess = True, useNeuralNetwork = False):
+    def createHistograms(self, hist_cfg, all_stack=False, verbose=False,  vcfgs=None, multiprocess = True, useNeuralNetwork = False, signalReweight = False):
         if multiprocess == True:
             #using multiprocess to create the histograms
-            pool = Pool(processes=len(self.hist_cfg.cfgs))
+            nSamples = len(self.hist_cfg.cfgs)
+            pool = Pool(processes= nSamples)
             results = pool.map(self.makealltheplots, self.hist_cfg.cfgs) 
             pool.terminate()
 
@@ -65,6 +68,24 @@ class CreateHists(object):
                             result[vcfg.name].histos[0].name\
                             ,result[vcfg.name].histos[0].obj\
                             ,stack=result[vcfg.name].histos[0].stack)
+            
+            if signalReweight:
+                reweightCfgs = reweightSignals(self.plots, useMultiprocess = True, ana_dir = self.analysis_dir, hist_cfg = self.hist_cfg, channel = self.channel)
+
+                #adding reweighting for multiprocessing
+                reweightPool = Pool(processes=len(reweightCfgs))
+                reWeightResults = reweightPool.map(self.makealltheplots, reweightCfgs) 
+                reweightPool.terminate()
+                for vcfg in self.vcfgs:
+                    for reWeightResult in reWeightResults: 
+                        self.plots[vcfg.name].AddHistogram(\
+                                reWeightResult[vcfg.name].histos[nSamples].name\
+                                ,reWeightResult[vcfg.name].histos[nSamples].obj\
+                                ,stack=reWeightResult[vcfg.name].histos[nSamples].stack)
+
+                # #adding reweighting for non multiprocessing
+                # for cfg in reweightCfgs:
+                    # result = self.makealltheplots(cfg)
 
        
         if multiprocess == False:
@@ -74,6 +95,12 @@ class CreateHists(object):
                     result = self.makealltheplots(self.hist_cfg.cfgs[i]) 
                 except:
                     set_trace()
+       
+            #adding reweighting for non multiprocessing
+            reweightCfgs = reweightSignals(self.plots, useMultiprocess = False, ana_dir = self.analysis_dir, hist_cfg = self.hist_cfg, channel = self.channel)
+            for cfg in reweightCfgs:
+                result = self.makealltheplots(cfg)
+
 
         procs = []
         for plot_key in self.plots:
@@ -86,6 +113,7 @@ class CreateHists(object):
 
         # for plot in self.plots.itervalues():
             # plot.Draw()
+
 
         return self.plots
 
@@ -404,20 +432,49 @@ class CreateHists(object):
         if ("TTJ" in cfg.name) or ("DY" in cfg.name):
             weight += '* l0_weight'
 
+        if cfg.is_reweightSignal:
+            if '0p00001'                      in cfg.name: weight += ' * ctau_w_v2_1em10'
+            elif '0p000022360679774997898'    in cfg.name: weight += ' * ctau_w_v2_5em10'
+            elif '0p000031622776601683795'    in cfg.name: weight += ' * ctau_w_v2_1em09'
+            elif '0p00007071067811865475'     in cfg.name: weight += ' * ctau_w_v2_5em09'
+            elif '0p0001'                     in cfg.name: weight += ' * ctau_w_v2_1em08'    
+            elif '0p00022360679774997898'     in cfg.name: weight += ' * ctau_w_v2_5em08'
+            elif '0p00031622776601683794'     in cfg.name: weight += ' * ctau_w_v2_1em07'
+            elif '0p0007071067811865475'      in cfg.name: weight += ' * ctau_w_v2_5em07'
+            elif '0p001'                      in cfg.name: weight += ' * ctau_w_v2_1em06'
+            elif '0p00223606797749979'        in cfg.name: weight += ' * ctau_w_v2_5em06'
+            elif '0p0024494897427831783'      in cfg.name: weight += ' * ctau_w_v2_6em06'
+            elif '0p00282842712474619'        in cfg.name: weight += ' * ctau_w_v2_8em06'
+            elif '0p0031622776601683794'      in cfg.name: weight += ' * ctau_w_v2_1em05'
+            elif '0p00447213595499958'        in cfg.name: weight += ' * ctau_w_v2_2em05'
+            elif '0p005477225575051661'       in cfg.name: weight += ' * ctau_w_v2_3em05'
+            elif '0p006324555320336759'       in cfg.name: weight += ' * ctau_w_v2_4em05'
+            elif '0p007071067811865475'       in cfg.name: weight += ' * ctau_w_v2_5em05'
+            elif '0p008366600265340755'       in cfg.name: weight += ' * ctau_w_v2_7em05'
+            elif '0p01'                       in cfg.name: weight += ' * ctau_w_v2_0.0001'
+            elif '0p01414213562373095'        in cfg.name: weight += ' * ctau_w_v2_0.0002'
+            elif '0p015811388300841896'       in cfg.name: weight += ' * ctau_w_v2_0.00025'
+            elif '0p017320508075688773'       in cfg.name: weight += ' * ctau_w_v2_0.0003'
+            elif '0p022360679774997897'       in cfg.name: weight += ' * ctau_w_v2_0.0005'
+            elif '0p034641016151377546'       in cfg.name: weight += ' * ctau_w_v2_0.0012'
+            else: set_trace()
+
         
         if not cfg.is_singlefake:
             # if 'A' in cfg.name: set_trace()
 	    # if 'Single' in cfg.name: set_trace()
-            if 'nbinsx' in vcfg.binning.keys():
-                hists[vcfg.name] =   dataframe\
-                                        .Define('w',weight)\
-                                        .Filter(norm_cut)\
-                                        .Histo1D((hists[vcfg.name].GetName(),'',vcfg.binning['nbinsx'],vcfg.binning['xmin'], vcfg.binning['xmax']),vcfg.drawname,'w')
-            else: #if custom bins are give (e.g. log bins)
-                hists[vcfg.name] =   dataframe\
-                                        .Define('w',weight)\
-                                        .Filter(norm_cut)\
-                                        .Histo1D((hists[vcfg.name].GetName(),'',len(vcfg.binning['bins'])-1,vcfg.binning['bins']),vcfg.drawname,'w')
+            try:
+                if 'nbinsx' in vcfg.binning.keys():
+                    hists[vcfg.name] =   dataframe\
+                                            .Define('w',weight)\
+                                            .Filter(norm_cut)\
+                                            .Histo1D((hists[vcfg.name].GetName(),'',vcfg.binning['nbinsx'],vcfg.binning['xmin'], vcfg.binning['xmax']),vcfg.drawname,'w')
+                else: #if custom bins are give (e.g. log bins)
+                    hists[vcfg.name] =   dataframe\
+                                            .Define('w',weight)\
+                                            .Filter(norm_cut)\
+                                            .Histo1D((hists[vcfg.name].GetName(),'',len(vcfg.binning['bins'])-1,vcfg.binning['bins']),vcfg.drawname,'w')
+            except: set_trace()
 
             histo = hists[vcfg.name]
         return hists[vcfg.name]

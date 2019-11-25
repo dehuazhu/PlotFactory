@@ -14,7 +14,6 @@ from socket import gethostname
 from shutil import copyfile
 import uproot as ur
 from modules.DataMCPlot import DataMCPlot 
-import plotfactory as pf
 import pickle
 import math
 
@@ -980,7 +979,6 @@ if __name__ == '__main__':
         # analysis_dir = '/home/dehuazhu/SESSD/4_production/2018/'
         # analysis_dir = '/work/dezhu/4_production/2018/'
 
-    pf.setpfstyle()
 
     # define input parameters
     #The features are the variables your model should depend on
