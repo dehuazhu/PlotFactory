@@ -857,6 +857,6 @@ def setSumWeights(samples, weight_dir='SkimAnalyzerCount', norm=True):
         else:
             sample.sumweights = getSumWeight(sample, weight_dir, norm)
 
-        print ('Sum weights from sample',sample.name, 'taken from SkimReport.txt file. Setting it to', sample.sumweights)
+        # print ('Sum weights from sample',sample.name, 'taken from SkimReport.txt file. Setting it to', sample.sumweights)
 
     return samples

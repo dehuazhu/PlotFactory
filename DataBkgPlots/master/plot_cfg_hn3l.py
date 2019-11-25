@@ -51,7 +51,8 @@ gr.SetBatch(True) # NEEDS TO BE SET FOR MULTIPROCESSING OF plot.Draw()
 
 def prepareRegions(channel):
     regions = []
-    regions.append(Region('datacard_v1_NewPT',channel,'SR'))
+    # regions.append(Region('datacard_v1_NewPT',channel,'SR'))
+    regions.append(Region('datacard_v2_SigReweight',channel,'SR'))
     # regions.append(Region('SR_v3_NewPT',channel,'SR'))
     # regions.append(Region('MR_nonprompt_v1_endgame',channel,'SR'))
     # regions.append(Region('MR_nonprompt_MartinaRegion',channel,'SR'))
@@ -86,8 +87,8 @@ def prepareRegions(channel):
    
 
     for region in regions: 
-        print 'region: %s; channel: %s'%(region.name,region.channel)
-        print 'baseline: %s\n'%(region.baseline)
+        print('region: %s; channel: %s'%(region.name,region.channel))
+        print('baseline: %s\n'%(region.baseline))
 
     return regions
 
@@ -101,10 +102,10 @@ def createSamples(channel, analysis_dir, total_weight, server, add_data_cut=None
     working_samples = samples_all
     working_samples = setSumWeights(working_samples)
     sample_dict['working_samples'] = working_samples
-    print ''
+    print('')
 
     print('###########################################################')
-    print'# %d samples to be used:'%(len(working_samples))
+    print('# %d samples to be used:'%(len(working_samples)))
     print('###########################################################')
     for w in working_samples: print('{:<20}{:<20}'.format(*[w.name,('path: '+w.ana_dir)]))
 
@@ -168,14 +169,14 @@ def makePlots(plotDir,channel_name,variables, regions, total_weight, sample_dict
             # print '# Path to Neural Network for SingleFakes1:\t' + fr_net.path_to_NeuralNet('SingleFake1',channel_dir,dataset)
             # print '# Path to Neural Network for SingleFakes2:\t' + fr_net.path_to_NeuralNet('SingleFake2',channel_dir,dataset)
             # print '# Path to Neural Network for DoubleFakes:\t' + fr_net.path_to_NeuralNet('DoubleFake',channel_dir,dataset)
-            print '# Path to Neural Network for nonprompt:\t\t' + fr_net.path_to_NeuralNet('nonprompt',channel_dir,dataset)
+            print('# Path to Neural Network for nonprompt:\t\t' + fr_net.path_to_NeuralNet('nonprompt',channel_dir,dataset))
         print('#############################################################################')
 
         i_var = 0
         start_plots = time.time()
         for var in variables:
             i_var += 1
-            print '\nPlotting variable \'%s\' (%d of %d; total time passed: %.1f s)...'%(var.name,i_var,len(variables),time.time()-start_plots)
+            print('\nPlotting variable \'%s\' (%d of %d; total time passed: %.1f s)...'%(var.name,i_var,len(variables),time.time()-start_plots))
             start_plot = time.time()
             cfg_main.vars = [var]
             HISTS = CreateHists(cfg_main, analysis_dir,channel_dir,server,useNeuralNetwork,dataset)
@@ -199,7 +200,7 @@ def makePlots(plotDir,channel_name,variables, regions, total_weight, sample_dict
             plot.Group('HNL', ['HN3L'])
             if make_plots:
                 HistDrawer.draw(plot, channel = channel_name, plot_dir = plotDir+region.name, server = server, region = region, channel_dir = channel_dir, dataset = dataset)
-            print'\tThis plot took %.1f s to compute.'%(time.time()-start_plot)
+            print('\tThis plot took %.1f s to compute.'%(time.time()-start_plot))
 
 
 def producePlots(promptLeptonType, L1L2LeptonType, dataset, option = None, multiprocess = False, dataframe = True):
@@ -239,7 +240,6 @@ def producePlots(promptLeptonType, L1L2LeptonType, dataset, option = None, multi
                 channel_name += 'e#mu SS'
                 channel = 'eem_SS'
             else:
-	    	set_trace()
                 plotDir = plotDirBase + 'eem/'
                 channel_name += 'e#mu'
                 channel = 'eem'
@@ -309,12 +309,12 @@ def producePlots(promptLeptonType, L1L2LeptonType, dataset, option = None, multi
     
         if not os.path.exists(regionDir):
             os.mkdir(regionDir)
-            print "Output directory created. "
-            print "Output directory: %s"%(regionDir)
+            print("Output directory created. ")
+            print("Output directory: %s"%(regionDir))
         else:
             # print "Output directory: ", regionDir, "already exists, overwriting it!"
-            print "Output directory already exists, overwriting it! "
-            print "Output directory: %s"%(regionDir)
+            print("Output directory already exists, overwriting it! ")
+            print( "Output directory: %s"%(regionDir))
             os.system("rm -rf %s"%(regionDir))
             os.system("mkdir %s"%(regionDir))
         
@@ -329,7 +329,7 @@ def producePlots(promptLeptonType, L1L2LeptonType, dataset, option = None, multi
             copyfile(cmsBaseDir+'/src/CMGTools/HNL/PlotFactory/DataBkgPlots/master/plot_cfg_hn3l.py', regionDir+'/plot_cfg_base.py')
             copyfile(cmsBaseDir+'/src/CMGTools/HNL/PlotFactory/DataBkgPlots/modules/Selections.py', regionDir+'/Selections.py')
 
-        print 'cfg files stored in "',plotDir + region.name + '/"'
+        print('cfg files stored in "',plotDir + region.name + '/"')
 
         if not os.path.exists(regionDir + '/pdf/'):
             os.mkdir(regionDir + '/pdf/')
@@ -349,10 +349,10 @@ def producePlots(promptLeptonType, L1L2LeptonType, dataset, option = None, multi
         if "starseeker" in hostname:
             if dataset == '2017':
                 os.system("cp -rf %s %s"%(regionDir,'/home/dehuazhu/t3work/3_figures/1_DataMC/FinalStates/'+channel+'/'))
-                print 'directory %s copied to /t3home/dezhu/eos/t3/figures/1_DataMC/FinalStates/%s!'%(region.name,channel)
+                print('directory %s copied to /t3home/dezhu/eos/t3/figures/1_DataMC/FinalStates/%s!'%(region.name,channel))
             if dataset == '2018':
                 os.system("cp -rf %s %s"%(regionDir,'/home/dehuazhu/t3work/3_figures/1_DataMC/FinalStates/2018/'+channel+'/'))
-                print 'directory %s copied to /t3home/dezhu/eos/t3/figures/1_DataMC/FinalStates/2018/%s!'%(region.name,channel)
+                print('directory %s copied to /t3home/dezhu/eos/t3/figures/1_DataMC/FinalStates/2018/%s!'%(region.name,channel))
     
     makePlots(
         plotDir,

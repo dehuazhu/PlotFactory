@@ -284,8 +284,8 @@ class dataCards(object):
         print('datacards generated to %s'%self.out_folder)
 
 if __name__ == '__main__':
-    # channel = 'mmm'
-    channel = 'mem_OS'
+    channel = 'mmm'
+    # channel = 'mem_OS'
     # channel = 'mem_SS'
     # channel = 'eee'
     # channel = 'eem_OS'

@@ -91,6 +91,9 @@ def path_to_NeuralNet(faketype ='nonprompt',channel = 'mmm', dataset = '2017', h
                 if dataset == '2018':
                     path_to_NeuralNet = 'NN/2018/mem_SS_nonprompt_v1_Endgame/'
 
+            path_to_NeuralNet = '/mnt/StorageElement1/7_' + path_to_NeuralNet
+
+
     if 'lxplus' in hostname:
         if channel == 'mmm':
                 if dataset == '2018':
