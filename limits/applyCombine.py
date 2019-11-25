@@ -86,17 +86,23 @@ def runCombine(inputDatacardArray):
 
 def runCombineParallel():
     inputDatacardsArray = []
-    for file in os.listdir("combined"):
-        inputDataCard_path = 'combined/' + file 
+    # for file in os.listdir("combined"):
+        # inputDataCard_path = 'combined/' + file 
+    for file in os.listdir("datacards"):
+        inputDataCard_path = 'datacards/' + file 
+
         outputDir_path     = 'outputText'
+        if not os.path.isdir(outputDir_path): os.mkdir(outputDir_path)
         inputDatacardsArray.append([inputDataCard_path,outputDir_path])
 
     n_sets = len(inputDatacardsArray)
     n_CPU  = multiprocessing.cpu_count()
     print('running %d M/V2 sets on %d CPUs:'%(n_sets,n_CPU))
     start = time.time()
-    pool    = multiprocessing.Pool(72)
-    result  = pool.map(runCombine,inputDatacardsArray) 
+    pool    = multiprocessing.Pool(n_sets)
+    # result  = pool.map(runCombine,inputDatacardsArray) 
+    test_input = [inputDatacardsArray[0]]
+    result  = pool.map(runCombine,test_input) 
     end = time.time()
     print('job done, it took %.2f seconds to combine'%(end-start))
     return True
@@ -124,13 +130,13 @@ if __name__ == '__main__':
 
 
     # # add all the output files together
-    combineTxtFiles()
+    # combineTxtFiles()
 
     
 
     
 
-    ## for testing!
+    # # for testing!
     # testSet = file_sets_array[0]
     # combineCardsInDisplacement(testSet)
     # testArray = [file_sets_array[0],file_sets_array[1],file_sets_array[2]]

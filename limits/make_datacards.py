@@ -203,17 +203,18 @@ class dataCards(object):
                     # h_dict['data_obs'] = h
 
             for h in h_list:
-                set_trace()
                 h_name = h.GetName()
                 if ('TFrame' in h_name) or ('TPave' in h_name): continue
                 elif 'Dirac' in h_name: continue  
                 elif 'HN3L' in h_name: 
-                    h_name = sub('.*HN3L_M_', 'M', h_name)
-                    h_name = sub('_V_0', '_V', h_name)
-                    h_name = sub('_mu_massiveAndCKM_LO', '', h_name)
-                    h_name = sub('_e_massiveAndCKM_LO', '', h_name)
-                    h.SetName(h_name)
-                    h_dict[h_name] = h
+                    # if 'datacard_v2_SigReweight_d471bd1f9ff31e2b2834b49a955c980a_HN3L_M_6_V_0p00202484567313_mu_massiveAndCKM_LO_hnl_m_12_money_disp1_0p5_fine_HN3L_M_6_V_0p00202484567313_mu_massiveAndCKM_' in h_name: set_trace()
+                    name = sub('_hnl_m_12_money_disp.*', '', h_name)
+                    name = sub('.*HN3L_M_', 'M', name)
+                    name = sub('_V_0', '_V', name)
+                    name = sub('_mu_massiveAndCKM_LO', '', name)
+                    name = sub('_e_massiveAndCKM_LO', '', name)
+                    h.SetName(name)
+                    h_dict[name] = h
                 elif 'stack' in h_name:
                     stack = pad.GetPrimitive(h_name)
                 else: 
@@ -222,7 +223,6 @@ class dataCards(object):
                 # elif 'data' in h_name: 
                     # h.SetName('data_obs')
                     # h_dict['data_obs'] = h
-
 
             for h in stack.GetHists():
                 h_name = h.GetName()
@@ -301,7 +301,7 @@ if __name__ == '__main__':
     in_folders = glob('/work/dezhu/3_figures/1_DataMC/FinalStates/2018/0_datacards_v2_SignalReweight/%s/root/linear/' %channel)
 
     # output_base = '/work/dezhu/3_figures/2_Limits/2018/%s/20191120_Aachen'%channel
-    out_base = '/work/dezhu/3_figures/2_Limits/2018/%s/20191125_SignalReweight'%(channel)
+    output_base = '/work/dezhu/3_figures/2_Limits/2018/%s/20191125_SignalReweight'%(channel)
     
     output_folder = output_base + '/datacards/'
 

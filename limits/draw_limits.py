@@ -125,7 +125,7 @@ def get_lim_dict(input_file, output_dir, ch='mem', verbose=False):
         line = line.strip()
         if line == '': continue
 
-        mode = 'mu'
+        mode = None
 
         if ((ch == 'mmm') or (ch == 'mem_OS') or (ch == 'mem_SS')): mode = 'mu'
         if ((ch == 'eee') or (ch == 'eem_OS') or (ch == 'eem_SS')): mode = 'e'
@@ -134,37 +134,27 @@ def get_lim_dict(input_file, output_dir, ch='mem', verbose=False):
         if '_mu_' in line:  mode = 'mu' 
         if '_tau_' in line: mode = 'tau'
 
-        # if 'hnl' in line:
-            # # mass = re.sub(r'.*M([0-9])_V.*',r'\1', line)
-            # mass = re.sub('.*_M','',line)
-            # mass = re.sub('_.*','',mass)
-            # v    = re.sub('.*Vp', '', line)
-            # v    = re.sub('_.*', '', v)
-            # v    = '0.' + v
-            # Mass, V = mass, v
-            # try:
-                # massNumber = int(Mass)
-                # if massNumber not in masses:
-                    # masses.append(massNumber) 
-            # except: pass
         if 'hnl' in line:
-            mass = re.sub('.*_m_','',line)
+            if '.root' in line: continue
+            # mass = re.sub(r'.*M([0-9])_V.*',r'\1', line)
+            mass = re.sub('.*_M','',line)
             mass = re.sub('_.*','',mass)
-            v    = re.sub('.*v2_', '', line)
+            v    = re.sub('.*Vp', '', line)
             v    = re.sub('_.*', '', v)
-            v    = re.sub('p', '.', v)
-            v    = re.sub('m', '-', v)
+            v    = '0.' + v
             Mass, V = mass, v
-
-            massNumber = int(Mass)
-            if massNumber not in masses:
-                masses.append(massNumber) 
-
             try:
+                massNumber = int(Mass)
+                if massNumber not in masses:
+                    masses.append(massNumber) 
+            except: pass
+
+            try: 
+                lim_dict['M' + Mass + '_V' + V + '_' + mode] = OrderedDict()
                 lim_dict['M' + Mass + '_V' + V + '_' + mode]['mass'] = float(Mass)
                 lim_dict['M' + Mass + '_V' + V + '_' + mode]['V']    = float(V)
-            except: 
-                lim_dict['M' + Mass + '_V' + V + '_' + mode] = OrderedDict()
+                lim_dict['M' + Mass + '_V' + V + '_' + mode]['V2']   = float(V)**2
+            except: set_trace()
 
         ep1s = None; ep2s = None; em1s = None; em2s = None; om1s = None; op1s = None; obs = None; exp = None
         line = re.sub(' ', '', line)
@@ -228,14 +218,13 @@ def draw_limits(input_file, output_dir, ch='mmm', twoD=False, verbose=False):
         for v2 in v2s:
             # if limits[v2].has_key('exp'):  
             if 'exp' in limits[v2]:
-                y_exp .append(limits [v2]['exp' ]) 
-                y_ep1s.append(limits [v2]['ep1s']) 
-                y_ep2s.append(limits [v2]['ep2s']) 
-                y_em1s.append(limits [v2]['em1s']) 
-                y_em2s.append(limits [v2]['em2s']) 
-                set_trace()
                 try:
-                    b_V2  .append(signals[v2]['V2']) 
+                    y_exp .append(limits [v2]['exp' ]) 
+                    y_ep1s.append(limits [v2]['ep1s']) 
+                    y_ep2s.append(limits [v2]['ep2s']) 
+                    y_em1s.append(limits [v2]['em1s']) 
+                    y_em2s.append(limits [v2]['em2s']) 
+                    b_V2  .append(limits [v2]['V2']) 
                 except: set_trace()
 
         if len(b_V2) == 0: 
@@ -257,13 +246,13 @@ def draw_limits(input_file, output_dir, ch='mmm', twoD=False, verbose=False):
         gr2 = rt.TGraphAsymmErrors(len(b_V2), np.array(b_V2), np.array(y_exp), np.array(x_err), np.array(x_err), np.array(y_em2s), np.array(y_ep2s))
         
         rt.gStyle.SetOptStat(0000)
-        B_V2 = np.logspace(-8, -1, 10, base=10)
+        B_V2 = np.logspace(-11, -1, 10, base=10)
         B_Y  = np.logspace(-4, 4, 10, base=10)
         r1g = rt.TGraph           (len(B_V2), np.array(B_V2), np.ones(len(B_V2)))
         r1g.SetLineColor(rt.kRed+1); r1g.SetLineWidth(1)
         framer = rt.TH2F('framer', 'framer', len(B_V2)-1, B_V2, len(B_Y)-1, B_Y)
         framer.GetYaxis().SetRangeUser(0.0001,10000)
-        framer.GetXaxis().SetRangeUser(0.00000001, 0.1)
+        framer.GetXaxis().SetRangeUser(0.00000000001, 0.1)
 
         if ch == 'mmm': 
             framer.SetTitle('m_{N} = %d GeV,  #mu#mu#mu; |V_{#mu N}|^{2}; r' %m)
@@ -331,23 +320,21 @@ if __name__ == '__main__':
     
     plotfactory.setpfstyle()
 
-    channel = 'mmm'
+    # channel = 'mmm'
     # channel = 'mem_OS'
     # channel = 'mem_SS'
     # channel = 'eee'
     # channel = 'eem_OS'
-    # channel = 'eem_SS'
+    channel = 'eem_SS'
 
     #2017
     # base_dir   = '/work/dezhu/3_figures/2_Limits/2017/mmm/20191119_limits'
 
     #2018
     # base_dir   = '/work/dezhu/3_figures/2_Limits/2018/%s/20191120_Aachen'%channel
-    base_dir   = '/work/dezhu/3_figures/2_Limits/2018/%s/20191121_RiccardoDatacards'%channel
-    # input_file = base_dir + '/output.txt'
-
-    #experimental
-    input_file='/work/dezhu/3_figures/2_Limits/2018/mmm/20191121_RiccardoDatacards/mmm_191120_18h_23m_signal_region_datacards/datacards/output.txt' 
+    # base_dir   = '/work/dezhu/3_figures/2_Limits/2018/%s/20191121_RiccardoDatacards'%channel
+    base_dir   = '/work/dezhu/3_figures/2_Limits/2018/%s/20191125_SignalReweight'%channel
+    input_file = base_dir + '/output.txt'
 
     output_dir = base_dir + '/output/' 
     if not os.path.isdir(output_dir): os.mkdir(output_dir)
