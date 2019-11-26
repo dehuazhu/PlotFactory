@@ -4,6 +4,7 @@ import pickle
 import ROOT
 from ROOT import gSystem, gROOT
 from collections import OrderedDict
+from modules.getSignals import getSignals
 
 from pdb import set_trace
 
@@ -15,14 +16,16 @@ from modules.PlotConfigs import SampleCfg, HistogramCfg
 def searchAndCreateSampleList(ana_dir,tree_prod_name,type='signal'):
     samples = []
     dirs = os.listdir(ana_dir)
+    signals = getSignals()
     for subdir in dirs:
         dir_sample = ana_dir + '/' + subdir
         if 'SkimAnalyzerCount' in os.listdir(dir_sample):
             subdir_sample = ana_dir + '/' + subdir + '/SkimAnalyzerCount'
             if 'SkimReport.txt' in os.listdir(subdir_sample):
                 if type is 'signal':
+                    if 'Dirac' in subdir: continue
                     samples.append(
-                        SampleCfg(name=subdir, dir_name=subdir, ana_dir=ana_dir, tree_prod_name=tree_prod_name, is_signal = True ),   
+                        SampleCfg(name=subdir, dir_name=subdir, ana_dir=ana_dir, tree_prod_name=tree_prod_name, xsec = signals[subdir]['xsec'], is_signal = True ),   
                     )
     return samples
 

@@ -15,10 +15,11 @@ import re
 from pdb import set_trace
 import numpy as np
 from matplotlib import pyplot as plt
-import shapely.geometry as sg
+# import shapely.geometry as sg
 import os
 from termcolor import colored
 import plotfactory    
+from socket import gethostname
 
 
 def get_signals(verbose=False):
@@ -206,6 +207,7 @@ def draw_limits(input_file, output_dir, ch='mmm', twoD=False, verbose=False):
     # create signal and limits dictionary
     limits, masses  = get_lim_dict(input_file, output_dir, ch=ch)
     signals = get_signals()
+    set_trace()
 
     b     = np.arange(0., 11, 1)
     req1  = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
