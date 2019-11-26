@@ -134,7 +134,7 @@ def get_lim_dict(input_file, output_dir, ch='mem', verbose=False):
         if '_mu_' in line:  mode = 'mu' 
         if '_tau_' in line: mode = 'tau'
 
-        if 'hnl' in line:
+        if ('HNL' in line) or ('hnl' in line):
             if '.root' in line: continue
             # mass = re.sub(r'.*M([0-9])_V.*',r'\1', line)
             mass = re.sub('.*_M','',line)
@@ -159,29 +159,32 @@ def get_lim_dict(input_file, output_dir, ch='mem', verbose=False):
         ep1s = None; ep2s = None; em1s = None; em2s = None; om1s = None; op1s = None; obs = None; exp = None
         line = re.sub(' ', '', line)
 
-        if 'Observed'     in line: 
-            obs  = re.sub('.*r<', '', line) 
-            lim_dict['M' + Mass + '_V' + V + '_' + mode]['obs']  = float(obs)
 
-        if 'Expected2.5'  in line:                           
-            em2s = re.sub('.*r<', '', line)                  
-            lim_dict['M' + Mass + '_V' + V + '_' + mode]['em2s'] = float(em2s)
+        try:
+            if 'Observed'     in line: 
+                obs  = re.sub('.*r<', '', line) 
+                lim_dict['M' + Mass + '_V' + V + '_' + mode]['obs']  = float(obs)
 
-        if 'Expected16.0' in line:                           
-            em1s = re.sub('.*r<', '', line)                  
-            lim_dict['M' + Mass + '_V' + V + '_' + mode]['em1s'] = float(em1s)
+            if 'Expected2.5'  in line:                           
+                em2s = re.sub('.*r<', '', line)                  
+                lim_dict['M' + Mass + '_V' + V + '_' + mode]['em2s'] = float(em2s)
 
-        if 'Expected50.0' in line:                           
-            exp  = re.sub('.*r<', '', line)                  
-            lim_dict['M' + Mass + '_V' + V + '_' + mode]['exp']  = float(exp)
+            if 'Expected16.0' in line:                           
+                em1s = re.sub('.*r<', '', line)                  
+                lim_dict['M' + Mass + '_V' + V + '_' + mode]['em1s'] = float(em1s)
 
-        if 'Expected84.0' in line:                           
-            ep1s = re.sub('.*r<', '', line)                  
-            lim_dict['M' + Mass + '_V' + V + '_' + mode]['ep1s'] = float(ep1s)
+            if 'Expected50.0' in line:                           
+                exp  = re.sub('.*r<', '', line)                  
+                lim_dict['M' + Mass + '_V' + V + '_' + mode]['exp']  = float(exp)
 
-        if 'Expected97.5' in line:                           
-            ep2s = re.sub('.*r<', '', line)                 
-            lim_dict['M' + Mass + '_V' + V + '_' + mode]['ep2s'] = float(ep2s)
+            if 'Expected84.0' in line:                           
+                ep1s = re.sub('.*r<', '', line)                  
+                lim_dict['M' + Mass + '_V' + V + '_' + mode]['ep1s'] = float(ep1s)
+
+            if 'Expected97.5' in line:                           
+                ep2s = re.sub('.*r<', '', line)                 
+                lim_dict['M' + Mass + '_V' + V + '_' + mode]['ep2s'] = float(ep2s)
+        except: set_trace()
 
     if verbose:
         for k in lim_dict.keys(): 
@@ -209,6 +212,9 @@ def draw_limits(input_file, output_dir, ch='mmm', twoD=False, verbose=False):
 
     ixs = OrderedDict()
 
+    #sort the dictionary after v values
+    limits = OrderedDict(sorted(limits.items(),key=lambda t: t[1]['V']))
+
     for m in masses:
         print(colored('doing MASS = %d GeV'%m,'green'))
 
@@ -225,6 +231,7 @@ def draw_limits(input_file, output_dir, ch='mmm', twoD=False, verbose=False):
                     y_em1s.append(limits [v2]['em1s']) 
                     y_em2s.append(limits [v2]['em2s']) 
                     b_V2  .append(limits [v2]['V2']) 
+                    # if m == 5: set_trace()
                 except: set_trace()
 
         if len(b_V2) == 0: 
@@ -241,6 +248,8 @@ def draw_limits(input_file, output_dir, ch='mmm', twoD=False, verbose=False):
             y_em2s[i] = abs(y_em2s[i] - y_exp[i]) 
             
 
+        # if Mass == '5' and V == '0.00145602197786': set_trace()
+       
         exp = rt.TGraph           (len(b_V2), np.array(b_V2), np.array(y_exp))
         gr1 = rt.TGraphAsymmErrors(len(b_V2), np.array(b_V2), np.array(y_exp), np.array(x_err), np.array(x_err), np.array(y_em1s), np.array(y_ep1s))
         gr2 = rt.TGraphAsymmErrors(len(b_V2), np.array(b_V2), np.array(y_exp), np.array(x_err), np.array(x_err), np.array(y_em2s), np.array(y_ep2s))
@@ -320,12 +329,12 @@ if __name__ == '__main__':
     
     plotfactory.setpfstyle()
 
-    # channel = 'mmm'
+    channel = 'mmm'
     # channel = 'mem_OS'
     # channel = 'mem_SS'
     # channel = 'eee'
     # channel = 'eem_OS'
-    channel = 'eem_SS'
+    # channel = 'eem_SS'
 
     #2017
     # base_dir   = '/work/dezhu/3_figures/2_Limits/2017/mmm/20191119_limits'
@@ -333,10 +342,12 @@ if __name__ == '__main__':
     #2018
     # base_dir   = '/work/dezhu/3_figures/2_Limits/2018/%s/20191120_Aachen'%channel
     # base_dir   = '/work/dezhu/3_figures/2_Limits/2018/%s/20191121_RiccardoDatacards'%channel
-    base_dir   = '/work/dezhu/3_figures/2_Limits/2018/%s/20191125_SignalReweight'%channel
+    # base_dir   = '/work/dezhu/3_figures/2_Limits/2018/%s/20191125_SignalReweightNormalized'%channel
+    # base_dir   = '/work/dezhu/3_figures/2_Limits/2018/%s/20191125_SignalReweightNormalized_fixed'%channel
+    base_dir   = '/work/dezhu/3_figures/2_Limits/2018/%s/20191125_SignalReweightNormalized_fixed2'%channel
     input_file = base_dir + '/output.txt'
 
-    output_dir = base_dir + '/output/' 
+    output_dir = base_dir + '/plots/' 
     if not os.path.isdir(output_dir): os.mkdir(output_dir)
 
     draw_limits(input_file, output_dir, ch = channel)

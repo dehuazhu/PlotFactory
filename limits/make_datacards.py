@@ -298,10 +298,14 @@ if __name__ == '__main__':
     
     #new 2018
     # in_folders = glob('/work/dezhu/3_figures/1_DataMC/FinalStates/2018/0_datacards_v1/%s/root/linear/' %channel)
-    in_folders = glob('/work/dezhu/3_figures/1_DataMC/FinalStates/2018/0_datacards_v2_SignalReweight/%s/root/linear/' %channel)
+    # in_folders = glob('/work/dezhu/3_figures/1_DataMC/FinalStates/2018/0_datacards_v2_SignalReweight/%s/root/linear/' %channel)
+    # in_folders = glob('/work/dezhu/3_figures/1_DataMC/FinalStates/2018/0_datacards_v3_SignalReweightNormalized/%s/root/linear/' %channel)
+    # in_folders = glob('/work/dezhu/3_figures/1_DataMC/FinalStates/2018/%s/datacard_v3_SigReweightNormalized_fixed/root/linear/' %channel)
+    in_folders = glob('/work/dezhu/3_figures/1_DataMC/FinalStates/2018/%s/datacard_v3_SigReweightNormalized_fixed2/root/linear/' %channel)
 
     # output_base = '/work/dezhu/3_figures/2_Limits/2018/%s/20191120_Aachen'%channel
-    output_base = '/work/dezhu/3_figures/2_Limits/2018/%s/20191125_SignalReweight'%(channel)
+    # output_base = '/work/dezhu/3_figures/2_Limits/2018/%s/20191125_SignalReweight'%(channel)
+    output_base = '/work/dezhu/3_figures/2_Limits/2018/%s/20191125_SignalReweightNormalized_fixed2'%(channel)
     
     output_folder = output_base + '/datacards/'
 

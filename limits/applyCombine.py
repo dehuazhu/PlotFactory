@@ -73,15 +73,26 @@ def runCombineCardsParallel(file_sets_array):
 def runCombine(inputDatacardArray):
     inputDataCard_path = inputDatacardArray[0]
     outputDir_path     = inputDatacardArray[1]
-    mass = re.sub('.*_m_','',inputDataCard_path)
-    mass = re.sub('_.*','',mass)
-    v2   = re.sub('.*_v2_','',inputDataCard_path)
-    v2   = re.sub('_.*','',v2)
+
+    # mass = re.sub('.*_m_','',inputDataCard_path)
+    # mass = re.sub('_.*','',mass)
+    # v2   = re.sub('.*_v2_','',inputDataCard_path)
+    # v2   = re.sub('_.*','',v2)
     
-    command = 'combine -M AsymptoticLimits %s --run blind > %s/m_%s_v2_%s.txt'%(inputDataCard_path,outputDir_path,mass,v2)
-    print('running combine on M = %s; V2 = %s'%(mass,v2)),
+    mass = re.sub('.*_M','',inputDataCard_path)
+    mass = re.sub('_.*','',mass)
+    v2   = re.sub('.*_V','',inputDataCard_path)
+    v2   = re.sub('_.*','',v2)
+
+    # command = 'combine -M AsymptoticLimits %s --run blind > %s/M_%s_V%s.txt'%(inputDataCard_path,outputDir_path,mass,v2)
+    # print('running combine on M = %s; V2 = %s'%(mass,v2)),
+    filename ='M_%s_V%s'%(mass,v2) 
+    command_writeHeader     = 'echo %s > %s/%s.txt'%(inputDataCard_path, outputDir_path,filename)
+    command_executeCombine  = 'combine -M AsymptoticLimits -d %s --run blind -n %s &>> %s/%s.txt'%(inputDataCard_path,filename,outputDir_path,filename)
+    command = command_writeHeader + ' && ' + command_executeCombine
     os.system(command)
-    print('\t\tdone!')
+    print('Done running combine on M = %s; V = %s'%(mass,v2))
+    # print('\t\tdone!')
     return True
 
 def runCombineParallel():
@@ -95,14 +106,19 @@ def runCombineParallel():
         if not os.path.isdir(outputDir_path): os.mkdir(outputDir_path)
         inputDatacardsArray.append([inputDataCard_path,outputDir_path])
 
-    n_sets = len(inputDatacardsArray)
-    n_CPU  = multiprocessing.cpu_count()
-    print('running %d M/V2 sets on %d CPUs:'%(n_sets,n_CPU))
     start = time.time()
-    pool    = multiprocessing.Pool(n_sets)
-    # result  = pool.map(runCombine,inputDatacardsArray) 
-    test_input = [inputDatacardsArray[0]]
-    result  = pool.map(runCombine,test_input) 
+
+    n_sets = len(inputDatacardsArray)
+    n_CPU  = multiprocessing.cpu_count()-4
+    print('running %d M/V2 sets on %d CPUs:'%(n_sets,n_CPU))
+    pool    = multiprocessing.Pool(n_CPU)
+    result  = pool.map(runCombine,inputDatacardsArray) 
+
+    # #for testing
+    # test_input = inputDatacardsArray[0]
+    # runCombine(test_input)
+    # # result  = pool.map(runCombine,test_input) 
+
     end = time.time()
     print('job done, it took %.2f seconds to combine'%(end-start))
     return True
@@ -126,11 +142,11 @@ if __name__ == '__main__':
     # runCombineCardsParallel(file_sets_array)
 
     # # run combine with all available cpus!
-    # runCombineParallel()
+    runCombineParallel()
 
 
     # # add all the output files together
-    # combineTxtFiles()
+    combineTxtFiles()
 
     
 
