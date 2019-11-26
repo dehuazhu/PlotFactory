@@ -15,10 +15,11 @@ import re
 from pdb import set_trace
 import numpy as np
 from matplotlib import pyplot as plt
-import shapely.geometry as sg
+# import shapely.geometry as sg
 import os
 from termcolor import colored
 import plotfactory    
+from socket import gethostname
 
 
 def get_signals(verbose=False):
@@ -203,6 +204,7 @@ def draw_limits(input_file, output_dir, ch='mmm', twoD=False, verbose=False):
     # create signal and limits dictionary
     limits, masses  = get_lim_dict(input_file, output_dir, ch=ch)
     signals = get_signals()
+    set_trace()
 
     b     = np.arange(0., 11, 1)
     req1  = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
@@ -317,26 +319,27 @@ def draw_limits(input_file, output_dir, ch='mmm', twoD=False, verbose=False):
 
 if __name__ == '__main__':
     print('starting draw_limits.py...')
-    
-    plotfactory.setpfstyle()
+    hostname = gethostname()
+    if 't3ui02' in hostname:
+        plotfactory.setpfstyle()
 
-    # channel = 'mmm'
-    # channel = 'mem_OS'
-    # channel = 'mem_SS'
-    # channel = 'eee'
-    # channel = 'eem_OS'
-    channel = 'eem_SS'
+        # channel = 'mmm'
+        # channel = 'mem_OS'
+        # channel = 'mem_SS'
+        # channel = 'eee'
+        # channel = 'eem_OS'
+        channel = 'eem_SS'
 
-    #2017
-    # base_dir   = '/work/dezhu/3_figures/2_Limits/2017/mmm/20191119_limits'
+        #2017
+        # base_dir   = '/work/dezhu/3_figures/2_Limits/2017/mmm/20191119_limits'
 
-    #2018
-    # base_dir   = '/work/dezhu/3_figures/2_Limits/2018/%s/20191120_Aachen'%channel
-    # base_dir   = '/work/dezhu/3_figures/2_Limits/2018/%s/20191121_RiccardoDatacards'%channel
-    base_dir   = '/work/dezhu/3_figures/2_Limits/2018/%s/20191125_SignalReweight'%channel
-    input_file = base_dir + '/output.txt'
+        #2018
+        # base_dir   = '/work/dezhu/3_figures/2_Limits/2018/%s/20191120_Aachen'%channel
+        # base_dir   = '/work/dezhu/3_figures/2_Limits/2018/%s/20191121_RiccardoDatacards'%channel
+        base_dir   = '/work/dezhu/3_figures/2_Limits/2018/%s/20191125_SignalReweight'%channel
+        input_file = base_dir + '/output.txt'
 
-    output_dir = base_dir + '/output/' 
-    if not os.path.isdir(output_dir): os.mkdir(output_dir)
+        output_dir = base_dir + '/output/' 
+        if not os.path.isdir(output_dir): os.mkdir(output_dir)
 
-    draw_limits(input_file, output_dir, ch = channel)
+        draw_limits(input_file, output_dir, ch = channel)
