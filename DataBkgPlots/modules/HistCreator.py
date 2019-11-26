@@ -273,9 +273,11 @@ class CreateHists(object):
 
         if (not cfg.is_data) and (not cfg.is_doublefake) and (not cfg.is_singlefake) and (not cfg.is_nonprompt):
             if cfg.is_reweightSignal:
-                weight = weight + ' * ' + str(self.hist_cfg.lumi/cfg.sumweights)
+                weight = weight + ' * ' + str(self.hist_cfg.lumi * cfg.xsec/cfg.sumweights)
             else:
-                weight = weight + ' * ' + str(self.hist_cfg.lumi*cfg.xsec/cfg.sumweights)
+                weight = weight + ' * ' + str(self.hist_cfg.lumi * cfg.xsec/cfg.sumweights)
+            # if 'M_5_V_0p0007071067811865475' in cfg.name: set_trace()
+            # if 'M_5_V_0p00145602197786' in cfg.name: set_trace()
 
         # gSystem.Load("modules/DDE_doublefake_h.so")
         # gSystem.Load("modules/DDE_singlefake_h.so")
@@ -466,6 +468,7 @@ class CreateHists(object):
         if not cfg.is_singlefake:
             # if 'A' in cfg.name: set_trace()
 	    # if 'Single' in cfg.name: set_trace()
+            if 'M_5_V_0p00145602197786' in cfg.name: set_trace()
             try:
                 if 'nbinsx' in vcfg.binning.keys():
                     hists[vcfg.name] =   dataframe\

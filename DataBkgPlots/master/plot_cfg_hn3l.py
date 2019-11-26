@@ -53,7 +53,7 @@ def prepareRegions(channel):
     regions = []
     # regions.append(Region('datacard_v1_NewPT',channel,'SR'))
     # regions.append(Region('datacard_v2_SigReweight',channel,'SR'))
-    regions.append(Region('datacard_v3_SigReweightNormalized_fixed',channel,'SR'))
+    regions.append(Region('datacard_v3_SigReweightNormalized_fixed2',channel,'SR'))
     # regions.append(Region('SR_v3_NewPT',channel,'SR'))
     # regions.append(Region('MR_nonprompt_v1_endgame',channel,'SR'))
     # regions.append(Region('MR_nonprompt_MartinaRegion',channel,'SR'))
@@ -365,7 +365,7 @@ def producePlots(promptLeptonType, L1L2LeptonType, dataset, option = None, multi
         total_weight, 
         sample_dict, 
         make_plots=True,
-        multiprocess=True,
+        multiprocess=False,
         useNeuralNetwork=True,
         dataframe=dataframe,
         server=hostname,

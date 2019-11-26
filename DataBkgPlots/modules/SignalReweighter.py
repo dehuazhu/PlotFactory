@@ -3,7 +3,26 @@ from modules.PlotConfigs import SampleCfg
 from modules.Samples import setSumWeights
 
 from pdb import set_trace
+###########################################
+from modules.getSignals import getSignals
 
+def searchAndCreateSampleList(ana_dir,tree_prod_name,type='signal'):
+    samples = []
+    dirs = os.listdir(ana_dir)
+    signals = getSignals()
+    for subdir in dirs:
+        dir_sample = ana_dir + '/' + subdir
+        if 'SkimAnalyzerCount' in os.listdir(dir_sample):
+            subdir_sample = ana_dir + '/' + subdir + '/SkimAnalyzerCount'
+            if 'SkimReport.txt' in os.listdir(subdir_sample):
+                if type is 'signal':
+                    if 'Dirac' in subdir: continue
+                    samples.append(
+                        SampleCfg(name=subdir, dir_name=subdir, ana_dir=ana_dir, tree_prod_name=tree_prod_name, xsec = signals[subdir]['xsec'], is_signal = True ),   
+                    )
+    return samples
+
+##########################################
 def makeSignalDict(dataMCPlots,channel):
     if ('mmm' in channel) or ('mem' in channel): ch = 'mu'
     if ('eee' in channel) or ('eem' in channel): ch = 'e'
@@ -32,7 +51,7 @@ def makeSignalDict(dataMCPlots,channel):
 	signalDict['%s'%mass]['V%s'%v]['name']   = 'HN3L_M_%s_V_%s_%s_massiveAndCKM_LO'%(mass,v,ch) 
     return signalDict
 
-def makeCfgs(signalDict,channel,dataset,ana_dir):
+def makeCfgs(signalDict,channel,dataset,ana_dir,signals):
     if ('mmm' in channel) or ('mem' in channel): ch = 'mu'
     if ('eee' in channel) or ('eem' in channel): ch = 'e'
     samples = []
@@ -76,13 +95,13 @@ def makeCfgs(signalDict,channel,dataset,ana_dir):
         except: set_trace()
         for newV in Vs:
 	    name = 'HN3L_M_%s_V_%s_%s_massiveAndCKM_LO'%(mass,newV,ch) 
-            sample = makeSample(name,subdir=subdir,dataset=dataset,channel=channel,analysis_dir=ana_dir) 
+            sample = makeSample(name,subdir=subdir,signals=signals,dataset=dataset,channel=channel,analysis_dir=ana_dir) 
             samples.append(sample)
     samples=setSumWeights(samples)
 
     return samples
 
-def makeSample(name,subdir,dataset='2018',channel='mmm',server='starseeker',analysis_dir=''):
+def makeSample(name,subdir,signals,dataset='2018',channel='mmm',server='starseeker',analysis_dir=''):
     if dataset == '2018':
         if channel == 'mmm':
             if 'lxplus' in server:
@@ -145,7 +164,7 @@ def makeSample(name,subdir,dataset='2018',channel='mmm',server='starseeker',anal
                 DY_dir = analysis_dir + bkg_dir
             dataA_name = 'Single_ele_2018A'; dataB_name = 'Single_ele_2018B'; dataC_name = 'Single_ele_2018C'; dataD_name = 'Single_ele_2018D';
             
-    sample = SampleCfg(name=name, dir_name=subdir, ana_dir=sig_dir, tree_prod_name='HNLTreeProducer', is_signal = True, is_reweightSignal = True)
+    sample = SampleCfg(name=name, dir_name=subdir, ana_dir=sig_dir, xsec = signals[subdir]['xsec'], tree_prod_name='HNLTreeProducer', is_signal = True, is_reweightSignal = True)
     return sample
 
 
@@ -155,6 +174,8 @@ def reweightSignals(inputPlots, useMultiprocess, ana_dir, hist_cfg, channel):
     print('#########################')
     dataset = '2018'
 
+    signals = getSignals()
+
     for inputPlotKey in inputPlots:
         currentDataMCPlot = inputPlots[inputPlotKey]
 
@@ -162,6 +183,6 @@ def reweightSignals(inputPlots, useMultiprocess, ana_dir, hist_cfg, channel):
         signalDict = makeSignalDict(currentDataMCPlot,channel)
 
         # make a cfg list for producing the missing signal histograms
-	samples = makeCfgs(signalDict,channel,dataset,ana_dir)
+	samples = makeCfgs(signalDict,channel,dataset,ana_dir,signals)
 
     return samples
