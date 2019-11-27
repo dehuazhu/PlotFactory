@@ -207,7 +207,6 @@ def draw_limits(input_file, output_dir, ch='mmm', twoD=False, verbose=False):
     # create signal and limits dictionary
     limits, masses  = get_lim_dict(input_file, output_dir, ch=ch)
     signals = get_signals()
-    set_trace()
 
     b     = np.arange(0., 11, 1)
     req1  = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
