@@ -27,7 +27,7 @@ if dataset == '2018':
 path_to_NeuralNet = path_to_NeuralNet(faketype, channel, dataset) 
 
 make_all_friendtrees(
-        multiprocess = True,
+        multiprocess = False,
         server = hostname,
         analysis_dir = analysis_dir,
         channel=channel,

@@ -53,7 +53,8 @@ def prepareRegions(channel):
     regions = []
     # regions.append(Region('datacard_v1_NewPT',channel,'SR'))
     # regions.append(Region('datacard_v2_SigReweight',channel,'SR'))
-    regions.append(Region('datacard_v3_SigReweightNormalized_fixed2',channel,'SR'))
+    # regions.append(Region('datacard_v3_SigReweightNormalized_fixed2',channel,'SR'))
+    regions.append(Region('datacard_v4_WideV2',channel,'SR'))
     # regions.append(Region('SR_v3_NewPT',channel,'SR'))
     # regions.append(Region('MR_nonprompt_v1_endgame',channel,'SR'))
     # regions.append(Region('MR_nonprompt_MartinaRegion',channel,'SR'))
@@ -108,7 +109,8 @@ def createSamples(channel, analysis_dir, total_weight, server, add_data_cut=None
     print('###########################################################')
     print('# %d samples to be used:'%(len(working_samples)))
     print('###########################################################')
-    for w in working_samples: print('{:<20}{:<20}'.format(*[w.name,('path: '+w.ana_dir)]))
+    for sample in working_samples: print('{:<20}{:<20}'.format(*[sample.name,('path: '+sample.ana_dir)]))
+    # for w in working_samples: print('{:<20}{:<20}'.format(*[w.name,('path: '+w.ana_dir+w.dir_name+'/'+tree_prod_name)]))
 
     return sample_dict
 
@@ -365,7 +367,7 @@ def producePlots(promptLeptonType, L1L2LeptonType, dataset, option = None, multi
         total_weight, 
         sample_dict, 
         make_plots=True,
-        multiprocess=False,
+        multiprocess=True,
         useNeuralNetwork=True,
         dataframe=dataframe,
         server=hostname,

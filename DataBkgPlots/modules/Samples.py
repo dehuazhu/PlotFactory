@@ -13,7 +13,7 @@ from modules.PlotConfigs import SampleCfg, HistogramCfg
 # from modules.samples_mc_2017_noskim   import TTJets, WJetsToLNu, WJetsToLNu_ext, ZZZ, WZZ, WWZ, WWW, WWTo2L2Nu, WGGJets, TTWJetsToLNu, TTZToLL_M10, TTZToLL_M1to10, ST_sch_lep, STbar_tch_inc, ST_tch_inc, STbar_tW_inc, ST_tW_inc, DYBB, DYJetsToLL_M10to50,DYJetsToLL_M50, DYJetsToLL_M50_ext, DY1JetsToLL_M50, DY2JetsToLL_M50, DY2JetsToLL_M50_ext, DY3JetsToLL_M50, DY3JetsToLL_M50_ext, WW, WZ, ZZ, QCD_pt_15to20_mu, QCD_pt_20to30_mu, QCD_pt_30to50_mu, QCD_pt_50to80_mu, QCD_pt_80to120_mu
 
 # from modules.samples_data_2017_noskim import Single_ele_2017B, Single_ele_2017C, Single_ele_2017D, Single_ele_2017E, Single_ele_2017F, Single_mu_2017B,  Single_mu_2017C,  Single_mu_2017D,  Single_mu_2017E,  Single_mu_2017F
-def searchAndCreateSampleList(ana_dir,tree_prod_name,type='signal'):
+def searchAndCreateSampleList(ana_dir,tree_prod_name,type='signal',channel=None,dataset=None):
     samples = []
     dirs = os.listdir(ana_dir)
     signals = getSignals()
@@ -24,9 +24,12 @@ def searchAndCreateSampleList(ana_dir,tree_prod_name,type='signal'):
             if 'SkimReport.txt' in os.listdir(subdir_sample):
                 if type is 'signal':
                     if 'Dirac' in subdir: continue
-                    samples.append(
-                        SampleCfg(name=subdir, dir_name=subdir, ana_dir=ana_dir, tree_prod_name=tree_prod_name, xsec = signals[subdir]['xsec'], is_signal = True ),   
-                    )
+                    if (channel in ['mmm','mem_OS','mem_SS']) and ('_mu_' in subdir): 
+                        if channel == 'mmm': samples.append(SampleCfg(name=subdir, dir_name=subdir, ana_dir=ana_dir, tree_prod_name='HNLTreeProducer_mmm', xsec = signals[subdir]['xsec'], is_signal = True ))
+                        if 'mem' in channel: samples.append(SampleCfg(name=subdir, dir_name=subdir, ana_dir=ana_dir, tree_prod_name='HNLTreeProducer_mem', xsec = signals[subdir]['xsec'], is_signal = True ))
+                    if (channel in ['eee','eem_OS','eem_SS']) and ('_e_' in subdir): 
+                        if channel == 'eee': samples.append(SampleCfg(name=subdir, dir_name=subdir, ana_dir=ana_dir, tree_prod_name='HNLTreeProducer_eee', xsec = signals[subdir]['xsec'], is_signal = True ))
+                        if 'eem' in channel: samples.append(SampleCfg(name=subdir, dir_name=subdir, ana_dir=ana_dir, tree_prod_name='HNLTreeProducer_eem', xsec = signals[subdir]['xsec'], is_signal = True ))
     return samples
 
 
@@ -119,7 +122,8 @@ def createSampleLists(analysis_dir='',
             if 'starseeker' in server:
                 data_dir = analysis_dir+'production_20191027_Data_mmm/'
                 bkg_dir = 'production_20191027_Bkg_mmm/'
-                sig_dir = analysis_dir + 'production_20191027_Signal_mmm/'
+                # sig_dir = analysis_dir + 'production_20191027_Signal_mmm/'
+                sig_dir = analysis_dir + 'production_20191126_Signal/signals_2018'
 
             dataA_name = 'Single_mu_2018A'; dataB_name = 'Single_mu_2018B'; dataC_name = 'Single_mu_2018C'; dataD_name = 'Single_mu_2018D';
 
@@ -140,7 +144,8 @@ def createSampleLists(analysis_dir='',
             if 'starseeker' in server:
                 data_dir = analysis_dir+'production_20191105_Data_mem'
                 bkg_dir = 'production_20191105_Bkg_mem'
-                sig_dir = analysis_dir + 'production_20191105_Signal_mem'
+                # sig_dir = analysis_dir + 'production_20191105_Signal_mem'
+                sig_dir = analysis_dir + 'production_20191126_Signal/signals_2018'
                 DY_dir = analysis_dir + bkg_dir
             dataA_name = 'Single_mu_2018A'; dataB_name = 'Single_mu_2018B'; dataC_name = 'Single_mu_2018C'; dataD_name = 'Single_mu_2018D';
 
@@ -152,7 +157,8 @@ def createSampleLists(analysis_dir='',
             if 'starseeker' in server:
                 data_dir = analysis_dir+'production_20191105_Data_eee'
                 bkg_dir = 'production_20191105_Bkg_eee'
-                sig_dir = analysis_dir + 'production_20191105_Signal_eee'
+                # sig_dir = analysis_dir + 'production_20191105_Signal_eee'
+                sig_dir = analysis_dir + 'production_20191126_Signal/signals_2018'
                 DY_dir = analysis_dir + bkg_dir
             dataA_name = 'Single_ele_2018A'; dataB_name = 'Single_ele_2018B'; dataC_name = 'Single_ele_2018C'; dataD_name = 'Single_ele_2018D';
 
@@ -164,7 +170,8 @@ def createSampleLists(analysis_dir='',
             if 'starseeker' in server:
                 data_dir = analysis_dir+'production_20191105_Data_eem'
                 bkg_dir = 'production_20191105_Bkg_eem'
-                sig_dir = analysis_dir + 'production_20191105_Signal_eem'
+                # sig_dir = analysis_dir + 'production_20191105_Signal_eem'
+                sig_dir = analysis_dir + 'production_20191126_Signal/signals_2018'
                 DY_dir = analysis_dir + bkg_dir
             dataA_name = 'Single_ele_2018A'; dataB_name = 'Single_ele_2018B'; dataC_name = 'Single_ele_2018C'; dataD_name = 'Single_ele_2018D';
 
@@ -562,7 +569,7 @@ def createSampleLists(analysis_dir='',
         SampleCfg(name='HNL_M8_V.005', dir_name='HN3L_M_8_V_0p00547722557505_%s_massiveAndCKM_LO' %CH, ana_dir=sig_dir, tree_prod_name=tree_prod_name, is_signal = True ),
     ]
 
-    samples_signal_2018 = searchAndCreateSampleList(ana_dir=sig_dir,tree_prod_name=tree_prod_name)
+    samples_signal_2018 = searchAndCreateSampleList(ana_dir=sig_dir,tree_prod_name=tree_prod_name, channel=channel, dataset=dataset)
 
     # samples_signal_2018 = [
         # SampleCfg(name='HNL_M1_V.094'   , dir_name='HN3L_M_1_V_0p0949736805647_%s_massiveAndCKM_LO' %CH, ana_dir=sig_dir, tree_prod_name=tree_prod_name, is_signal = True ),   
