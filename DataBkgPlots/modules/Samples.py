@@ -114,11 +114,12 @@ def createSampleLists(analysis_dir='',
             if 'lxplus' in server:
                 data_dir = analysis_dir+'production_20191027_Data_mmm/'
                 bkg_dir = 'production_20191027_Bkg_mmm/'
-                sig_dir = analysis_dir + 'production_20191027_Signal_mmm/'
+                # sig_dir = analysis_dir + 'production_20191027_Signal_mmm/'
+                sig_dir = analysis_dir + 'production_20191126_Signal/signals_2018/'
             if 't3' in server:
                 data_dir = analysis_dir+'production_20191027_Data_mmm/'
                 bkg_dir = 'production_20191027_Bkg_mmm/'
-                sig_dir = analysis_dir + 'production_20191027_Signal_mmm/'
+                sig_dir = analysis_dir + 'production_20191126_Signal/signals_2018/'
             if 'starseeker' in server:
                 data_dir = analysis_dir+'production_20191027_Data_mmm/'
                 bkg_dir = 'production_20191027_Bkg_mmm/'
@@ -139,7 +140,8 @@ def createSampleLists(analysis_dir='',
                 data_dir = '/work/dezhu/4_production/vinz'
                 bkg_dir = 'vinz/'
                 # bkg_dir = 'production_20190306_BkgMC/mmm/ntuples/'
-                sig_dir = 'signal/ntuples'
+                # sig_dir = 'signal/ntuples'
+                sig_dir = analysis_dir + 'production_20191126_Signal/signals_2018/'
                 DY_dir = analysis_dir + bkg_dir
             if 'starseeker' in server:
                 data_dir = analysis_dir+'production_20191105_Data_mem'
@@ -153,7 +155,7 @@ def createSampleLists(analysis_dir='',
             if 'lxplus' in server:
                 set_trace()
             if 't3' in server:
-                set_trace()
+                sig_dir = analysis_dir + 'production_20191126_Signal/signals_2018/'
             if 'starseeker' in server:
                 data_dir = analysis_dir+'production_20191105_Data_eee'
                 bkg_dir = 'production_20191105_Bkg_eee'
@@ -166,7 +168,7 @@ def createSampleLists(analysis_dir='',
             if 'lxplus' in server:
                 set_trace()
             if 't3' in server:
-                set_trace()
+                sig_dir = analysis_dir + 'production_20191126_Signal/signals_2018/'
             if 'starseeker' in server:
                 data_dir = analysis_dir+'production_20191105_Data_eem'
                 bkg_dir = 'production_20191105_Bkg_eem'
@@ -812,10 +814,10 @@ def getSumWeight(sample, weight_dir='SkimAnalyzerCount', norm=True):
         set_trace()
 
 def setSumWeights(samples, weight_dir='SkimAnalyzerCount', norm=True):
-    print('###########################################################')
-    print('# setting sum weights for the samples...')
-    print('###########################################################')
-    print('')
+    # print('###########################################################')
+    # print('# setting sum weights for the samples...')
+    # print('###########################################################')
+    # print('')
 
     
     for sample in samples:

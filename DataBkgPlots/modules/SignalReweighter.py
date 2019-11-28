@@ -18,7 +18,7 @@ def makeSignalDict(dataMCPlots,channel):
     for i, hist in enumerate(dataMCPlots.histos):
         name = hist.name
         if 'HN3L' not in name: continue
-	if 'Dirac' in name: continue
+        if 'Dirac' in name: continue
         mass = re.sub('.*_M_','',name)
         mass = re.sub('_.*','',mass)
         mass = int(mass)
@@ -140,6 +140,7 @@ def makeCfgs(signalDict,channel,dataset,ana_dir,signals):
         '0p894427191', #v2 = 8em01
         '0p9486832981', #v2 = 9em01
         ]
+
     for mass in signalDict:
         if signalDict[mass]=={}: continue
         maxEntries = 0
@@ -153,7 +154,7 @@ def makeCfgs(signalDict,channel,dataset,ana_dir,signals):
             subdir = signalDict[mass][maxEntriesSampleKey]['name']
         except: set_trace()
         for newV in Vs:
-	    name = 'HN3L_M_%s_V_%s_%s_massiveAndCKM_LO'%(mass,newV,ch) 
+            name = 'HN3L_M_%s_V_%s_%s_massiveAndCKM_LO_reweighted'%(mass,newV,ch) 
             sample = makeSample(name,subdir=subdir,signals=signals,dataset=dataset,channel=channel,analysis_dir=ana_dir) 
             samples.append(sample)
             
@@ -253,6 +254,6 @@ def reweightSignals(inputPlots, useMultiprocess, ana_dir, hist_cfg, channel):
         signalDict = makeSignalDict(currentDataMCPlot,channel)
 
         # make a cfg list for producing the missing signal histograms
-	samples = makeCfgs(signalDict,channel,dataset,ana_dir,signals)
+        samples = makeCfgs(signalDict,channel,dataset,ana_dir,signals)
 
     return samples

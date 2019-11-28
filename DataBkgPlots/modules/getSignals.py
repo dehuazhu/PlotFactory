@@ -9,7 +9,6 @@ from matplotlib import pyplot as plt
 # import shapely.geometry as sg
 import os
 from termcolor import colored
-import plotfactory    
 from socket import gethostname
 
 def getSignals(verbose=False):

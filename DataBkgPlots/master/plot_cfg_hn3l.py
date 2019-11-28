@@ -13,7 +13,8 @@ from socket import gethostname
 import time
 import sys
 
-from copy_reg import pickle       # to pickle methods for multiprocessing
+# from copy_reg import pickle       # to pickle methods for multiprocessing
+import copyreg as copy_reg
 from types    import MethodType   # to pickle methods for multiprocessing
 
 from modules.PlotConfigs import HistogramCfg, VariableCfg
@@ -44,7 +45,7 @@ def _unpickle_method(func_name, obj, cls):
             break
     return func.__get__(obj, cls)
 
-pickle(MethodType, _pickle_method, _unpickle_method)
+copy_reg.pickle(MethodType, _pickle_method, _unpickle_method)
 
 gr.SetBatch(True) # NEEDS TO BE SET FOR MULTIPROCESSING OF plot.Draw()
 
@@ -118,8 +119,9 @@ def createVariables(rebin=None):
     # Taken from Variables.py; can get subset with e.g. getVars(['mt', 'mvis'])
     DoNotRebin = ['_norm_', 'n_vtx', 'nj', 'nbj',] 
     variables = essential_vars
-    if rebin>0:
-        for ivar in hnl_vars:
+    # if rebin > 0:
+    if rebin != None:
+        for ivar in variables:
             if ivar.name in DoNotRebin: continue
             ivar.binning['nbinsx'] = int(ivar.binning['nbinsx']/rebin)
 
@@ -202,7 +204,7 @@ def makePlots(plotDir,channel_name,variables, regions, total_weight, sample_dict
             # plot.Group('Conversions', ['Conversions_DYJetsToLL_M10to50','Conversions_DYJets_M50','Conversions_DYJets_M50_ext'])
             # plot.Group('ConversionsSingle', ['ConversionsSingle_DYJetsToLL_M10to50','ConversionsSingle_DYJets_M50','ConversionsSingle_DYJets_M50_ext'])
             # plot.Group('ConversionsDouble', ['ConversionsDouble_DYJetsToLL_M10to50','ConversionsDouble_DYJets_M50','ConversionsDouble_DYJets_M50_ext'])
-            plot.Group('HNL', ['HN3L'])
+            plot.Group('HNL', ['HN3L*'])
             if make_plots:
                 HistDrawer.draw(plot, channel = channel_name, plot_dir = plotDir+region.name, server = server, region = region, channel_dir = channel_dir, dataset = dataset)
             print('\tThis plot took %.1f s to compute.'%(time.time()-start_plot))
@@ -215,7 +217,7 @@ def producePlots(promptLeptonType, L1L2LeptonType, dataset, option = None, multi
     hostname = gethostname()
 
     if 't3ui02' in hostname:
-        if usr == 'dezhu':   plotDirBase = '/work/dezhu/3_figures/1_DataMC/FinalStates/'
+        if usr == 'dezhu':   plotDirBase = '/work/dezhu/3_figures/1_DataMC/FinalStates/2018/'
         if usr == 'vstampf': plotDirBase = '/t3home/vstampf/eos/plots/'
 
     if 'lxplus' in hostname:
@@ -280,7 +282,10 @@ def producePlots(promptLeptonType, L1L2LeptonType, dataset, option = None, multi
         analysis_dir = '/eos/user/v/vstampf/ntuples/'
    
     if "t3ui02" in hostname:
-        analysis_dir = '/work/dezhu/4_production/'
+        if dataset == '2017':
+            analysis_dir = '/work/dezhu/4_production/'
+        if dataset == '2018':
+            analysis_dir = '/work/dezhu/4_production/2018/'
 
     if "starseeker" in hostname:
         if dataset == '2017':
@@ -330,9 +335,12 @@ def producePlots(promptLeptonType, L1L2LeptonType, dataset, option = None, multi
             copyfile(cmsBaseDir+'/src/PlotFactory/DataBkgPlots/modules/Samples.py', regionDir+'/Samples.py')
             copyfile(cmsBaseDir+'/src/PlotFactory/DataBkgPlots/modules/fr_net.py', regionDir+'/fr_net.py')
         else:
-            copyfile(cmsBaseDir+'/src/CMGTools/HNL/PlotFactory/DataBkgPlots/0_cfg_hn3l_'+channel+'.py', regionDir+'/plot_cfg.py')
-            copyfile(cmsBaseDir+'/src/CMGTools/HNL/PlotFactory/DataBkgPlots/master/plot_cfg_hn3l.py', regionDir+'/plot_cfg_base.py')
-            copyfile(cmsBaseDir+'/src/CMGTools/HNL/PlotFactory/DataBkgPlots/modules/Selections.py', regionDir+'/Selections.py')
+            # copyfile(cmsBaseDir+'/src/CMGTools/HNL/PlotFactory/DataBkgPlots/0_cfg_hn3l_'+channel+'.py', regionDir+'/plot_cfg.py')
+            # copyfile(cmsBaseDir+'/src/CMGTools/HNL/PlotFactory/DataBkgPlots/master/plot_cfg_hn3l.py', regionDir+'/plot_cfg_base.py')
+            # copyfile(cmsBaseDir+'/src/CMGTools/HNL/PlotFactory/DataBkgPlots/modules/Selections.py', regionDir+'/Selections.py')
+            copyfile('0_cfg_hn3l_'+channel+'.py', regionDir+'/plot_cfg.py')
+            copyfile('master/plot_cfg_hn3l.py', regionDir+'/plot_cfg_base.py')
+            copyfile('modules/Selections.py', regionDir+'/Selections.py')
 
         print('cfg files stored in "',plotDir + region.name + '/"')
 

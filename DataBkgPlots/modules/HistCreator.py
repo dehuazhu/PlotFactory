@@ -21,8 +21,8 @@ from ROOT import ROOT, RDataFrame, TH1F, TFile, TTree, TTreeFormula, gInterprete
 
 
 # Enable ROOT's implicit multi-threading for all objects that provide an internal parallelisation mechanism
-# ROOT.EnableImplicitMT(40)
-ROOT.EnableImplicitMT()
+ROOT.EnableImplicitMT(68)
+# ROOT.EnableImplicitMT(20)
 
 def initHist(hist, vcfg):
     hist.Sumw2()
@@ -75,23 +75,25 @@ class CreateHists(object):
                 starttime_reweight = time.time()
                 reweightCfgs = reweightSignals(self.plots, useMultiprocess = True, ana_dir = self.analysis_dir, hist_cfg = self.hist_cfg, channel = self.channel)
 
-                # #adding reweighting for multiprocessing; be careful when using this option to make sure you have enough memory!
-                # # The number of samples can go up to 100!
-                # # reweightPool = Pool(processes=len(reweightCfgs))
-                # reweightPool = Pool(10)
-                # reWeightResults = reweightPool.map(self.makealltheplots, reweightCfgs) 
-                # reweightPool.terminate()
-                # for vcfg in self.vcfgs:
-                    # for reWeightResult in reWeightResults: 
-                        # self.plots[vcfg.name].AddHistogram(\
-                                # reWeightResult[vcfg.name].histos[nSamples].name\
-                                # ,reWeightResult[vcfg.name].histos[nSamples].obj\
-                                # ,stack=reWeightResult[vcfg.name].histos[nSamples].stack)
+                #adding reweighting for multiprocessing; be careful when using this option to make sure you have enough memory!
+                # The number of samples can go up to 100!
+                # reweightPool = Pool(processes=len(reweightCfgs))
+                reweightPool = Pool(70)
+                reWeightResults = reweightPool.map(self.makealltheplots, reweightCfgs) 
+                reweightPool.terminate()
+                for vcfg in self.vcfgs:
+                    for reWeightResult in reWeightResults: 
+                        for hist in reWeightResult[vcfg.name].histos:
+                            if hist.name not in [histo.name for histo in self.plots[vcfg.name].histos]:
+                                self.plots[vcfg.name].AddHistogram(\
+                                        hist.name\
+                                        ,hist.obj\
+                                        ,stack=hist.stack)
 
-                #adding reweighting for non multiprocessing
-                for cfg in reweightCfgs:
-                    result = self.makealltheplots(cfg)
-                    print('done sample nr. %d; passed time: %d seconds'%(len(self.plots[vcfg.name].histos),time.time()-starttime_reweight),end='\r')
+                # #adding reweighting for non multiprocessing
+                # for cfg in reweightCfgs:
+                    # result = self.makealltheplots(cfg)
+                    # print('done sample nr. %d; passed time: %d seconds'%(len(self.plots[vcfg.name].histos),time.time()-starttime_reweight),end='\r')
 
        
         if multiprocess == False:
