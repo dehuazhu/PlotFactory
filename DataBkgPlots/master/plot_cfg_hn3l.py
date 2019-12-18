@@ -329,10 +329,11 @@ def producePlots(promptLeptonType, L1L2LeptonType, dataset, option = None, multi
             print("Output directory: %s"%(regionDir))
         else:
             # print "Output directory: ", regionDir, "already exists, overwriting it!"
-            print("Output directory already exists, overwriting it! ")
+            # print("Output directory already exists, overwriting it! ")
+            print("Output directory already exists, trying to preserve it! ")
             print( "Output directory: %s"%(regionDir))
-            os.system("rm -rf %s"%(regionDir))
-            os.system("mkdir %s"%(regionDir))
+            # os.system("rm -rf %s"%(regionDir))
+            # os.system("mkdir %s"%(regionDir))
         
         if "starseeker" in hostname:
             copyfile(cmsBaseDir+'/src/PlotFactory/DataBkgPlots/0_cfg_hn3l_'+channel+'.py', regionDir+'/plot_cfg.py')
@@ -362,6 +363,10 @@ def producePlots(promptLeptonType, L1L2LeptonType, dataset, option = None, multi
             os.mkdir(regionDir + '/png/')
             os.mkdir(regionDir + '/png/linear/')
             os.mkdir(regionDir + '/png/log/')
+        if not os.path.exists(regionDir + '/tex/'):
+            os.mkdir(regionDir + '/tex/')
+            os.mkdir(regionDir + '/tex/linear/')
+            os.mkdir(regionDir + '/tex/log/')
         if not os.path.exists(regionDir + '/datacards/'):
             os.mkdir(regionDir + '/datacards/')
 
