@@ -15,7 +15,7 @@ import plotfactory
 
 # def draw_limits2D(input_file, output_dir, ch='mmm', twoD=False, verbose=False): 
 # def draw_limits2D(masses, x_err, y_exp, y_ep1s, y_ep2s, y_em1s, y_em2s, input_file, output_dir, ch='mmm', twoD=False, verbose=False): 
-def draw_limits2D(ExclusionLimits2D_low, ExclusionLimits2D_high, input_file, output_dir, ch='mmm', twoD=False, verbose=False): 
+def draw_limits2DWithPrompt(ExclusionLimits2D_low, ExclusionLimits2D_high, input_file, output_dir, ch='mmm', twoD=False, verbose=False): 
     '''
     #############################################################################
     ## producing coupling vs r limits for each signal mass and a given channel ##
@@ -24,15 +24,22 @@ def draw_limits2D(ExclusionLimits2D_low, ExclusionLimits2D_high, input_file, out
     #############################################################################
     '''
 
-    
-    # masses = [1.,2.,3.,4.,5.,6.,8.,10.,20.]
-    # x_err  = np.zeros(len(masses))
+    promptMuonDirectory     = '/work/dezhu/3_figures/2_Limits/PromptAnalysis/limitsMuonMixing.root'
+    promptMuonFile = rt.TFile(promptMuonDirectory)
+    promptMuonGraph_ep2 = promptMuonFile.Get('expected_2sigmaUp')
+    promptMuonGraph_ep1 = promptMuonFile.Get('expected_1sigmaUp')
+    promptMuonGraph_exp = promptMuonFile.Get('expected_central')
+    promptMuonGraph_em1 = promptMuonFile.Get('expected_1sigmaDown')
+    promptMuonGraph_em2 = promptMuonFile.Get('expected_2sigmaDown')
 
-    # y_exp  = [2e-4  ,2.5e-6,2e-7  ,3e-8,8e-9 ,4e-9,7e-10 ,4e-10,7e-9 ]
-    # y_ep1s = [1e-4  ,3.5e-6,1e-7  ,2e-8,7e-9 ,2e-9,2e-10 ,2e-10,3e-9 ]
-    # y_ep2s = [5e-4  ,5.5e-6,6e-7  ,5e-8,12e-9,5e-9,8e-10 ,6e-10,8e-9] 
-    # y_em1s = [1e-4  ,0.5e-6,1e-7  ,1e-8,3e-9 ,2e-9,3e-10 ,2e-10,4e-9 ]
-    # y_em2s = [1.4e-4,1.1e-6,1.2e-7,2e-8,5e-9 ,3e-9,5e-10 ,3e-10,6e-9 ]
+    promptElectronDirectory = '/work/dezhu/3_figures/2_Limits/PromptAnalysis/limitsElectionMixing.root'
+    promptElectronFile = rt.TFile(promptElectronDirectory)
+    promptElectronGraph_ep2 = promptMuonFile.Get('expected_2sigmaUp')
+    promptElectronGraph_ep1 = promptMuonFile.Get('expected_1sigmaUp')
+    promptElectronGraph_exp = promptMuonFile.Get('expected_central')
+    promptElectronGraph_em1 = promptMuonFile.Get('expected_1sigmaDown')
+    promptElectronGraph_em2 = promptMuonFile.Get('expected_2sigmaDown')
+
 
     low_masses  = ExclusionLimits2D_low['masses']
     low_x_err   = ExclusionLimits2D_low['x_err'] 
@@ -60,17 +67,23 @@ def draw_limits2D(ExclusionLimits2D_low, ExclusionLimits2D_high, input_file, out
     
     rt.gStyle.SetOptStat(0000)
 
-    B_X  = np.logspace(-0.1,1,50,base=10)
-    B_Y  = np.logspace(-11, 2, 50, base=10)
-    framer = rt.TH2F('framer', 'framer', len(B_X)-1, B_X, len(B_Y)-1, B_Y)
-    framer.GetXaxis().SetRangeUser(0, 10)
-    framer.GetYaxis().SetRangeUser(1e-7,1)
-
-    # B_X  = np.logspace(-1,2.5,10,base=10)
-    # B_Y  = np.logspace(-12, 0, 10, base=10)
+    # B_X  = np.logspace(-0.1,1,50,base=10)
+    # B_Y  = np.logspace(-11, 2, 50, base=10)
     # framer = rt.TH2F('framer', 'framer', len(B_X)-1, B_X, len(B_Y)-1, B_Y)
-    # framer.GetXaxis().SetRangeUser(0.1, 150.)
-    # framer.GetYaxis().SetRangeUser(1e-12,1.)
+    # framer.GetXaxis().SetRangeUser(0, 10)
+    # framer.GetYaxis().SetRangeUser(1e-7,1)
+
+    # B_X  = np.logspace(-0.1,3,10,base=10)
+    # B_Y  = np.logspace(-11, 2, 10, base=10)
+    # framer = rt.TH2F('framer', 'framer', len(B_X)-1, B_X, len(B_Y)-1, B_Y)
+    # framer.GetXaxis().SetRangeUser(1, 40)
+    # framer.GetYaxis().SetRangeUser(1e-7,1)
+
+    B_X  = np.logspace(-1,2.5,10,base=10)
+    B_Y  = np.logspace(-12, 0, 10, base=10)
+    framer = rt.TH2F('framer', 'framer', len(B_X)-1, B_X, len(B_Y)-1, B_Y)
+    framer.GetXaxis().SetRangeUser(0.1, 100.)
+    framer.GetYaxis().SetRangeUser(1e-12,1.)
 
     if ch == 'mmm': 
         framer.SetTitle('#mu#mu#mu; m_{N}(GeV); |V_{#mu N}|^{2}' )
@@ -113,13 +126,42 @@ def draw_limits2D(ExclusionLimits2D_low, ExclusionLimits2D_high, input_file, out
     high_gr2.SetLineColor(rt.kOrange)
     high_gr2.SetLineWidth(2)
 
-    can = rt.TCanvas('limits', 'limits',1000,500)
+    for graph in [promptMuonGraph_ep2, promptElectronGraph_ep2, promptMuonGraph_em2, promptElectronGraph_em2]:
+        graph.SetFillColor(rt.kGray)
+        graph.SetLineColor(rt.kGray)
+        graph.SetLineStyle(2)
+        graph.SetLineWidth(2)
+
+    for graph in [promptMuonGraph_ep1, promptElectronGraph_ep1, promptMuonGraph_em1, promptElectronGraph_em1]:
+        graph.SetFillColor(rt.kGray+1)
+        graph.SetLineColor(rt.kGray+1)
+        graph.SetLineStyle(7)
+        graph.SetLineWidth(2)
+
+    for graph in [promptMuonGraph_exp, promptElectronGraph_exp]:
+        graph.SetMarkerStyle(22)
+        graph.SetMarkerSize(1)
+        graph.SetMarkerColor(rt.kGray+2)
+        graph.SetLineColor(  rt.kGray+2)
+        graph.SetLineStyle(1)
+        graph.SetLineWidth(2)
+
+    can = rt.TCanvas('limits', 'limits',700,530)
     # can = rt.TCanvas('limits', 'limits')
     can.cd() 
     can.SetLogy() 
     # can.SetLogx()
 
+    if ch == 'mCombined':
+        framer.GetYaxis().SetTitle('|V_{#mu}|^{2}')
+    if ch == 'eCombined':
+        framer.GetYaxis().SetTitle('|V_{e}|^{2}')
+
+    framer.GetYaxis().SetTitleOffset(1.5)
+    framer.GetXaxis().SetTitle('m_{N} (GeV)')
+    framer.GetXaxis().SetTitleOffset(1.5)
     framer.Draw()
+
 
     # low_gr2.Draw('same, E1')
     low_gr2.Draw('same, E3')
@@ -135,13 +177,28 @@ def draw_limits2D(ExclusionLimits2D_low, ExclusionLimits2D_high, input_file, out
     # high_exp.Draw('same, LP')
     high_exp.Draw('same, L')
 
-    can.Update()
+    if ch == 'mCombined': 
+        promptMuonGraph_ep2.Draw('same, L')
+        promptMuonGraph_ep1.Draw('same, L')
+        promptMuonGraph_exp.Draw('same, L')
+        promptMuonGraph_em1.Draw('same, L')
+        promptMuonGraph_em2.Draw('same, L')
+    
+    if ch == 'eCombined': 
+        promptElectronGraph_exp.Draw('same, L')
+        promptElectronGraph_ep1.Draw('same, L')
+        promptElectronGraph_exp.Draw('same, L')
+        promptElectronGraph_em1.Draw('same, L')
+        promptElectronGraph_em2.Draw('same, L')
 
-    leg = rt.TLegend(.4,.75,.8,.88)
-    leg.AddEntry(low_exp, 'Expected', 'LP')
-    leg.AddEntry(low_gr1, 'Expected #pm 1 #sigma', 'E3')
-    leg.AddEntry(low_gr2, 'Expected #pm 2 #sigma', 'E3')
+    # leg = rt.TLegend(.4,.75,.8,.88)
+    leg = rt.TLegend(.5,.20,.8,.40)
+    leg.AddEntry(low_exp, 'Expected', 'L')
+    leg.AddEntry(low_gr1, 'Expected #pm 1 #sigma', 'CFL')
+    leg.AddEntry(low_gr2, 'Expected #pm 2 #sigma', 'CFL')
+    leg.AddEntry(promptMuonGraph_exp, 'Expected [EXO-17-012]', 'L')
     leg.Draw('apez same')
+
 
     
     # plotfactory.showlogopreliminary()

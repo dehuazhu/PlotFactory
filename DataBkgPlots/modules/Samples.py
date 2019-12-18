@@ -135,14 +135,9 @@ def createSampleLists(analysis_dir='',
                 sig_dir = 'sig_mc_m/ntuples/'
                 DY_dir = analysis_dir + bkg_dir
             if 't3' in server:
-                # data_dir = analysis_dir + 'data/'
-                # data_dir = 'root://t3dcachedb.psi.ch:1094///pnfs/psi.ch/cms/trivcat/store/user/dezhu/2_ntuples/HN3Lv2.0/mmm/data/'
-                data_dir = '/work/dezhu/4_production/vinz'
-                bkg_dir = 'vinz/'
-                # bkg_dir = 'production_20190306_BkgMC/mmm/ntuples/'
-                # sig_dir = 'signal/ntuples'
+                data_dir = analysis_dir + 'production_20191105_Data_mem/'
+                bkg_dir = 'production_20191105_Bkg_mem/'
                 sig_dir = analysis_dir + 'production_20191126_Signal/signals_2018/'
-                DY_dir = analysis_dir + bkg_dir
             if 'starseeker' in server:
                 data_dir = analysis_dir+'production_20191105_Data_mem'
                 bkg_dir = 'production_20191105_Bkg_mem'
@@ -155,6 +150,8 @@ def createSampleLists(analysis_dir='',
             if 'lxplus' in server:
                 set_trace()
             if 't3' in server:
+                data_dir = analysis_dir+'production_20191105_Data_eee'
+                bkg_dir = 'production_20191105_Bkg_eee'
                 sig_dir = analysis_dir + 'production_20191126_Signal/signals_2018/'
             if 'starseeker' in server:
                 data_dir = analysis_dir+'production_20191105_Data_eee'
@@ -168,6 +165,8 @@ def createSampleLists(analysis_dir='',
             if 'lxplus' in server:
                 set_trace()
             if 't3' in server:
+                data_dir = analysis_dir+'production_20191105_Data_eem'
+                bkg_dir = 'production_20191105_Bkg_eem'
                 sig_dir = analysis_dir + 'production_20191126_Signal/signals_2018/'
             if 'starseeker' in server:
                 data_dir = analysis_dir+'production_20191105_Data_eem'
@@ -533,7 +532,7 @@ def createSampleLists(analysis_dir='',
     if channel[0] == 'e': CH = 'e'
     assert CH != None
 
-    samples_signal_essential = [
+    samples_signal_essential_2017 = [
         # SampleCfg(name='HNL_M2_V.002', dir_name='HN3L_M_2_V_0p00244948974278_%s_massiveAndCKM_LO' %CH, ana_dir=sig_dir, tree_prod_name=tree_prod_name, is_signal = True ),   
         SampleCfg(name='HNL_M2_V.022', dir_name='HN3L_M_2_V_0p022360679775_%s_massiveAndCKM_LO' %CH  , ana_dir=sig_dir, tree_prod_name=tree_prod_name, is_signal = True ), #good for eee disp2, mmm disp2/3
         # SampleCfg(name='HNL_M5_V.002', dir_name='HN3L_M_5_V_0p00244948974278_%s_massiveAndCKM_LO' %CH, ana_dir=sig_dir, tree_prod_name=tree_prod_name, is_signal = True ), 
@@ -543,6 +542,26 @@ def createSampleLists(analysis_dir='',
         SampleCfg(name='HNL_M8_V.002', dir_name='HN3L_M_8_V_0p00244948974278_%s_massiveAndCKM_LO' %CH, ana_dir=sig_dir, tree_prod_name=tree_prod_name, is_signal = True ), #good for eee dispw, mmm  mmm disp2/3
         # SampleCfg(name='HNL_M8_V.005', dir_name='HN3L_M_8_V_0p00547722557505_%s_massiveAndCKM_LO' %CH, ana_dir=sig_dir, tree_prod_name=tree_prod_name, is_signal = True ),
     ]
+
+    samples_signal_essential_2018 = []
+    if (channel in ['mmm','mem_OS','mem_SS']): 
+        if channel == 'mmm': 
+            samples_signal_essential_2018.append(SampleCfg(name='HNL_M2_V.011', dir_name='HN3L_M_2_V_0p0110905365064_%s_massiveAndCKM_LO' %CH  , ana_dir=sig_dir, tree_prod_name='HNLTreeProducer_mmm', is_signal = True, xsec = 0.5278)) 
+            samples_signal_essential_2018.append(SampleCfg(name='HNL_M5_V.001', dir_name='HN3L_M_5_V_0p00145602197786_%s_massiveAndCKM_LO' %CH  , ana_dir=sig_dir, tree_prod_name='HNLTreeProducer_mmm', is_signal = True, xsec = 0.008434 ))
+            samples_signal_essential_2018.append(SampleCfg(name='HNL_M10_V.001', dir_name='HN3L_M_10_V_0p001_%s_massiveAndCKM_LO' %CH  , ana_dir=sig_dir, tree_prod_name='HNLTreeProducer_mmm', is_signal = True, xsec = 0.002405 ))
+        if 'mem' in channel: 
+            samples_signal_essential_2018.append(SampleCfg(name='HNL_M2_V.011', dir_name='HN3L_M_2_V_0p0110905365064_%s_massiveAndCKM_LO' %CH  , ana_dir=sig_dir, tree_prod_name='HNLTreeProducer_mem', is_signal = True, xsec = 0.5278 )) 
+            samples_signal_essential_2018.append(SampleCfg(name='HNL_M5_V.001', dir_name='HN3L_M_5_V_0p00145602197786_%s_massiveAndCKM_LO' %CH  , ana_dir=sig_dir, tree_prod_name='HNLTreeProducer_mem', is_signal = True, xsec = 0.008434 ))
+            samples_signal_essential_2018.append(SampleCfg(name='HNL_M10_V.001', dir_name='HN3L_M_10_V_0p001_%s_massiveAndCKM_LO' %CH  , ana_dir=sig_dir, tree_prod_name='HNLTreeProducer_mem', is_signal = True, xsec = 0.002405 ))
+    if (channel in ['eee','eem_OS','eem_SS']): 
+        if channel == 'eee': 
+            samples_signal_essential_2018.append(SampleCfg(name='HNL_M2_V.011', dir_name='HN3L_M_2_V_0p0110905365064_%s_massiveAndCKM_LO' %CH  , ana_dir=sig_dir, tree_prod_name='HNLTreeProducer_eee', is_signal = True, xsec = 0.5273 )) 
+            samples_signal_essential_2018.append(SampleCfg(name='HNL_M5_V.001', dir_name='HN3L_M_5_V_0p00145602197786_%s_massiveAndCKM_LO' %CH  , ana_dir=sig_dir, tree_prod_name='HNLTreeProducer_eee', is_signal = True, xsec = 0.008479 ))
+            samples_signal_essential_2018.append(SampleCfg(name='HNL_M10_V.001', dir_name='HN3L_M_10_V_0p001_%s_massiveAndCKM_LO' %CH  , ana_dir=sig_dir, tree_prod_name='HNLTreeProducer_eee', is_signal = True, xsec = 0.002403 ))
+        if 'eem' in channel: 
+            samples_signal_essential_2018.append(SampleCfg(name='HNL_M2_V.011', dir_name='HN3L_M_2_V_0p0110905365064_%s_massiveAndCKM_LO' %CH  , ana_dir=sig_dir, tree_prod_name='HNLTreeProducer_eem', is_signal = True, xsec = 0.5273 )) 
+            samples_signal_essential_2018.append(SampleCfg(name='HNL_M5_V.001', dir_name='HN3L_M_5_V_0p00145602197786_%s_massiveAndCKM_LO' %CH  , ana_dir=sig_dir, tree_prod_name='HNLTreeProducer_eem', is_signal = True, xsec = 0.008479 ))
+            samples_signal_essential_2018.append(SampleCfg(name='HNL_M10_V.001', dir_name='HN3L_M_10_V_0p001_%s_massiveAndCKM_LO' %CH  , ana_dir=sig_dir, tree_prod_name='HNLTreeProducer_eem', is_signal = True, xsec = 0.002403 ))
 
     samples_signal_2017 = [
         SampleCfg(name='HNL_M2_V.002', dir_name='HN3L_M_2_V_0p00244948974278_%s_massiveAndCKM_LO' %CH, ana_dir=sig_dir, tree_prod_name=tree_prod_name, is_signal = True ),   
@@ -778,10 +797,10 @@ def createSampleLists(analysis_dir='',
     samples_bkg = samples_nonprompt + samples_mc
 
 
-    # samples_all = samples_data + samples_bkg #for the closureplots
-    samples_all = samples_bkg + samples_signal_2018 #for the datacards
+    samples_all = samples_data + samples_bkg #for the closureplots
+    # samples_all = samples_bkg + samples_signal_2018 #for the datacards
     # samples_all = samples_bkg + samples_signal_2017 #for the datacards
-    # samples_all = samples_bkg + samples_signal_essential #for signal acceptance plots
+    # samples_all = samples_bkg + samples_signal_essential_2018 #for signal acceptance plots
     # samples_all = samples_bkg + samples_data + samples_signal
     # samples_all = samples_singlefake + samples_doublefake +tttmples_data
     # samples_all = samples_singlefake + samples_data

@@ -1,4 +1,5 @@
 from pdb import set_trace
+
 def defineDataCut(promptLeptonType):
     goodVertices                 = '  &&  Flag_goodVertices'    
     globalSuperTightHalo2016     = '  &&  Flag_globalSuperTightHalo2016Filter'    
@@ -386,7 +387,6 @@ def SR_2018(channel):
     # return selection_ignoreEverything
     return selection
 
-
 def DY():
     selection = ('l0_pt>25 && abs(l0_eta)<2.4'
                 '&& l1_pt > 15 && abs(l1_eta) < 2.4 '
@@ -607,6 +607,139 @@ def MR_SF2_closure(channel):
         ])
     return selection
 
+def CustomRegion(channel):
+    selection = ' & '.join([
+    'l0_pt > 25 '              , 
+    'abs(l0_eta) < 2.4 '       ,
+    'abs(l0_dxy) < 0.05 '      ,
+    'abs(l0_dz) < 0.2 '        ,
+    'l0_reliso_rho_03 < 0.2 '  ,
+
+    'l1_pt > 5 '              ,
+    'abs(l1_eta) < 2.4 '       ,
+    'abs(l1_dxy) > 0.01 '      ,
+
+    'l2_pt > 5 '               ,
+    'abs(l2_eta) < 2.4 '       ,
+    'abs(l2_dxy) > 0.01 '       ,
+
+    'hnl_q_12 == 0 '           ,
+    'min(abs(hnl_dphi_01), abs(hnl_dphi_02))>1.',
+    'hnl_dr_12 < 1.',
+
+    'hnl_2d_disp_sig>20',
+    'hnl_pt_12>15',
+    'sv_cos>0.99',
+    'sv_prob>0.001',
+
+    #switch between (sub) final states in eem and mem
+    # 'hnl_q_01 == 0',  
+    # 'hnl_q_01 != 0', 
+    # 'hnl_q_02 == 0',
+    # 'hnl_q_02 != 0',
+
+    #displacement bins
+    # 'hnl_2d_disp < 0.5',
+    # '((hnl_2d_disp > 0.5) && (hnl_2d_disp < 10))',
+    # 'hnl_2d_disp > 10',
+    # 'hnl_2d_disp > 2',
+
+    '(nbj == 0)',# true SR
+    # '(hnl_w_vis_m > 50. && hnl_w_vis_m < 80.) ', # true SR
+    
+    # '!(nbj == 0)', # activate for SR orthogonal
+    '!(hnl_w_vis_m > 50. && hnl_w_vis_m < 80.) ', # activate for SR orthogonal (sideband)
+    # '((!(nbj == 0)) || (!(hnl_w_vis_m > 40. && hnl_w_vis_m < 85.)))', #activate to train on all orthogonal regions
+    # '((!(hnl_w_vis_m > 50. && hnl_w_vis_m < 81.)) && hnl_w_vis_m > 110) ', # activate for right sideband (train)
+    # '((!(hnl_w_vis_m > 50. && hnl_w_vis_m < 81.)) && hnl_w_vis_m < 110) ', # activate for left sideband (test)
+    
+    ## auxiliary selections
+    # 'hnl_m_12 < 12',
+    # 'sv_cos > 0.',
+    ])
+
+    if (channel is 'mmm') or (channel is 'eee'):
+        selection = '&'.join([
+            selection,
+            # vetoes 12 (always OS anyways)
+            'abs(hnl_m_12-3.0969) > 0.08'              , # jpsi veto
+            'abs(hnl_m_12-3.6861) > 0.08'              , # psi (2S) veto
+            'abs(hnl_m_12-0.7827) > 0.08'              , # omega veto
+            'abs(hnl_m_12-1.0190) > 0.08'              , # phi veto
+
+	    # vetoes 01 (only is OS)
+	    '!(hnl_q_01==0 & abs(hnl_m_01-91.1876) < 10)'  , # Z veto
+	    '!(hnl_q_01==0 & abs(hnl_m_01- 9.4603) < 0.08)', # Upsilon veto
+	    '!(hnl_q_01==0 & abs(hnl_m_01-10.0233) < 0.08)', # Upsilon (2S) veto
+	    '!(hnl_q_01==0 & abs(hnl_m_01-10.3552) < 0.08)', # Upsilon (3S) veto
+	    '!(hnl_q_01==0 & abs(hnl_m_01-3.0969) < 0.08)', # jpsi veto
+	    '!(hnl_q_01==0 & abs(hnl_m_01-3.6861) < 0.08)', # psi (2S) veto
+	    '!(hnl_q_01==0 & abs(hnl_m_01-0.7827) < 0.08)', # omega veto
+	    '!(hnl_q_01==0 & abs(hnl_m_01-1.0190) < 0.08)', # phi veto
+
+	    # vetoes 02 (only is OS)
+	    '!(hnl_q_02==0 & abs(hnl_m_02-91.1876) < 10)'  , # Z veto
+	    '!(hnl_q_02==0 & abs(hnl_m_02- 9.4603) < 0.08)', # Upsilon veto
+	    '!(hnl_q_02==0 & abs(hnl_m_02-10.0233) < 0.08)', # Upsilon (2S) veto
+	    '!(hnl_q_02==0 & abs(hnl_m_02-10.3552) < 0.08)', # Upsilon (3S) veto
+	    '!(hnl_q_02==0 & abs(hnl_m_02-3.0969) < 0.08)', # jpsi veto
+	    '!(hnl_q_02==0 & abs(hnl_m_02-3.6861) < 0.08)', # psi (2S) veto
+	    '!(hnl_q_02==0 & abs(hnl_m_02-0.7827) < 0.08)', # omega veto
+	    '!(hnl_q_02==0 & abs(hnl_m_02-1.0190) < 0.08)', # phi veto
+        ])
+    if channel is 'mmm':
+        selection = '&'.join([
+            selection,
+            'l0_id_m == 1',
+            'l1_Medium == 1 ', 
+            'l2_Medium == 1 ', 
+        ])
+        
+    if channel is 'eee':
+        selection = '&'.join([
+            selection,
+            'l0_eid_mva_iso_wp90 == 1',
+            'l1_MediumNoIso == 1 ', 
+            'l2_MediumNoIso == 1 ', 
+        ])
+    if channel is 'eem_OS':    
+        selection = '&'.join([
+            selection,
+            'l0_eid_mva_iso_wp90 == 1',
+            'l1_MediumNoIso == 1 ', 
+            'l2_Medium == 1 ', 
+	    'hnl_q_01 == 0',  
+        ])
+    if channel is 'eem_SS':    
+        selection = '&'.join([
+            selection,
+            'l0_eid_mva_iso_wp90 == 1',
+            'l1_MediumNoIso == 1 ', 
+            'l2_Medium == 1 ', 
+	    'hnl_q_01 != 0', 
+        ])
+    if channel is 'mem_OS':
+        selection = '&'.join([
+            selection,
+            'l0_id_m == 1',
+            'l1_MediumNoIso == 1 ', 
+            'l2_Medium == 1 ', 
+	    'hnl_q_02 == 0',
+        ])
+    if channel is 'mem_SS':
+        selection = '&'.join([
+            selection,
+            'l0_id_m == 1',
+            'l1_MediumNoIso == 1 ', 
+            'l2_Medium == 1 ', 
+	    'hnl_q_02 != 0',
+        ])
+        
+
+    selection_ignoreEverything = 'l1_pt > 0'
+
+    # return selection_ignoreEverything
+    return selection
 
 def getSelection(channel, selection_name):
     # capping_value = '0.8';
@@ -645,6 +778,9 @@ def getSelection(channel, selection_name):
         # selection = SR(channel)
         # selection = SR_Martina(channel)
         selection = SR_2018(channel)
+    
+    if selection_name == 'CustomRegion':
+        selection = CustomRegion(channel)
                     
     if selection_name == 'SR_Martina':
         selection = SR_Martina(channel)

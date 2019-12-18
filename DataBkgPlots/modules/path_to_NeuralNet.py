@@ -104,6 +104,16 @@ def path_to_NeuralNet(faketype ='nonprompt',channel = 'mmm', dataset = '2017', h
                 if dataset == '2018':
                     # path_to_NeuralNet = '/work/dezhu/7_NN/2018/mmm_nonprompt_v7_GhentSelection/'
                     path_to_NeuralNet = '/work/dezhu/7_NN/2018/mmm_nonprompt_v8_ProductionT3/'
+        if channel == 'mem_OS':
+                    path_to_NeuralNet = '/work/dezhu/7_NN/2018/mem_OS_nonprompt_v1_Endgame/'
+        if channel == 'mem_SS':
+                    path_to_NeuralNet = '/work/dezhu/7_NN/2018/mem_SS_nonprompt_v1_Endgame/'
+        if channel == 'eee':
+                    path_to_NeuralNet = '/work/dezhu/7_NN/2018/eee_nonprompt_v1_Endgame/'
+        if channel == 'eem_OS':
+                    path_to_NeuralNet = '/work/dezhu/7_NN/2018/eem_OS_nonprompt_v1_Endgame/'
+        if channel == 'eem_SS':
+                    path_to_NeuralNet = '/work/dezhu/7_NN/2018/eem_OS_nonprompt_v1_Endgame/'
     
 
     return path_to_NeuralNet 

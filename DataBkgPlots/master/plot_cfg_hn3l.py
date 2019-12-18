@@ -55,8 +55,11 @@ def prepareRegions(channel):
     # regions.append(Region('datacard_v1_NewPT',channel,'SR'))
     # regions.append(Region('datacard_v2_SigReweight',channel,'SR'))
     # regions.append(Region('datacard_v3_SigReweightNormalized_fixed2',channel,'SR'))
-    regions.append(Region('datacard_v4_WideV2',channel,'SR'))
-    # regions.append(Region('SR_v3_NewPT',channel,'SR'))
+    # regions.append(Region('datacard_v4_WideV2',channel,'SR'))
+    # regions.append(Region('datacard_v5_BetterDisplacementBin',channel,'SR'))
+
+    # regions.append(Region('SR_v2_EXOAachen',channel,'SR'))
+    # regions.append(Region('MR_nonprompt',channel,'SR'))
     # regions.append(Region('MR_nonprompt_v1_endgame',channel,'SR'))
     # regions.append(Region('MR_nonprompt_MartinaRegion',channel,'SR'))
     # regions.append(Region('MR_nonprompt_disp1',channel,'SR_disp1'))
@@ -64,6 +67,8 @@ def prepareRegions(channel):
     # regions.append(Region('MR_nonprompt_disp3',channel,'SR_disp3'))
     # regions.append(Region('MR_nonprompt_v10_GhentSelection',channel,'SR'))
     # regions.append(Region('SR',channel,'SR'))
+
+    regions.append(Region('CustomRegion',channel,'CustomRegion'))
     # regions.append(Region('SR_disp1',channel,'SR_disp1'))
     # regions.append(Region('SR_disp2',channel,'SR_disp2'))
     # regions.append(Region('SR_disp3',channel,'SR_disp3'))
@@ -168,7 +173,7 @@ def makePlots(plotDir,channel_name,variables, regions, total_weight, sample_dict
 
         print('\n#############################################################################')
         print('# creating plots for %i sample(s) and %i variable(s)...'%(len(sample_dict['working_samples']),len(variables),))
-        print('# using %d CPUs'%(cpu_count())), 'with multiprocess %s'%(multiprocess_status) 
+        print('# using %d CPUs with multiprocess %s'%(cpu_count(),multiprocess_status)) 
         print('# Method used to estimate Lepton Fake Rate: %s'%(fr_method))
         if useNeuralNetwork:
             # print '# Path to Neural Network for SingleFakes1:\t' + fr_net.path_to_NeuralNet('SingleFake1',channel_dir,dataset)

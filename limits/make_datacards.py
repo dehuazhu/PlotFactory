@@ -49,6 +49,11 @@ class dataCards(object):
             rate_conv_d1, rate_conv_d2, rate_conv_d3 = self.rates[disp_bins[0]]['conv'].Integral(), self.rates[disp_bins[1]]['conv'].Integral(), self.rates[disp_bins[2]]['conv'].Integral()
             rate_fake_d1, rate_fake_d2, rate_fake_d3 = self.rates[disp_bins[0]]['fake'].Integral(), self.rates[disp_bins[1]]['fake'].Integral(), self.rates[disp_bins[2]]['fake'].Integral()
             rate_sig_d1,  rate_sig_d2,  rate_sig_d3  = self.rates[disp_bins[0]][signal_name ].Integral(), self.rates[disp_bins[1]][signal_name ].Integral(), self.rates[disp_bins[2]][signal_name ].Integral()
+    
+            # to prevent a zero denominator, rate_fake* should never be a complete zero
+            if rate_fake_d1 < 0.01: rate_fake_d1 = 0.01
+            if rate_fake_d2 < 0.01: rate_fake_d2 = 0.01
+            if rate_fake_d2 < 0.01: rate_fake_d2 = 0.01
 
             if self.vv: rate_vv_d1,   rate_vv_d2,   rate_vv_d3  = self.rates[disp_bins[0]]['vv' ].Integral(), self.rates[disp_bins[2]]['vv' ].Integral(), self.rates[disp_bins[2]]['vv' ].Integral()
 
@@ -285,33 +290,36 @@ class dataCards(object):
         print('datacards generated to %s'%self.out_folder)
 
 if __name__ == '__main__':
-    channel = 'mmm'
-    # channel = 'mem_OS'
-    # channel = 'mem_SS'
-    # channel = 'eee'
-    # channel = 'eem_OS'
-    # channel = 'eem_SS'
+    channels = []
+    channels.append('mmm')
+    channels.append('mem_OS')
+    channels.append('mem_SS')
+    channels.append('eee')
+    channels.append('eem_OS')
+    channels.append('eem_SS')
 
-    #original 2017
-    # in_folders = glob('/work/dezhu/3_figures/1_DataMC/FinalStates/0_datacards_v2_NewBinning/*%s_disp*/root/linear/' %channel)
-    # out_base = '/work/dezhu/3_figures/2_Limits/2017/mmm/20191119_limits'
-    
-    #new 2018
-    # in_folders = glob('/work/dezhu/3_figures/1_DataMC/FinalStates/2018/0_datacards_v1/%s/root/linear/' %channel)
-    # in_folders = glob('/work/dezhu/3_figures/1_DataMC/FinalStates/2018/0_datacards_v2_SignalReweight/%s/root/linear/' %channel)
-    # in_folders = glob('/work/dezhu/3_figures/1_DataMC/FinalStates/2018/0_datacards_v3_SignalReweightNormalized/%s/root/linear/' %channel)
-    # in_folders = glob('/work/dezhu/3_figures/1_DataMC/FinalStates/2018/%s/datacard_v3_SigReweightNormalized_fixed/root/linear/' %channel)
-    in_folders = glob('/work/dezhu/3_figures/1_DataMC/FinalStates/2018/%s/datacard_v3_SigReweightNormalized_fixed2/root/linear/' %channel)
+    for channel in channels:
+        #original 2017
+        # in_folders = glob('/work/dezhu/3_figures/1_DataMC/FinalStates/0_datacards_v2_NewBinning/*%s_disp*/root/linear/' %channel)
+        # out_base = '/work/dezhu/3_figures/2_Limits/2017/mmm/20191119_limits'
+        
+        #new 2018
+        # in_folders = glob('/work/dezhu/3_figures/1_DataMC/FinalStates/2018/0_datacards_v1/%s/root/linear/' %channel)
+        # in_folders = glob('/work/dezhu/3_figures/1_DataMC/FinalStates/2018/0_datacards_v2_SignalReweight/%s/root/linear/' %channel)
+        # in_folders = glob('/work/dezhu/3_figures/1_DataMC/FinalStates/2018/0_datacards_v3_SignalReweightNormalized/%s/root/linear/' %channel)
+        # in_folders = glob('/work/dezhu/3_figures/1_DataMC/FinalStates/2018/%s/datacard_v3_SigReweightNormalized_fixed/root/linear/' %channel)
+        # in_folders = glob('/work/dezhu/3_figures/1_DataMC/FinalStates/2018/%s/datacard_v3_SigReweightNormalized_fixed2/root/linear/' %channel)
+        in_folders = glob('/work/dezhu/3_figures/1_DataMC/FinalStates/2018/%s/datacard_v5_BetterDisplacementBin/root/linear/' %channel)
 
-    # output_base = '/work/dezhu/3_figures/2_Limits/2018/%s/20191120_Aachen'%channel
-    # output_base = '/work/dezhu/3_figures/2_Limits/2018/%s/20191125_SignalReweight'%(channel)
-    output_base = '/work/dezhu/3_figures/2_Limits/2018/%s/20191125_SignalReweightNormalized_fixed2'%(channel)
-    
-    output_folder = output_base + '/datacards/'
+        # output_base = '/work/dezhu/3_figures/2_Limits/2018/%s/20191120_Aachen'%channel
+        # output_base = '/work/dezhu/3_figures/2_Limits/2018/%s/20191125_SignalReweight'%(channel)
+        output_base = '/work/dezhu/3_figures/2_Limits/2018/%s/20191129_NewDispBin'%(channel)
+        
+        output_folder = output_base + '/datacards/'
 
-    if not os.path.isdir(output_base): os.mkdir(output_base)
-    if not os.path.isdir(output_folder): os.mkdir(output_folder)
+        if not os.path.isdir(output_base): os.mkdir(output_base)
+        if not os.path.isdir(output_folder): os.mkdir(output_folder)
 
-    DC = dataCards(channel, in_folders, output_folder)
-    DC.make_inputs(verbose=False)
-    
+        DC = dataCards(channel, in_folders, output_folder)
+        DC.make_inputs(verbose=False)
+        

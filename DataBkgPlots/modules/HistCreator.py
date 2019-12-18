@@ -21,8 +21,9 @@ from ROOT import ROOT, RDataFrame, TH1F, TFile, TTree, TTreeFormula, gInterprete
 
 
 # Enable ROOT's implicit multi-threading for all objects that provide an internal parallelisation mechanism
-ROOT.EnableImplicitMT(68)
-# ROOT.EnableImplicitMT(20)
+# ROOT.EnableImplicitMT()
+# ROOT.EnableImplicitMT(68)
+ROOT.EnableImplicitMT(20)
 
 def initHist(hist, vcfg):
     hist.Sumw2()
@@ -78,7 +79,7 @@ class CreateHists(object):
                 #adding reweighting for multiprocessing; be careful when using this option to make sure you have enough memory!
                 # The number of samples can go up to 100!
                 # reweightPool = Pool(processes=len(reweightCfgs))
-                reweightPool = Pool(70)
+                reweightPool = Pool(30)
                 reWeightResults = reweightPool.map(self.makealltheplots, reweightCfgs) 
                 reweightPool.terminate()
                 for vcfg in self.vcfgs:
@@ -92,8 +93,10 @@ class CreateHists(object):
 
                 # #adding reweighting for non multiprocessing
                 # for cfg in reweightCfgs:
-                    # result = self.makealltheplots(cfg)
-                    # print('done sample nr. %d; passed time: %d seconds'%(len(self.plots[vcfg.name].histos),time.time()-starttime_reweight),end='\r')
+                    # try:
+                        # result = self.makealltheplots(cfg)
+                        # print('done sample nr. %d; passed time: %d seconds'%(len(self.plots[vcfg.name].histos),time.time()-starttime_reweight),end='\r')
+                    # except: set_trace()
 
        
         if multiprocess == False:
@@ -229,16 +232,26 @@ class CreateHists(object):
                 norm_cut += '&& (hnl_2d_disp < 0.5)'
             if 'disp1_2p0' in self.vcfgs[0].name:
                 norm_cut += '&& (hnl_2d_disp < 2.0)'
+
             if 'disp2_0p5_10' in self.vcfgs[0].name:
                 norm_cut += '&& ((hnl_2d_disp > 0.5) && (hnl_2d_disp < 10))'
             if 'disp2_2p0_10' in self.vcfgs[0].name:
                 norm_cut += '&& ((hnl_2d_disp > 2.0) && (hnl_2d_disp < 10))'
-            if 'disp3_10' in self.vcfgs[0].name:
-                norm_cut += '&& hnl_2d_disp > 10'
             if 'disp2_0p5_5' in self.vcfgs[0].name:
                 norm_cut += '&& ((hnl_2d_disp > 0.5) && (hnl_2d_disp < 5))'
+            if 'disp2_0p5_2' in self.vcfgs[0].name:
+                norm_cut += '&& ((hnl_2d_disp > 0.5) && (hnl_2d_disp < 2))'
+            if 'disp2_0p5_1' in self.vcfgs[0].name:
+                norm_cut += '&& ((hnl_2d_disp > 0.5) && (hnl_2d_disp < 1))'
+
+            if 'disp3_10' in self.vcfgs[0].name:
+                norm_cut += '&& hnl_2d_disp > 10'
             if 'disp3_5' in self.vcfgs[0].name:
                 norm_cut += '&& hnl_2d_disp > 5'
+            if 'disp3_2' in self.vcfgs[0].name:
+                norm_cut += '&& hnl_2d_disp > 2'
+            if 'disp3_1' in self.vcfgs[0].name:
+                norm_cut += '&& hnl_2d_disp > 1.'
 
 
 
@@ -424,6 +437,7 @@ class CreateHists(object):
             # if is_corrupt > 0:
                 # print '%s: main tree and friend tree do not match'%(cfg.name)
                 # set_trace()
+            # norm_cut += ' && (hnl_2d_disp < 40 )'
     
         if cfg.is_contamination:
             '''
@@ -449,130 +463,108 @@ class CreateHists(object):
             weight += '* l0_weight'
 
         if cfg.is_reweightSignal:
-            # if   '0p00001'                    in cfg.name: weight += ' * ctau_w_v2_1em10   * xs_w_v2_1em10'
-            # elif '0p000022360679774997898'    in cfg.name: weight += ' * ctau_w_v2_5em10   * xs_w_v2_5em10'
-            # elif '0p000031622776601683795'    in cfg.name: weight += ' * ctau_w_v2_1em09   * xs_w_v2_1em09'
-            # elif '0p00007071067811865475'     in cfg.name: weight += ' * ctau_w_v2_5em09   * xs_w_v2_5em09'
-            # elif '0p0001'                     in cfg.name: weight += ' * ctau_w_v2_1em08   * xs_w_v2_1em08'    
-            # elif '0p00022360679774997898'     in cfg.name: weight += ' * ctau_w_v2_5em08   * xs_w_v2_5em08'
-            # elif '0p00031622776601683794'     in cfg.name: weight += ' * ctau_w_v2_1em07   * xs_w_v2_1em07'
-            # elif '0p0007071067811865475'      in cfg.name: weight += ' * ctau_w_v2_5em07   * xs_w_v2_5em07'
-            # elif '0p001'                      in cfg.name: weight += ' * ctau_w_v2_1em06   * xs_w_v2_1em06'
-            # elif '0p00223606797749979'        in cfg.name: weight += ' * ctau_w_v2_5em06   * xs_w_v2_5em06'
-            # elif '0p0024494897427831783'      in cfg.name: weight += ' * ctau_w_v2_6em06   * xs_w_v2_6em06'
-            # elif '0p00282842712474619'        in cfg.name: weight += ' * ctau_w_v2_8em06   * xs_w_v2_8em06'
-            # elif '0p0031622776601683794'      in cfg.name: weight += ' * ctau_w_v2_1em05   * xs_w_v2_1em05'
-            # elif '0p00447213595499958'        in cfg.name: weight += ' * ctau_w_v2_2em05   * xs_w_v2_2em05'
-            # elif '0p005477225575051661'       in cfg.name: weight += ' * ctau_w_v2_3em05   * xs_w_v2_3em05'
-            # elif '0p006324555320336759'       in cfg.name: weight += ' * ctau_w_v2_4em05   * xs_w_v2_4em05'
-            # elif '0p007071067811865475'       in cfg.name: weight += ' * ctau_w_v2_5em05   * xs_w_v2_5em05'
-            # elif '0p008366600265340755'       in cfg.name: weight += ' * ctau_w_v2_7em05   * xs_w_v2_7em05'
-            # elif '0p01'                       in cfg.name: weight += ' * ctau_w_v2_0.0001  * xs_w_v2_0.0001'
-            # elif '0p01414213562373095'        in cfg.name: weight += ' * ctau_w_v2_0.0002  * xs_w_v2_0.0002'
-            # elif '0p015811388300841896'       in cfg.name: weight += ' * ctau_w_v2_0.00025 * xs_w_v2_0.00025'
-            # elif '0p017320508075688773'       in cfg.name: weight += ' * ctau_w_v2_0.0003  * xs_w_v2_0.0003'
-            # elif '0p022360679774997897'       in cfg.name: weight += ' * ctau_w_v2_0.0005  * xs_w_v2_0.0005'
-            # elif '0p034641016151377546'       in cfg.name: weight += ' * ctau_w_v2_0.0012  * xs_w_v2_0.0012'
+            if ('mmm' in self.channel) or ('mem' in self.channel): ch = '_mu'
+            if ('eee' in self.channel) or ('eem' in self.channel): ch = '_e_'
 
-            if   '0p00001'                      in cfg.name: weight += ' * ctau_w_v2_1p0em10  * xs_w_v2_1p0em10 '
-            elif '0p00001414213562'             in cfg.name: weight += ' * ctau_w_v2_2p0em10  * xs_w_v2_2p0em10 '
-            elif '0p00001732050808'             in cfg.name: weight += ' * ctau_w_v2_3p0em10  * xs_w_v2_3p0em10 '
-            elif '0p00002'                      in cfg.name: weight += ' * ctau_w_v2_4p0em10  * xs_w_v2_4p0em10 '
-            elif '0p000022360679774997898'      in cfg.name: weight += ' * ctau_w_v2_5p0em10  * xs_w_v2_5p0em10 '
-            elif '0p00002449489743'             in cfg.name: weight += ' * ctau_w_v2_6p0em10  * xs_w_v2_6p0em10 '
-            elif '0p00002645751311'             in cfg.name: weight += ' * ctau_w_v2_7p0em10  * xs_w_v2_7p0em10 '
-            elif '0p00002828427125'             in cfg.name: weight += ' * ctau_w_v2_8p0em10  * xs_w_v2_8p0em10 '
-            elif '0p00003'                      in cfg.name: weight += ' * ctau_w_v2_9p0em10  * xs_w_v2_9p0em10 '
+            if   '0p00001'                     + ch in cfg.name: weight += ' * ctau_w_v2_1p0em10  * xs_w_v2_1p0em10 '
+            elif '0p00001414213562'            + ch in cfg.name: weight += ' * ctau_w_v2_2p0em10  * xs_w_v2_2p0em10 '
+            elif '0p00001732050808'            + ch in cfg.name: weight += ' * ctau_w_v2_3p0em10  * xs_w_v2_3p0em10 '
+            elif '0p00002'                     + ch in cfg.name: weight += ' * ctau_w_v2_4p0em10  * xs_w_v2_4p0em10 '
+            elif '0p000022360679774997898'     + ch in cfg.name: weight += ' * ctau_w_v2_5p0em10  * xs_w_v2_5p0em10 '
+            elif '0p00002449489743'            + ch in cfg.name: weight += ' * ctau_w_v2_6p0em10  * xs_w_v2_6p0em10 '
+            elif '0p00002645751311'            + ch in cfg.name: weight += ' * ctau_w_v2_7p0em10  * xs_w_v2_7p0em10 '
+            elif '0p00002828427125'            + ch in cfg.name: weight += ' * ctau_w_v2_8p0em10  * xs_w_v2_8p0em10 '
+            elif '0p00003'                     + ch in cfg.name: weight += ' * ctau_w_v2_9p0em10  * xs_w_v2_9p0em10 '
 
-            elif '0p000031622776601683795'      in cfg.name: weight += ' * ctau_w_v2_1p0em09  * xs_w_v2_1p0em09 '
-            elif '0p00004472135955'             in cfg.name: weight += ' * ctau_w_v2_2p0em09  * xs_w_v2_2p0em09 '
-            elif '0p00005477225575'             in cfg.name: weight += ' * ctau_w_v2_3p0em09  * xs_w_v2_3p0em09 '
-            elif '0p0000632455532'              in cfg.name: weight += ' * ctau_w_v2_4p0em09  * xs_w_v2_4p0em09 '
-            elif '0p00007071067811865475'       in cfg.name: weight += ' * ctau_w_v2_5p0em09  * xs_w_v2_5p0em09 '
-            elif '0p00007745966692'             in cfg.name: weight += ' * ctau_w_v2_6p0em09  * xs_w_v2_6p0em09 '
-            elif '0p00008366600265'             in cfg.name: weight += ' * ctau_w_v2_7p0em09  * xs_w_v2_7p0em09 '
-            elif '0p0000894427191'              in cfg.name: weight += ' * ctau_w_v2_8p0em09  * xs_w_v2_8p0em09 '
-            elif '0p00009486832981'             in cfg.name: weight += ' * ctau_w_v2_9p0em09  * xs_w_v2_9p0em09 '
+            elif '0p000031622776601683795'     + ch in cfg.name: weight += ' * ctau_w_v2_1p0em09  * xs_w_v2_1p0em09 '
+            elif '0p00004472135955'            + ch in cfg.name: weight += ' * ctau_w_v2_2p0em09  * xs_w_v2_2p0em09 '
+            elif '0p00005477225575'            + ch in cfg.name: weight += ' * ctau_w_v2_3p0em09  * xs_w_v2_3p0em09 '
+            elif '0p0000632455532'             + ch in cfg.name: weight += ' * ctau_w_v2_4p0em09  * xs_w_v2_4p0em09 '
+            elif '0p00007071067811865475'      + ch in cfg.name: weight += ' * ctau_w_v2_5p0em09  * xs_w_v2_5p0em09 '
+            elif '0p00007745966692'            + ch in cfg.name: weight += ' * ctau_w_v2_6p0em09  * xs_w_v2_6p0em09 '
+            elif '0p00008366600265'            + ch in cfg.name: weight += ' * ctau_w_v2_7p0em09  * xs_w_v2_7p0em09 '
+            elif '0p0000894427191'             + ch in cfg.name: weight += ' * ctau_w_v2_8p0em09  * xs_w_v2_8p0em09 '
+            elif '0p00009486832981'            + ch in cfg.name: weight += ' * ctau_w_v2_9p0em09  * xs_w_v2_9p0em09 '
 
-            elif '0p0001'                       in cfg.name: weight += ' * ctau_w_v2_1p0em08  * xs_w_v2_1p0em08 '
-            elif '0p0001414213562'              in cfg.name: weight += ' * ctau_w_v2_2p0em08  * xs_w_v2_2p0em08 '
-            elif '0p0001732050808'              in cfg.name: weight += ' * ctau_w_v2_3p0em08  * xs_w_v2_3p0em08 '
-            elif '0p0002'                       in cfg.name: weight += ' * ctau_w_v2_4p0em08  * xs_w_v2_4p0em08 '
-            elif '0p00022360679774997898'       in cfg.name: weight += ' * ctau_w_v2_5p0em08  * xs_w_v2_5p0em08 '
-            elif '0p0002449489743'              in cfg.name: weight += ' * ctau_w_v2_6p0em08  * xs_w_v2_6p0em08 '
-            elif '0p0002645751311'              in cfg.name: weight += ' * ctau_w_v2_7p0em08  * xs_w_v2_7p0em08 '
-            elif '0p0002828427125'              in cfg.name: weight += ' * ctau_w_v2_8p0em08  * xs_w_v2_8p0em08 '
-            elif '0p0003'                       in cfg.name: weight += ' * ctau_w_v2_9p0em08  * xs_w_v2_9p0em08 '
+            elif '0p0001'                      + ch in cfg.name: weight += ' * ctau_w_v2_1p0em08  * xs_w_v2_1p0em08 '
+            elif '0p0001414213562'             + ch in cfg.name: weight += ' * ctau_w_v2_2p0em08  * xs_w_v2_2p0em08 '
+            elif '0p0001732050808'             + ch in cfg.name: weight += ' * ctau_w_v2_3p0em08  * xs_w_v2_3p0em08 '
+            elif '0p0002'                      + ch in cfg.name: weight += ' * ctau_w_v2_4p0em08  * xs_w_v2_4p0em08 '
+            elif '0p00022360679774997898'      + ch in cfg.name: weight += ' * ctau_w_v2_5p0em08  * xs_w_v2_5p0em08 '
+            elif '0p0002449489743'             + ch in cfg.name: weight += ' * ctau_w_v2_6p0em08  * xs_w_v2_6p0em08 '
+            elif '0p0002645751311'             + ch in cfg.name: weight += ' * ctau_w_v2_7p0em08  * xs_w_v2_7p0em08 '
+            elif '0p0002828427125'             + ch in cfg.name: weight += ' * ctau_w_v2_8p0em08  * xs_w_v2_8p0em08 '
+            elif '0p0003'                      + ch in cfg.name: weight += ' * ctau_w_v2_9p0em08  * xs_w_v2_9p0em08 '
 
-            elif '0p00031622776601683795'       in cfg.name: weight += ' * ctau_w_v2_1p0em07  * xs_w_v2_1p0em07 '
-            elif '0p0004472135955'              in cfg.name: weight += ' * ctau_w_v2_2p0em07  * xs_w_v2_2p0em07 '
-            elif '0p0005477225575'              in cfg.name: weight += ' * ctau_w_v2_3p0em07  * xs_w_v2_3p0em07 '
-            elif '0p000632455532'               in cfg.name: weight += ' * ctau_w_v2_4p0em07  * xs_w_v2_4p0em07 '
-            elif '0p0007071067811865475'        in cfg.name: weight += ' * ctau_w_v2_5p0em07  * xs_w_v2_5p0em07 '
-            elif '0p0007745966692'              in cfg.name: weight += ' * ctau_w_v2_6p0em07  * xs_w_v2_6p0em07 '
-            elif '0p0008366600265'              in cfg.name: weight += ' * ctau_w_v2_7p0em07  * xs_w_v2_7p0em07 '
-            elif '0p000894427191'               in cfg.name: weight += ' * ctau_w_v2_8p0em07  * xs_w_v2_8p0em07 '
-            elif '0p0009486832981'              in cfg.name: weight += ' * ctau_w_v2_9p0em07  * xs_w_v2_9p0em07 '
+            elif '0p00031622776601683795'      + ch in cfg.name: weight += ' * ctau_w_v2_1p0em07  * xs_w_v2_1p0em07 '
+            elif '0p0004472135955'             + ch in cfg.name: weight += ' * ctau_w_v2_2p0em07  * xs_w_v2_2p0em07 '
+            elif '0p0005477225575'             + ch in cfg.name: weight += ' * ctau_w_v2_3p0em07  * xs_w_v2_3p0em07 '
+            elif '0p000632455532'              + ch in cfg.name: weight += ' * ctau_w_v2_4p0em07  * xs_w_v2_4p0em07 '
+            elif '0p0007071067811865475'       + ch in cfg.name: weight += ' * ctau_w_v2_5p0em07  * xs_w_v2_5p0em07 '
+            elif '0p0007745966692'             + ch in cfg.name: weight += ' * ctau_w_v2_6p0em07  * xs_w_v2_6p0em07 '
+            elif '0p0008366600265'             + ch in cfg.name: weight += ' * ctau_w_v2_7p0em07  * xs_w_v2_7p0em07 '
+            elif '0p000894427191'              + ch in cfg.name: weight += ' * ctau_w_v2_8p0em07  * xs_w_v2_8p0em07 '
+            elif '0p0009486832981'             + ch in cfg.name: weight += ' * ctau_w_v2_9p0em07  * xs_w_v2_9p0em07 '
 
-            elif '0p001'                        in cfg.name: weight += ' * ctau_w_v2_1p0em06  * xs_w_v2_1p0em06 '
-            elif '0p001414213562'               in cfg.name: weight += ' * ctau_w_v2_2p0em06  * xs_w_v2_2p0em06 '
-            elif '0p001732050808'               in cfg.name: weight += ' * ctau_w_v2_3p0em06  * xs_w_v2_3p0em06 '
-            elif '0p002'                        in cfg.name: weight += ' * ctau_w_v2_4p0em06  * xs_w_v2_4p0em06 '
-            elif '0p0022360679774997898'        in cfg.name: weight += ' * ctau_w_v2_5p0em06  * xs_w_v2_5p0em06 '
-            elif '0p002449489743'               in cfg.name: weight += ' * ctau_w_v2_6p0em06  * xs_w_v2_6p0em06 '
-            elif '0p002645751311'               in cfg.name: weight += ' * ctau_w_v2_7p0em06  * xs_w_v2_7p0em06 '
-            elif '0p002828427125'               in cfg.name: weight += ' * ctau_w_v2_8p0em06  * xs_w_v2_8p0em06 '
-            elif '0p003'                        in cfg.name: weight += ' * ctau_w_v2_9p0em06  * xs_w_v2_9p0em06 '
+            elif '0p001'                       + ch in cfg.name: weight += ' * ctau_w_v2_1p0em06  * xs_w_v2_1p0em06 '
+            elif '0p001414213562'              + ch in cfg.name: weight += ' * ctau_w_v2_2p0em06  * xs_w_v2_2p0em06 '
+            elif '0p001732050808'              + ch in cfg.name: weight += ' * ctau_w_v2_3p0em06  * xs_w_v2_3p0em06 '
+            elif '0p002'                       + ch in cfg.name: weight += ' * ctau_w_v2_4p0em06  * xs_w_v2_4p0em06 '
+            elif '0p0022360679774997898'       + ch in cfg.name: weight += ' * ctau_w_v2_5p0em06  * xs_w_v2_5p0em06 '
+            elif '0p002449489743'              + ch in cfg.name: weight += ' * ctau_w_v2_6p0em06  * xs_w_v2_6p0em06 '
+            elif '0p002645751311'              + ch in cfg.name: weight += ' * ctau_w_v2_7p0em06  * xs_w_v2_7p0em06 '
+            elif '0p002828427125'              + ch in cfg.name: weight += ' * ctau_w_v2_8p0em06  * xs_w_v2_8p0em06 '
+            elif '0p003'                       + ch in cfg.name: weight += ' * ctau_w_v2_9p0em06  * xs_w_v2_9p0em06 '
 
-            elif '0p0031622776601683795'        in cfg.name: weight += ' * ctau_w_v2_1p0em05  * xs_w_v2_1p0em05 '
-            elif '0p004472135955'               in cfg.name: weight += ' * ctau_w_v2_2p0em05  * xs_w_v2_2p0em05 '
-            elif '0p005477225575'               in cfg.name: weight += ' * ctau_w_v2_3p0em05  * xs_w_v2_3p0em05 '
-            elif '0p00632455532'                in cfg.name: weight += ' * ctau_w_v2_4p0em05  * xs_w_v2_4p0em05 '
-            elif '0p007071067811865475'         in cfg.name: weight += ' * ctau_w_v2_5p0em05  * xs_w_v2_5p0em05 '
-            elif '0p007745966692'               in cfg.name: weight += ' * ctau_w_v2_6p0em05  * xs_w_v2_6p0em05 '
-            elif '0p008366600265'               in cfg.name: weight += ' * ctau_w_v2_7p0em05  * xs_w_v2_7p0em05 '
-            elif '0p00894427191'                in cfg.name: weight += ' * ctau_w_v2_8p0em05  * xs_w_v2_8p0em05 '
-            elif '0p009486832981'               in cfg.name: weight += ' * ctau_w_v2_9p0em05  * xs_w_v2_9p0em05 '
+            elif '0p0031622776601683795'       + ch in cfg.name: weight += ' * ctau_w_v2_1p0em05  * xs_w_v2_1p0em05 '
+            elif '0p004472135955'              + ch in cfg.name: weight += ' * ctau_w_v2_2p0em05  * xs_w_v2_2p0em05 '
+            elif '0p005477225575'              + ch in cfg.name: weight += ' * ctau_w_v2_3p0em05  * xs_w_v2_3p0em05 '
+            elif '0p00632455532'               + ch in cfg.name: weight += ' * ctau_w_v2_4p0em05  * xs_w_v2_4p0em05 '
+            elif '0p007071067811865475'        + ch in cfg.name: weight += ' * ctau_w_v2_5p0em05  * xs_w_v2_5p0em05 '
+            elif '0p007745966692'              + ch in cfg.name: weight += ' * ctau_w_v2_6p0em05  * xs_w_v2_6p0em05 '
+            elif '0p008366600265'              + ch in cfg.name: weight += ' * ctau_w_v2_7p0em05  * xs_w_v2_7p0em05 '
+            elif '0p00894427191'               + ch in cfg.name: weight += ' * ctau_w_v2_8p0em05  * xs_w_v2_8p0em05 '
+            elif '0p009486832981'              + ch in cfg.name: weight += ' * ctau_w_v2_9p0em05  * xs_w_v2_9p0em05 '
 
-            elif '0p01'                         in cfg.name: weight += ' * ctau_w_v2_1p0em04  * xs_w_v2_1p0em04 '
-            elif '0p01414213562'                in cfg.name: weight += ' * ctau_w_v2_2p0em04  * xs_w_v2_2p0em04 '
-            elif '0p01732050808'                in cfg.name: weight += ' * ctau_w_v2_3p0em04  * xs_w_v2_3p0em04 '
-            elif '0p02'                         in cfg.name: weight += ' * ctau_w_v2_4p0em04  * xs_w_v2_4p0em04 '
-            elif '0p022360679774997898'         in cfg.name: weight += ' * ctau_w_v2_5p0em04  * xs_w_v2_5p0em04 '
-            elif '0p02449489743'                in cfg.name: weight += ' * ctau_w_v2_6p0em04  * xs_w_v2_6p0em04 '
-            elif '0p02645751311'                in cfg.name: weight += ' * ctau_w_v2_7p0em04  * xs_w_v2_7p0em04 '
-            elif '0p02828427125'                in cfg.name: weight += ' * ctau_w_v2_8p0em04  * xs_w_v2_8p0em04 '
-            elif '0p03'                         in cfg.name: weight += ' * ctau_w_v2_9p0em04  * xs_w_v2_9p0em04 '
+            elif '0p01'                        + ch in cfg.name: weight += ' * ctau_w_v2_1p0em04  * xs_w_v2_1p0em04 '
+            elif '0p01414213562'               + ch in cfg.name: weight += ' * ctau_w_v2_2p0em04  * xs_w_v2_2p0em04 '
+            elif '0p01732050808'               + ch in cfg.name: weight += ' * ctau_w_v2_3p0em04  * xs_w_v2_3p0em04 '
+            elif '0p02'                        + ch in cfg.name: weight += ' * ctau_w_v2_4p0em04  * xs_w_v2_4p0em04 '
+            elif '0p022360679774997898'        + ch in cfg.name: weight += ' * ctau_w_v2_5p0em04  * xs_w_v2_5p0em04 '
+            elif '0p02449489743'               + ch in cfg.name: weight += ' * ctau_w_v2_6p0em04  * xs_w_v2_6p0em04 '
+            elif '0p02645751311'               + ch in cfg.name: weight += ' * ctau_w_v2_7p0em04  * xs_w_v2_7p0em04 '
+            elif '0p02828427125'               + ch in cfg.name: weight += ' * ctau_w_v2_8p0em04  * xs_w_v2_8p0em04 '
+            elif '0p03'                        + ch in cfg.name: weight += ' * ctau_w_v2_9p0em04  * xs_w_v2_9p0em04 '
 
-            elif '0p031622776601683795'         in cfg.name: weight += ' * ctau_w_v2_1p0em03  * xs_w_v2_1p0em03 '
-            elif '0p04472135955'                in cfg.name: weight += ' * ctau_w_v2_2p0em03  * xs_w_v2_2p0em03 '
-            elif '0p05477225575'                in cfg.name: weight += ' * ctau_w_v2_3p0em03  * xs_w_v2_3p0em03 '
-            elif '0p0632455532'                 in cfg.name: weight += ' * ctau_w_v2_4p0em03  * xs_w_v2_4p0em03 '
-            elif '0p07071067811865475'          in cfg.name: weight += ' * ctau_w_v2_5p0em03  * xs_w_v2_5p0em03 '
-            elif '0p07745966692'                in cfg.name: weight += ' * ctau_w_v2_6p0em03  * xs_w_v2_6p0em03 '
-            elif '0p08366600265'                in cfg.name: weight += ' * ctau_w_v2_7p0em03  * xs_w_v2_7p0em03 '
-            elif '0p0894427191'                 in cfg.name: weight += ' * ctau_w_v2_8p0em03  * xs_w_v2_8p0em03 '
-            elif '0p09486832981'                in cfg.name: weight += ' * ctau_w_v2_9p0em03  * xs_w_v2_9p0em03 '
+            elif '0p031622776601683795'        + ch in cfg.name: weight += ' * ctau_w_v2_1p0em03  * xs_w_v2_1p0em03 '
+            elif '0p04472135955'               + ch in cfg.name: weight += ' * ctau_w_v2_2p0em03  * xs_w_v2_2p0em03 '
+            elif '0p05477225575'               + ch in cfg.name: weight += ' * ctau_w_v2_3p0em03  * xs_w_v2_3p0em03 '
+            elif '0p0632455532'                + ch in cfg.name: weight += ' * ctau_w_v2_4p0em03  * xs_w_v2_4p0em03 '
+            elif '0p07071067811865475'         + ch in cfg.name: weight += ' * ctau_w_v2_5p0em03  * xs_w_v2_5p0em03 '
+            elif '0p07745966692'               + ch in cfg.name: weight += ' * ctau_w_v2_6p0em03  * xs_w_v2_6p0em03 '
+            elif '0p08366600265'               + ch in cfg.name: weight += ' * ctau_w_v2_7p0em03  * xs_w_v2_7p0em03 '
+            elif '0p0894427191'                + ch in cfg.name: weight += ' * ctau_w_v2_8p0em03  * xs_w_v2_8p0em03 '
+            elif '0p09486832981'               + ch in cfg.name: weight += ' * ctau_w_v2_9p0em03  * xs_w_v2_9p0em03 '
 
-            elif '0p1'                          in cfg.name: weight += ' * ctau_w_v2_1p0em02  * xs_w_v2_1p0em02 '
-            elif '0p1414213562'                 in cfg.name: weight += ' * ctau_w_v2_2p0em02  * xs_w_v2_2p0em02 '
-            elif '0p1732050808'                 in cfg.name: weight += ' * ctau_w_v2_3p0em02  * xs_w_v2_3p0em02 '
-            elif '0p2'                          in cfg.name: weight += ' * ctau_w_v2_4p0em02  * xs_w_v2_4p0em02 '
-            elif '0p22360679774997898'          in cfg.name: weight += ' * ctau_w_v2_5p0em02  * xs_w_v2_5p0em02 '
-            elif '0p2449489743'                 in cfg.name: weight += ' * ctau_w_v2_6p0em02  * xs_w_v2_6p0em02 '
-            elif '0p2645751311'                 in cfg.name: weight += ' * ctau_w_v2_7p0em02  * xs_w_v2_7p0em02 '
-            elif '0p2828427125'                 in cfg.name: weight += ' * ctau_w_v2_8p0em02  * xs_w_v2_8p0em02 '
-            elif '0p3'                          in cfg.name: weight += ' * ctau_w_v2_9p0em02  * xs_w_v2_9p0em02 '
+            elif '0p1'                         + ch in cfg.name: weight += ' * ctau_w_v2_1p0em02  * xs_w_v2_1p0em02 '
+            elif '0p1414213562'                + ch in cfg.name: weight += ' * ctau_w_v2_2p0em02  * xs_w_v2_2p0em02 '
+            elif '0p1732050808'                + ch in cfg.name: weight += ' * ctau_w_v2_3p0em02  * xs_w_v2_3p0em02 '
+            elif '0p2'                         + ch in cfg.name: weight += ' * ctau_w_v2_4p0em02  * xs_w_v2_4p0em02 '
+            elif '0p22360679774997898'         + ch in cfg.name: weight += ' * ctau_w_v2_5p0em02  * xs_w_v2_5p0em02 '
+            elif '0p2449489743'                + ch in cfg.name: weight += ' * ctau_w_v2_6p0em02  * xs_w_v2_6p0em02 '
+            elif '0p2645751311'                + ch in cfg.name: weight += ' * ctau_w_v2_7p0em02  * xs_w_v2_7p0em02 '
+            elif '0p2828427125'                + ch in cfg.name: weight += ' * ctau_w_v2_8p0em02  * xs_w_v2_8p0em02 '
+            elif '0p3'                         + ch in cfg.name: weight += ' * ctau_w_v2_9p0em02  * xs_w_v2_9p0em02 '
 
-            elif '0p31622776601683795'          in cfg.name: weight += ' * ctau_w_v2_1p0em01  * xs_w_v2_1p0em01 '
-            elif '0p4472135955'                 in cfg.name: weight += ' * ctau_w_v2_2p0em01  * xs_w_v2_2p0em01 '
-            elif '0p5477225575'                 in cfg.name: weight += ' * ctau_w_v2_3p0em01  * xs_w_v2_3p0em01 '
-            elif '0p632455532'                  in cfg.name: weight += ' * ctau_w_v2_4p0em01  * xs_w_v2_4p0em01 '
-            elif '0p7071067811865475'           in cfg.name: weight += ' * ctau_w_v2_5p0em01  * xs_w_v2_5p0em01 '
-            elif '0p7745966692'                 in cfg.name: weight += ' * ctau_w_v2_6p0em01  * xs_w_v2_6p0em01 '
-            elif '0p8366600265'                 in cfg.name: weight += ' * ctau_w_v2_7p0em01  * xs_w_v2_7p0em01 '
-            elif '0p894427191'                  in cfg.name: weight += ' * ctau_w_v2_8p0em01  * xs_w_v2_8p0em01 '
-            elif '0p9486832981'                 in cfg.name: weight += ' * ctau_w_v2_9p0em01  * xs_w_v2_9p0em01 '
+            elif '0p31622776601683795'         + ch in cfg.name: weight += ' * ctau_w_v2_1p0em01  * xs_w_v2_1p0em01 '
+            elif '0p4472135955'                + ch in cfg.name: weight += ' * ctau_w_v2_2p0em01  * xs_w_v2_2p0em01 '
+            elif '0p5477225575'                + ch in cfg.name: weight += ' * ctau_w_v2_3p0em01  * xs_w_v2_3p0em01 '
+            elif '0p632455532'                 + ch in cfg.name: weight += ' * ctau_w_v2_4p0em01  * xs_w_v2_4p0em01 '
+            elif '0p7071067811865475'          + ch in cfg.name: weight += ' * ctau_w_v2_5p0em01  * xs_w_v2_5p0em01 '
+            elif '0p7745966692'                + ch in cfg.name: weight += ' * ctau_w_v2_6p0em01  * xs_w_v2_6p0em01 '
+            elif '0p8366600265'                + ch in cfg.name: weight += ' * ctau_w_v2_7p0em01  * xs_w_v2_7p0em01 '
+            elif '0p894427191'                 + ch in cfg.name: weight += ' * ctau_w_v2_8p0em01  * xs_w_v2_8p0em01 '
+            elif '0p9486832981'                + ch in cfg.name: weight += ' * ctau_w_v2_9p0em01  * xs_w_v2_9p0em01 '
 
             else: set_trace()
 
@@ -581,6 +573,7 @@ class CreateHists(object):
             # if 'A' in cfg.name: set_trace()
 	    # if 'Single' in cfg.name: set_trace()
             # if 'M_5_V_0p00145602197786' in cfg.name: set_trace()
+            # if ('0p01' in cfg.name) and cfg.is_reweightSignal: set_trace()
             try:
                 if 'nbinsx' in vcfg.binning.keys():
                     hists[vcfg.name] =   dataframe\
