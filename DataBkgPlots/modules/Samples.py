@@ -797,10 +797,10 @@ def createSampleLists(analysis_dir='',
     samples_bkg = samples_nonprompt + samples_mc
 
 
-    samples_all = samples_data + samples_bkg #for the closureplots
+    # samples_all = samples_data + samples_bkg #for the closureplots
     # samples_all = samples_bkg + samples_signal_2018 #for the datacards
     # samples_all = samples_bkg + samples_signal_2017 #for the datacards
-    # samples_all = samples_bkg + samples_signal_essential_2018 #for signal acceptance plots
+    samples_all = samples_bkg + samples_signal_essential_2018 #for signal acceptance plots
     # samples_all = samples_bkg + samples_data + samples_signal
     # samples_all = samples_singlefake + samples_doublefake +tttmples_data
     # samples_all = samples_singlefake + samples_data

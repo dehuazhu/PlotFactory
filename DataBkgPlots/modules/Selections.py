@@ -645,10 +645,10 @@ def CustomRegion(channel):
     # 'hnl_2d_disp > 2',
 
     '(nbj == 0)',# true SR
-    # '(hnl_w_vis_m > 50. && hnl_w_vis_m < 80.) ', # true SR
+    '(hnl_w_vis_m > 50. && hnl_w_vis_m < 80.) ', # true SR
     
     # '!(nbj == 0)', # activate for SR orthogonal
-    '!(hnl_w_vis_m > 50. && hnl_w_vis_m < 80.) ', # activate for SR orthogonal (sideband)
+    # '!(hnl_w_vis_m > 50. && hnl_w_vis_m < 80.) ', # activate for SR orthogonal (sideband)
     # '((!(nbj == 0)) || (!(hnl_w_vis_m > 40. && hnl_w_vis_m < 85.)))', #activate to train on all orthogonal regions
     # '((!(hnl_w_vis_m > 50. && hnl_w_vis_m < 81.)) && hnl_w_vis_m > 110) ', # activate for right sideband (train)
     # '((!(hnl_w_vis_m > 50. && hnl_w_vis_m < 81.)) && hnl_w_vis_m < 110) ', # activate for left sideband (test)
