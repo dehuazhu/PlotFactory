@@ -69,6 +69,7 @@ def prepareRegions(channel):
     # regions.append(Region('SR',channel,'SR'))
 
     regions.append(Region('AN_AcceptancePlots1',channel,'CustomRegion'))
+    # regions.append(Region('AN_SR',channel,'CustomRegion'))
     # regions.append(Region('CustomRegion',channel,'CustomRegion'))
     # regions.append(Region('SR_disp1',channel,'SR_disp1'))
     # regions.append(Region('SR_disp2',channel,'SR_disp2'))
@@ -212,7 +213,7 @@ def makePlots(plotDir,channel_name,variables, regions, total_weight, sample_dict
             # plot.Group('ConversionsDouble', ['ConversionsDouble_DYJetsToLL_M10to50','ConversionsDouble_DYJets_M50','ConversionsDouble_DYJets_M50_ext'])
             plot.Group('HNL', ['HN3L*'])
             if make_plots:
-                HistDrawer.draw(plot, channel = channel_name, plot_dir = plotDir+region.name, server = server, region = region, channel_dir = channel_dir, dataset = dataset)
+                HistDrawer.draw(plot,do_ratio = True, channel = channel_name, plot_dir = plotDir+region.name, server = server, region = region, channel_dir = channel_dir, dataset = dataset)
             print('\tThis plot took %.1f s to compute.'%(time.time()-start_plot))
 
 

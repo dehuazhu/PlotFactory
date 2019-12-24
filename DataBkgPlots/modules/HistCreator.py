@@ -318,6 +318,7 @@ class CreateHists(object):
                                 .Define('abs_dphi_hnvis0','abs(hnl_dphi_hnvis0)')\
                                 .Define('abs_l1_Dz','abs(l1_dz)')\
                                 .Define('abs_l2_Dz','abs(l2_dz)')\
+                                .Define('abs_l1_dxy','abs(l2_dxy)')\
                                 # .Define('pt_cone','(  ( hnl_hn_vis_pt * (hnl_iso03_rel_rhoArea<0.2) ) + ( (hnl_iso03_rel_rhoArea>=0.2) * ( hnl_hn_vis_pt * (1. + hnl_iso03_rel_rhoArea - 0.2) ) )  )')\
                                 # .Define('eta_hnl_l0','hnl_hn_eta - l0_eta')\
                                 # .Define('abs_hnl_hn_eta','abs(hnl_hn_eta)')\
@@ -358,7 +359,6 @@ class CreateHists(object):
         dataframe = dataframe\
                 .Define('l1_ptcone_vs_pt','(l1_ptcone)/l1_pt')\
                 .Define('l2_ptcone_vs_pt','(l2_ptcone)/l2_pt')\
-                # .Define('m12Cone_vs_m12','(hnl_m_12_ConeCorrected2)/(hnl_m_12)')
 
 
         if cfg.is_singlefake:
@@ -437,7 +437,10 @@ class CreateHists(object):
             # if is_corrupt > 0:
                 # print '%s: main tree and friend tree do not match'%(cfg.name)
                 # set_trace()
-            # norm_cut += ' && (hnl_2d_disp < 40 )'
+
+            # if 'nonprompt' in cfg.name:
+                # norm_cut += ' && (hnl_2d_disp < 18 )'
+                # norm_cut += ' && (hnl_m_12 < 5 )'
     
         if cfg.is_contamination:
             '''

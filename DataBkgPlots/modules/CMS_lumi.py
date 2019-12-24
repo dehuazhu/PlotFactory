@@ -11,7 +11,8 @@ cmsText = "CMS"
 cmsTextFont = 61
 
 writeExtraText = True
-extraText = "Preliminary"
+# extraText = "Preliminary"
+extraText = "work in progress"
 extraTextFont = 52
 
 lumiTextSize = 0.6

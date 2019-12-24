@@ -617,24 +617,25 @@ def CustomRegion(channel):
 
     'l1_pt > 5 '              ,
     'abs(l1_eta) < 2.4 '       ,
-    # 'abs(l1_dxy) > 0.01 '      ,
+    'abs(l1_dxy) > 0.01 '      ,
 
     'l2_pt > 5 '               ,
     'abs(l2_eta) < 2.4 '       ,
-    # 'abs(l2_dxy) > 0.01 '       ,
+    'abs(l2_dxy) > 0.01 '       ,
 
     'hnl_q_12 == 0 '           ,
-    # 'min(abs(hnl_dphi_01), abs(hnl_dphi_02))>1.',
-    # 'hnl_dr_12 < 1.',
+    'min(abs(hnl_dphi_01), abs(hnl_dphi_02))>1.',
+    'hnl_dr_12 < 1.',
 
-    # 'hnl_2d_disp_sig>20',
-    # 'hnl_pt_12>15',
-    # 'sv_cos>0.99',
-    # 'sv_prob>0.001',
+    'hnl_2d_disp_sig>20',
+    'hnl_pt_12>15',
+    'sv_cos>0.99',
+    'sv_prob>0.001',
+    'pfmet_pt<100',
 
 
-    # '(nbj == 0)',# true SR
-    # '(hnl_w_vis_m > 50. && hnl_w_vis_m < 80.) ', # true SR
+    '(nbj == 0)',# true SR
+    '(hnl_w_vis_m > 45. && hnl_w_vis_m < 85.) ', # true SR
     
     # '!(nbj == 0)', # activate for SR orthogonal
     # '!(hnl_w_vis_m > 50. && hnl_w_vis_m < 80.) ', # activate for SR orthogonal (sideband)
@@ -644,7 +645,6 @@ def CustomRegion(channel):
     
     ## auxiliary selections
     # 'hnl_m_12 < 12',
-    # 'sv_cos > 0.',
     ])
 
     if (channel is 'mmm') or (channel is 'eee'):
