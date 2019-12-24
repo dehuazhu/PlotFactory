@@ -17,7 +17,6 @@ import ntup_dir as nt
 ntup_dir = nt.getntupdir()
 # Returns a TChain object which either contains all samples (allsamples = True) or a selected sample (allsamples = False) with different displacements. 
 def makechain(allsamples):    
-
     #access multiple trees by "chaining" them
     chain = ROOT.TChain('tree')
     # all_files = glob(ntup_dir + '*/HNLGenTreeProducer/tree.root')
@@ -128,7 +127,8 @@ def showlogopreliminary():
     preliminary.SetTextAlign(11)
     preliminary.SetTextFont(52)
     preliminary.SetTextSize(0.038)
-    preliminary.DrawLatex(0.24,0.94,'Preliminary')
+    # preliminary.DrawLatex(0.24,0.94,'Preliminary')
+    preliminary.DrawLatex(0.24,0.94,'work in progress')
     
 def showlogoprelimsim(text):
     logo = ROOT.TLatex()
