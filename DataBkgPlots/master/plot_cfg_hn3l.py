@@ -68,8 +68,10 @@ def prepareRegions(channel):
     # regions.append(Region('MR_nonprompt_v10_GhentSelection',channel,'SR'))
     # regions.append(Region('SR',channel,'SR'))
 
-    regions.append(Region('AN_AcceptancePlots1',channel,'CustomRegion'))
+    # regions.append(Region('AN_AcceptancePlots1',channel,'CustomRegion'))
+    # regions.append(Region('AN_ClosurePlots1',channel,'CustomRegion'))
     # regions.append(Region('AN_SR',channel,'CustomRegion'))
+    regions.append(Region('AN_Result',channel,'CustomRegion'))
     # regions.append(Region('CustomRegion',channel,'CustomRegion'))
     # regions.append(Region('SR_disp1',channel,'SR_disp1'))
     # regions.append(Region('SR_disp2',channel,'SR_disp2'))

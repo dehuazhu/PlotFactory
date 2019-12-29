@@ -123,7 +123,8 @@ class HistDrawer:
             pad.SetLogy(SetLogy)
 
 
-        plot.DrawStack('HIST', print_norm=plot.name=='_norm_', ymin=0.1) # magic word to print integrals in legend
+        # plot.DrawStack('HIST', print_norm=plot.name=='_norm_', ymin=0.1) # magic word to print integrals in legend
+        plot.DrawStack('HIST', print_norm=('_norm_' in plot.name), ymin=0.1) # magic word to print integrals in legend
 
         h = plot.supportHist
         h.GetXaxis().SetLabelColor(1)
