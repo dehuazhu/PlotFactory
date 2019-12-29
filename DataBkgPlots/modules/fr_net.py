@@ -259,9 +259,6 @@ def createArrays(features, branches, path_to_NeuralNet, faketype = 'DoubleFake',
                 df_fail = pd.concat([df_fail,array])
                 # print ('added fail events to df_pass: %d'%len(array))
 
-
-
-
     if multiprocess == False:
         for i,s in enumerate(samples_mc):
             sample = samples_mc[i]
@@ -426,7 +423,7 @@ def train(features,branches,path_to_NeuralNet,newArrays = False, faketype = 'Dou
     # history = model.fit(X[features], Y, epochs=500, validation_split=0.5, callbacks=[es])  
 
     # history = model.fit(xx, Y, batch_size = 512, epochs=1000, verbose = 1,  validation_split=0.5, callbacks=[es],sample_weight = np.array(data.contamination_weight))
-    history = model.fit(xx, Y, epochs=2000, validation_split=0.5, callbacks=[es, reduce_lr, save_model], batch_size=32, verbose=True, sample_weight=weight)  
+    history = model.fit(xx, Y, epochs=1000, validation_split=0.5, callbacks=[es, reduce_lr, save_model], batch_size=32, verbose=True, sample_weight=weight)  
 
     # plot loss function trends for train and validation sample
     plt.clf()

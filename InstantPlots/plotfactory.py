@@ -215,9 +215,11 @@ def setpfstyle():
     pfstyle.SetTitleOffset(1.35,"z")
 
     pfstyle.SetMarkerStyle(20)
-    pfstyle.SetMarkerSize(0.5)
-    pfstyle.SetLineWidth(1)
-    # pfstyle.SetHistLineWidth(2.)
+    # pfstyle.SetMarkerSize(0.5)
+    # pfstyle.SetLineWidth(1)
+    pfstyle.SetMarkerSize(1.3)
+    pfstyle.SetLineWidth(2)
+    pfstyle.SetHistLineWidth(4)
     pfstyle.SetLineStyleString(2,'[12 12]') # postscript dashes
     
     # Draw horizontal and vertical grids
