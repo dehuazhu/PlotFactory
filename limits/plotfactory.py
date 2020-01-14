@@ -49,15 +49,19 @@ def showlogopreliminary():
     logo.SetNDC()
     logo.SetTextAlign(11)
     logo.SetTextFont(61)
-    logo.SetTextSize(0.045)
-    logo.DrawLatex(0.15,0.94,'CMS')
+    # logo.SetTextSize(0.045)
+    logo.SetTextSize(0.05)
+    # logo.DrawLatex(0.15,0.94,'CMS')
+    logo.DrawLatex(0.2,0.84,'CMS')
     
     preliminary = ROOT.TLatex()
     preliminary.SetNDC()
     preliminary.SetTextAlign(11)
     preliminary.SetTextFont(52)
-    preliminary.SetTextSize(0.038)
-    preliminary.DrawLatex(0.24,0.94,'Work in Progress')
+    # preliminary.SetTextSize(0.038)
+    preliminary.SetTextSize(0.043)
+    # preliminary.DrawLatex(0.24,0.94,'work in progress')
+    preliminary.DrawLatex(0.28,0.84,'work in progress')
     
 def showlogoprelimsim(text):
     logo = ROOT.TLatex()
@@ -105,7 +109,8 @@ def setpfstyle():
 
     # Use large fonts
     font = 42
-    tsize = 0.045
+    # tsize = 0.045
+    tsize = 0.05
     pfstyle.SetTextFont(font)
 
     # Global Title Properties
@@ -140,8 +145,8 @@ def setpfstyle():
     pfstyle.SetTitleSize(tsize,"z")
 
     # pfstyle.SetTitleOffset(1.1,"x")
-    pfstyle.SetTitleOffset(1.1,"x")
-    pfstyle.SetTitleOffset(1.5,"y")
+    pfstyle.SetTitleOffset(0.5,"x")
+    pfstyle.SetTitleOffset(1.0,"y")
     pfstyle.SetTitleOffset(1.35,"z")
 
     pfstyle.SetMarkerStyle(20)
@@ -151,8 +156,10 @@ def setpfstyle():
     pfstyle.SetLineStyleString(2,'[12 12]') # postscript dashes
     
     # Draw horizontal and vertical grids
-    pfstyle.SetPadGridX(ROOT.kTRUE)
-    pfstyle.SetPadGridY(ROOT.kTRUE)
+    # pfstyle.SetPadGridX(ROOT.kTRUE)
+    # pfstyle.SetPadGridY(ROOT.kTRUE)
+    pfstyle.SetPadGridX(ROOT.kFALSE)
+    pfstyle.SetPadGridY(ROOT.kFALSE)
     pfstyle.SetGridStyle(3)
     pfstyle.SetPadTickX(1)
     pfstyle.SetPadTickY(1)

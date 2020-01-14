@@ -17,7 +17,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 # import shapely.geometry as sg
 import os
-from termcolor import colored
+# from termcolor import colored
 import plotfactory    
 from socket import gethostname
 from draw_limits_2d import draw_limits2D
@@ -233,7 +233,8 @@ def draw_limits(input_file, output_dir, ch='mmm', twoD=False, verbose=False):
 
     for mass in masses:
     # for m in [1,2,3,4,5,6,7,8,9,10]:
-        print(colored('doing MASS = %d GeV'%mass,'green'))
+        # print(colored('doing MASS = %d GeV'%mass,'green'))
+        print('### doing MASS = %d GeV'%mass)
 
         y_exp = []; y_ep1s = []; y_ep2s = []; y_em2s = []; y_em1s = [];  
         v2s   = [lim for lim in limits if 'M%d_' %mass in lim]
@@ -424,7 +425,7 @@ if __name__ == '__main__':
     # channels.append('eee')
     # channels.append('eem_OS')
     # channels.append('eem_SS')
-    channels.append('mCombined')
+    # channels.append('mCombined')
     channels.append('eCombined')
 
     for channel in channels:
@@ -439,7 +440,8 @@ if __name__ == '__main__':
         # base_dir   = '/work/dezhu/3_figures/2_Limits/2018/%s/20191125_SignalReweightNormalized_fixed2'%channel
         # base_dir   = '/work/dezhu/3_figures/2_Limits/2018/%s/20191128_WideV2'%channel
         # base_dir   = '/work/dezhu/3_figures/2_Limits/2018/%s/20191129_NewDispBin'%channel
-        base_dir   = '/work/dezhu/3_figures/2_Limits/2018/%s/20191129_NewDispBin'%channel
+        # base_dir   = '/work/dezhu/3_figures/2_Limits/2018/%s/20191129_NewDispBin'%channel
+        base_dir   = '/Users/dehuazhu/SynologyDrive/PhD/7_Writing/1912_AnalysisNote_HNL/AN-19-272/1_Sections/6_Interpretation/figures/Limits/%s/20191129_NewDispBin'%channel
         input_file = base_dir + '/output.txt'
 
         output_dir = base_dir + '/plots/' 

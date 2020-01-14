@@ -6,9 +6,9 @@ import re
 from pdb import set_trace
 import numpy as np
 from matplotlib import pyplot as plt
-import shapely.geometry as sg
+# import shapely.geometry as sg
 import os
-from termcolor import colored
+# from termcolor import colored
 import plotfactory    
 
 
