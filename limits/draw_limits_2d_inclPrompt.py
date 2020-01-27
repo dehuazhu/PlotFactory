@@ -11,10 +11,37 @@ import os
 # from termcolor import colored
 import plotfactory    
 
+def makeDelphiDisplaced():
+    masses = np.array([10.0**-0.365297, 10.0**-0.228311, 10.0**-0.125571, 10.0**-0.020548, 10.0**0.095890, 10.0**0.232877, 10.0**0.315068, 10.0**0.326484, 10.0**0.363014,10.0**0.413242, 10.0**0.461187, 10.0**0.506849, 10.0**0.552511, 10.0**0.586758, 10.0**0.609589, 10.0**0.618721, 10.0**0.625571, 10.0**0.632420, 10.0**0.639269, 10.0**0.646119, 10.0**0.655251, 10.0**0.655251])
+    exp = np.array([10.0**-2.000000, 10.0**-2.467626, 10.0**-2.827338, 10.0**-3.172662, 10.0**-3.561151, 10.0**-3.978417, 10.0**-4.215827, 10.0**-4.237410, 10.0**-4.323741, 10.0**-4.460432, 10.0**-4.582734, 10.0**-4.661871, 10.0**-4.712230, 10.0**-4.669065, 10.0**-4.503597, 10.0**-4.309353, 10.0**-4.079137, 10.0**-3.769784, 10.0**-3.431655, 10.0**-3.158273, 10.0**-2.985612, 10.0**-2.985612])
+
+    gr_exp = rt.TGraph(len(masses), masses, exp)
+    return gr_exp 
+
+def makeDelphiPrompt():
+    masses = np.array([10.0**0.292237442922374, 10.0**0.342465753424657, 10.0**0.390410958904109, 10.0**0.447488584474885, 10.0**0.481735159817351, 10.0**0.534246575342466, 10.0**0.591324200913242, 10.0**0.625570776255707, 10.0**0.652968036529680, 10.0**0.694063926940639, 10**0.732876712328766, 10**0.776255707762557, 10**0.815068493150685, 10**0.860730593607306, 10**0.915525114155251, 10**0.972602739726027, 10**1.038812785388127, 10**1.098173515981735, 10**1.166666666666666, 10**1.230593607305935, 10**1.280821917808219, 10**1.331050228310502, 10**1.381278538812785, 10**1.456621004566209, 10**1.513698630136986, 10**1.5867579908, 10**1.630136986301369, 10**1.666666666666666, 10**1.712328767123287, 10**1.751141552511415, 10**1.785388127853881, 10**1.815068493150684, 10**1.837899543378995, 10**1.856164383561643, 10**1.872146118721461, 10**1.888127853881278, 10**1.901826484018265])
+    exp = np.array([10**-2.19424460431654, 10**-2.49640287769784, 10**-2.78417266187050, 10**-3.11510791366906, 10**-3.33812949640287, 10**-3.63309352517985, 10**-3.95683453237410, 10**-4.14388489208633, 10**-4.30935251798561, 10**-4.47482014388489, 10**-4.59712230215827, 10**-4.68345323741007, 10**-4.72661870503597, 10**-4.75539568345323, 10**-4.74820143884892, 10**-4.73381294964028, 10**-4.72661870503597, 10**-4.72661870503597, 10** -4.70503597122302, 10**-4.68345323741007, 10**-4.67625899280575, 10**-4.66187050359712, 10**-4.63309352517985, 10**-4.60431654676259, 10**-4.60431654676259, 10**-4.60431654676259, 10**-4.59712230215827, 10**-4.56115107913669, 10**-4.48920863309352, 10**-4.38129496402877, 10**-4.20143884892086, 10**-3.98561151079136, 10**-3.73381294964028, 10**-3.50359712230215, 10**-3.20863309352517, 10**-2.92805755395683, 10**-2.64748201438848])
+    gr_exp = rt.TGraph(len(masses), masses, exp)
+    return gr_exp 
+
+def makeAtlasDisplacedMuonLNV():
+    # masses = np.array([4.1, 4.2, 4.4, 4.6, 5.2, 5.8, 6.0, 6.6, 6.8, 7.4, 7.8, 8.0, 8.1, 8.1, 7.8, 7.5, 7.0, 6.0 , 5.6, 5.2, 4.8, 4.4, 4.2])
+    # exp = np.array([2e-4, 4e-4, 5e-4, 4e-4, 2e-4, 1e-4, 8e-5, 4e-5, 3e-5, 1.3e-5, 8e-6, 5.3e-6, 3.5e-6, 2.5e-6, 2e-6, 1.9e-6, 2e-6, 3.1e-6, 4e-6, 6e-6, 1e-5, 2.3e-5, 4.3e-5])
+    masses = np.array([8.1, 7.8, 7.5, 7.0, 6.0 , 5.6, 5.2, 4.8, 4.4, 4.2])
+    exp = np.array([2.5e-6, 2e-6, 1.9e-6, 2e-6, 3.1e-6, 4e-6, 6e-6, 1e-5, 2.3e-5, 4.3e-5])
+    gr_exp = rt.TGraph(len(masses), masses, exp)
+    return gr_exp 
+
+def makeAtlasDisplacedMuonLNC():
+    # masses = np.array([4.1, 4.2, 4.4, 4.6, 5.2, 5.8, 6.0, 6.6, 6.8, 7.4, 7.8, 8.0, 8.1, 8.1, 7.8, 7.5, 7.0, 6.0 , 5.6, 5.2, 4.8, 4.4, 4.2])
+    # exp = np.array([2e-4, 4e-4, 5e-4, 4e-4, 2e-4, 1e-4, 8e-5, 4e-5, 3e-5, 1.3e-5, 8e-6, 5.3e-6, 3.5e-6, 2.5e-6, 2e-6, 1.9e-6, 2e-6, 3.1e-6, 4e-6, 6e-6, 1e-5, 2.3e-5, 4.3e-5])
+    masses = np.array([9.6, 9.2, 8.8, 8.0, 7.0, 6.0, 5.0, 4.2, 4.1])
+    exp = np.array([2.3e-6, 1.6e-6, 1.4e-6, 1.5e-6, 2e-6, 3.3e-6, 8e-6, 5e-5, 1e-4])
+    gr_exp = rt.TGraph(len(masses), masses, exp)
+    return gr_exp 
 
 
-# def draw_limits2D(input_file, output_dir, ch='mmm', twoD=False, verbose=False): 
-# def draw_limits2D(masses, x_err, y_exp, y_ep1s, y_ep2s, y_em1s, y_em2s, input_file, output_dir, ch='mmm', twoD=False, verbose=False): 
+
 def draw_limits2DWithPrompt(ExclusionLimits2D_low, ExclusionLimits2D_high, input_file, output_dir, ch='mmm', twoD=False, verbose=False): 
     '''
     #############################################################################
@@ -68,18 +95,6 @@ def draw_limits2DWithPrompt(ExclusionLimits2D_low, ExclusionLimits2D_high, input
     high_gr2 = rt.TGraphAsymmErrors(len(high_masses), np.array(high_masses), np.array(high_y_exp), np.array(high_x_err), np.array(high_x_err), np.array(high_y_em2s), np.array(high_y_ep2s))
     
     rt.gStyle.SetOptStat(0000)
-
-    # B_X  = np.logspace(-0.1,1,50,base=10)
-    # B_Y  = np.logspace(-11, 2, 50, base=10)
-    # framer = rt.TH2F('framer', 'framer', len(B_X)-1, B_X, len(B_Y)-1, B_Y)
-    # framer.GetXaxis().SetRangeUser(0, 10)
-    # framer.GetYaxis().SetRangeUser(1e-7,1)
-
-    # B_X  = np.logspace(-0.1,3,10,base=10)
-    # B_Y  = np.logspace(-11, 2, 10, base=10)
-    # framer = rt.TH2F('framer', 'framer', len(B_X)-1, B_X, len(B_Y)-1, B_Y)
-    # framer.GetXaxis().SetRangeUser(1, 40)
-    # framer.GetYaxis().SetRangeUser(1e-7,1)
 
     # B_X  = np.logspace(0,2.5,10,base=10)
     # B_X  = np.logspace(0.,1.,10)
@@ -168,7 +183,6 @@ def draw_limits2DWithPrompt(ExclusionLimits2D_low, ExclusionLimits2D_high, input
     framer.GetXaxis().SetTitleOffset(1.5)
     framer.Draw()
 
-
     # low_gr2.Draw('same, E1')
     low_gr2.Draw('same, E3')
     # low_gr1.Draw('same, E1')
@@ -176,12 +190,26 @@ def draw_limits2DWithPrompt(ExclusionLimits2D_low, ExclusionLimits2D_high, input
     # low_exp.Draw('same, LP')
     low_exp.Draw('same, L')
 
-    # high_gr2.Draw('same, E1')
-    # high_gr2.Draw('same, E3')
-    # high_gr1.Draw('same, E1')
-    # high_gr1.Draw('same, E3')
-    # high_exp.Draw('same, LP')
-    # high_exp.Draw('same, L')
+    DelphiDisplaced_exp =  makeDelphiDisplaced()
+    DelphiPrompt_exp =  makeDelphiPrompt()
+    AtlasDisplacedMuonLNV_exp = makeAtlasDisplacedMuonLNV()
+    AtlasDisplacedMuonLNC_exp = makeAtlasDisplacedMuonLNV()
+
+    for graph in [DelphiDisplaced_exp, DelphiPrompt_exp, AtlasDisplacedMuonLNV_exp, AtlasDisplacedMuonLNC_exp]:
+        graph.SetMarkerStyle(0)
+        graph.SetMarkerSize(1)
+        graph.SetLineStyle(1)
+        graph.SetLineWidth(2)
+
+        DelphiDisplaced_exp.SetMarkerColor(rt.kOrange+2)
+        DelphiDisplaced_exp.SetLineColor(  rt.kOrange+2)
+
+        DelphiPrompt_exp.SetMarkerColor(rt.kOrange+2)
+        DelphiPrompt_exp.SetLineColor(  rt.kOrange+2)
+        DelphiPrompt_exp.SetLineStyle(2)
+
+        AtlasDisplacedMuonLNV_exp.SetMarkerColor(rt.kPink+10)
+        AtlasDisplacedMuonLNV_exp.SetLineColor(  rt.kPink+10)
 
     if ch == 'mCombined': 
         promptMuonGraph_ep2.Draw('same, L')
@@ -189,6 +217,12 @@ def draw_limits2DWithPrompt(ExclusionLimits2D_low, ExclusionLimits2D_high, input
         promptMuonGraph_exp.Draw('same, L')
         promptMuonGraph_em1.Draw('same, L')
         promptMuonGraph_em2.Draw('same, L')
+
+        DelphiDisplaced_exp.Draw('same, L')
+        DelphiPrompt_exp.Draw('same, L')
+        AtlasDisplacedMuonLNV_exp.Draw('same, L')
+        # AtlasDisplacedMuonLNC_exp.Draw('same, L')
+    
     
     if ch == 'eCombined': 
         promptElectronGraph_exp.Draw('same, L')
@@ -198,12 +232,18 @@ def draw_limits2DWithPrompt(ExclusionLimits2D_low, ExclusionLimits2D_high, input
         promptElectronGraph_em2.Draw('same, L')
 
     # leg = rt.TLegend(.4,.75,.8,.88)
-    leg = rt.TLegend(.46,.58,.80,.79)
+    leg = rt.TLegend(.53,.58,.80,.88)
     leg.SetBorderSize(0)
     leg.AddEntry(low_exp, 'Expected', 'L')
     leg.AddEntry(low_gr1, 'Expected #pm 1 #sigma', 'CFL')
     leg.AddEntry(low_gr2, 'Expected #pm 2 #sigma', 'CFL')
     leg.AddEntry(promptMuonGraph_exp, 'CMS [EXO-17-012]', 'L')
+    # leg.AddEntry(DelphiDisplaced_exp, 'DELPHI long-lived')
+    # leg.AddEntry(DelphiPrompt_exp, 'DELPHI prompt')
+    # leg.AddEntry(AtlasDisplacedMuonLNV_exp, 'ATLAS')
+
+    # leg.AddEntry(AtlasDisplacedMuonLNV_exp, 'ATLAS LNV')
+    # leg.AddEntry(AtlasDisplacedMuonLNC_exp, 'ATLAS LNC')
     leg.Draw('apez same')
 
 
