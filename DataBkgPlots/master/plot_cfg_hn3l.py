@@ -68,10 +68,12 @@ def prepareRegions(channel):
     # regions.append(Region('MR_nonprompt_v10_GhentSelection',channel,'SR'))
     # regions.append(Region('SR',channel,'SR'))
 
-    # regions.append(Region('AN_AcceptancePlots1',channel,'CustomRegion'))
+    #regions.append(Region('AN_AcceptancePlots1',channel,'CustomRegion'))
     # regions.append(Region('AN_ClosurePlots1',channel,'CustomRegion'))
     # regions.append(Region('AN_SR',channel,'CustomRegion'))
-    regions.append(Region('AN_Result',channel,'CustomRegion'))
+    # regions.append(Region('AN_Result',channel,'CustomRegion'))
+    # regions.append(Region('AN_Feb',channel,'AN_Feb'))
+    regions.append(Region('AN_Feb',channel,'AN_Feb'))
     # regions.append(Region('CustomRegion',channel,'CustomRegion'))
     # regions.append(Region('SR_disp1',channel,'SR_disp1'))
     # regions.append(Region('SR_disp2',channel,'SR_disp2'))
@@ -198,6 +200,7 @@ def makePlots(plotDir,channel_name,variables, regions, total_weight, sample_dict
             HISTS = CreateHists(cfg_main, analysis_dir,channel_dir,server,useNeuralNetwork,dataset)
             plots = HISTS.createHistograms(cfg_main, verbose=False, multiprocess = multiprocess, signalReweight = signalReweight)
             plot = plots[var.name]
+            # set_trace()
             plot.Group('data_obs', ['data_2017A','data_2017B', 'data_2017C', 'data_2017D', 'data_2017E', 'data_2017F'])
             # plot.Group('doublefake', ['doublefake_B', 'doublefake_C', 'doublefake_D', 'doublefake_E', 'doublefake_F'])
             # plot.Group('singlefake', ['singlefake_B', 'singlefake_C', 'singlefake_D', 'singlefake_E', 'singlefake_F'])

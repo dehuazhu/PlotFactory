@@ -48,7 +48,9 @@ class dataCards(object):
             rate_obs_d1,  rate_obs_d2,  rate_obs_d3  = self.rates[disp_bins[0]]['obs' ].Integral(), self.rates[disp_bins[1]]['obs' ].Integral(), self.rates[disp_bins[2]]['obs' ].Integral()
             rate_conv_d1, rate_conv_d2, rate_conv_d3 = self.rates[disp_bins[0]]['conv'].Integral(), self.rates[disp_bins[1]]['conv'].Integral(), self.rates[disp_bins[2]]['conv'].Integral()
             rate_fake_d1, rate_fake_d2, rate_fake_d3 = self.rates[disp_bins[0]]['fake'].Integral(), self.rates[disp_bins[1]]['fake'].Integral(), self.rates[disp_bins[2]]['fake'].Integral()
-            rate_sig_d1,  rate_sig_d2,  rate_sig_d3  = self.rates[disp_bins[0]][signal_name ].Integral(), self.rates[disp_bins[1]][signal_name ].Integral(), self.rates[disp_bins[2]][signal_name ].Integral()
+            try:
+                rate_sig_d1,  rate_sig_d2,  rate_sig_d3  = self.rates[disp_bins[0]][signal_name ].Integral(), self.rates[disp_bins[1]][signal_name ].Integral(), self.rates[disp_bins[2]][signal_name ].Integral()
+            except: set_trace()
     
             # to prevent a zero denominator, rate_fake* should never be a complete zero
             if rate_fake_d1 < 0.01: rate_fake_d1 = 0.01
@@ -283,6 +285,10 @@ class dataCards(object):
        
         signals = [sig for sig in rates[disp_bin] if 'Vp' in sig]
         self.rates = rates
+
+       
+        # signals = ['M1_Vp707106781187', 'M10_Vp000547722557505', 'M4_Vp00290516780927', 'M10_Vp01', 'M5_Vp001', 'M8_Vp00151327459504', 'M5_Vp0707106781187', 'M5_Vp00145602197786', 'M4_Vp0707106781187', 'M11_Vp01', 'M8_Vp0316227766017', 'M5_Vp000316227766017', 'M10_Vp000756967634711', 'M20_Vp00316227766017', 'M2_Vp0248394846967', 'M3_Vp22360679775', 'M8_Vp000547722557505', 'M11_Vp00316227766017', 'M1_Vp212367605816', 'M3_Vp00707813534767', 'M10_Vp001', 'M20_Vp001', 'M5_Vp000547722557505', 'M7_Vp0316227766017', 'M2_Vp0110905365064', 'M6_Vp0316227766017', 'M8_Vp001', 'M6_Vp00202484567313', 'M1_Vp0949736805647', 'M2_Vp22360679775', 'M10_Vp000316227766017']
+ 
         for signal in signals:
             self.printDataCards(signal)
 
@@ -292,11 +298,11 @@ class dataCards(object):
 if __name__ == '__main__':
     channels = []
     channels.append('mmm')
-    channels.append('mem_OS')
-    channels.append('mem_SS')
-    channels.append('eee')
-    channels.append('eem_OS')
-    channels.append('eem_SS')
+    # channels.append('mem_OS')
+    # channels.append('mem_SS')
+    # channels.append('eee')
+    # channels.append('eem_OS')
+    # channels.append('eem_SS')
 
     for channel in channels:
         #original 2017
@@ -309,17 +315,18 @@ if __name__ == '__main__':
         # in_folders = glob('/work/dezhu/3_figures/1_DataMC/FinalStates/2018/0_datacards_v3_SignalReweightNormalized/%s/root/linear/' %channel)
         # in_folders = glob('/work/dezhu/3_figures/1_DataMC/FinalStates/2018/%s/datacard_v3_SigReweightNormalized_fixed/root/linear/' %channel)
         # in_folders = glob('/work/dezhu/3_figures/1_DataMC/FinalStates/2018/%s/datacard_v3_SigReweightNormalized_fixed2/root/linear/' %channel)
-        in_folders = glob('/work/dezhu/3_figures/1_DataMC/FinalStates/2018/%s/datacard_v5_BetterDisplacementBin/root/linear/' %channel)
+        # in_folders = glob('/work/dezhu/3_figures/1_DataMC/FinalStates/2018/%s/datacard_v5_BetterDisplacementBin/root/linear/' %channel)
+        in_folders = glob('/work/dezhu/3_figures/1_DataMC/FinalStates/2018/%s/AN_Feb/root/linear/' %channel)
 
         # output_base = '/work/dezhu/3_figures/2_Limits/2018/%s/20191120_Aachen'%channel
         # output_base = '/work/dezhu/3_figures/2_Limits/2018/%s/20191125_SignalReweight'%(channel)
-        output_base = '/work/dezhu/3_figures/2_Limits/2018/%s/20191129_NewDispBin'%(channel)
+        # output_base = '/work/dezhu/3_figures/2_Limits/2018/%s/20200123_AN_Feb'%(channel)
+        output_base = '/work/dezhu/3_figures/2_Limits/2018/%s/'%(channel)
         
         output_folder = output_base + '/datacards/'
 
         if not os.path.isdir(output_base): os.mkdir(output_base)
         if not os.path.isdir(output_folder): os.mkdir(output_folder)
-
         DC = dataCards(channel, in_folders, output_folder)
         DC.make_inputs(verbose=False)
         

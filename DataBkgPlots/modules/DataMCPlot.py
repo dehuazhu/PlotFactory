@@ -128,28 +128,30 @@ class DataMCPlot(object):
         from the first histogram in namesToGroup.
         See UnGroup as well
         '''
-        groupHist = None
-        realNames = []
-        actualNamesInGroup = []
-        for name in namesToGroup:
-            hist = self.histosDict.get(name, None)
-            if hist is None:
-                continue
-            if groupHist is None:
-                groupHist = hist.Clone(groupName)
-                self.histos.append(groupHist)
-                self.histosDict[groupName] = groupHist
-            else:
-                groupHist.Add(hist)
-            actualNamesInGroup.append(name)
-            realNames.append(hist.realName)
-            hist.on = False
-        if groupHist:
-            self.groups[groupName] = actualNamesInGroup
-            groupHist.realName = ','.join(realNames)
-            if style is not None:
-                groupHist.SetStyle(style)
-            self._ApplyPrefs()
+        try:
+            groupHist = None
+            realNames = []
+            actualNamesInGroup = []
+            for name in namesToGroup:
+                hist = self.histosDict.get(name, None)
+                if hist is None:
+                    continue
+                if groupHist is None:
+                    groupHist = hist.Clone(groupName)
+                    self.histos.append(groupHist)
+                    self.histosDict[groupName] = groupHist
+                else:
+                    groupHist.Add(hist)
+                actualNamesInGroup.append(name)
+                realNames.append(hist.realName)
+                hist.on = False
+            if groupHist:
+                self.groups[groupName] = actualNamesInGroup
+                groupHist.realName = ','.join(realNames)
+                if style is not None:
+                    groupHist.SetStyle(style)
+                self._ApplyPrefs()
+        except: set_trace()
 
     def UnGroup(self, groupName):
         '''Ungroup groupName, recover the histograms in the group'''

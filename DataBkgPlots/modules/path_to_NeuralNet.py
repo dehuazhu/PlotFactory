@@ -103,17 +103,23 @@ def path_to_NeuralNet(faketype ='nonprompt',channel = 'mmm', dataset = '2017', h
         if channel == 'mmm':
                 if dataset == '2018':
                     # path_to_NeuralNet = '/work/dezhu/7_NN/2018/mmm_nonprompt_v7_GhentSelection/'
-                    path_to_NeuralNet = '/work/dezhu/7_NN/2018/mmm_nonprompt_v8_ProductionT3/'
+                    # path_to_NeuralNet = '/work/dezhu/7_NN/2018/mmm_nonprompt_v8_ProductionT3/'
+                    path_to_NeuralNet = '/work/dezhu/7_NN/2018/mmm_AN_Feb_v1/'
         if channel == 'mem_OS':
-                    path_to_NeuralNet = '/work/dezhu/7_NN/2018/mem_OS_nonprompt_v1_Endgame/'
+                    # path_to_NeuralNet = '/work/dezhu/7_NN/2018/mem_OS_nonprompt_v1_Endgame/'
+                    path_to_NeuralNet = '/work/dezhu/7_NN/2018/mem_OS_AN_Feb_v1/'
         if channel == 'mem_SS':
-                    path_to_NeuralNet = '/work/dezhu/7_NN/2018/mem_SS_nonprompt_v1_Endgame/'
+                    # path_to_NeuralNet = '/work/dezhu/7_NN/2018/mem_SS_nonprompt_v1_Endgame/'
+                    path_to_NeuralNet = '/work/dezhu/7_NN/2018/mem_SS_AN_Feb_v1/'
         if channel == 'eee':
-                    path_to_NeuralNet = '/work/dezhu/7_NN/2018/eee_nonprompt_v1_Endgame/'
+                    # path_to_NeuralNet = '/work/dezhu/7_NN/2018/eee_nonprompt_v1_Endgame/'
+                    path_to_NeuralNet = '/work/dezhu/7_NN/2018/eee_AN_Feb_v1/'
         if channel == 'eem_OS':
-                    path_to_NeuralNet = '/work/dezhu/7_NN/2018/eem_OS_nonprompt_v1_Endgame/'
+                    # path_to_NeuralNet = '/work/dezhu/7_NN/2018/eem_OS_nonprompt_v1_Endgame/'
+                    path_to_NeuralNet = '/work/dezhu/7_NN/2018/eem_OS_AN_Feb_v1/'
         if channel == 'eem_SS':
-                    path_to_NeuralNet = '/work/dezhu/7_NN/2018/eem_OS_nonprompt_v1_Endgame/'
+                    # path_to_NeuralNet = '/work/dezhu/7_NN/2018/eem_SS_nonprompt_v1_Endgame/'
+                    path_to_NeuralNet = '/work/dezhu/7_NN/2018/eem_SS_AN_Feb_v1/'
     
 
     return path_to_NeuralNet 
