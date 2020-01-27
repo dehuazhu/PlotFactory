@@ -418,14 +418,14 @@ if __name__ == '__main__':
     plotfactory.setpfstyle()
 
     channels = []
-    # channels.append('mmm')
+    channels.append('mmm')
     # channels.append('mem_OS')
     # channels.append('mem_SS')
     # channels.append('eee')
     # channels.append('eem_OS')
     # channels.append('eem_SS')
-    channels.append('mCombined')
-    channels.append('eCombined')
+    # channels.append('mCombined')
+    # channels.append('eCombined')
 
     for channel in channels:
         #2017
@@ -439,7 +439,8 @@ if __name__ == '__main__':
         # base_dir   = '/work/dezhu/3_figures/2_Limits/2018/%s/20191125_SignalReweightNormalized_fixed2'%channel
         # base_dir   = '/work/dezhu/3_figures/2_Limits/2018/%s/20191128_WideV2'%channel
         # base_dir   = '/work/dezhu/3_figures/2_Limits/2018/%s/20191129_NewDispBin'%channel
-        base_dir   = '/work/dezhu/3_figures/2_Limits/2018/%s/20191129_NewDispBin'%channel
+        # base_dir   = '/work/dezhu/3_figures/2_Limits/2018/%s/20191129_NewDispBin'%channel
+        base_dir   = '/work/dezhu/3_figures/2_Limits/2018/%s/20200123_AN_Feb'%channel
         input_file = base_dir + '/output.txt'
 
         output_dir = base_dir + '/plots/' 

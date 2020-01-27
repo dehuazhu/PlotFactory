@@ -36,7 +36,8 @@ if __name__ == '__main__':
     # channels.append('m')
     channels.append('e')
 
-    datacardVersion = '20191129_NewDispBin'
+    # datacardVersion = '20191129_NewDispBin'
+    datacardVersion = '20200123_AN_Feb'
     for channel in channels:
         #new 2018
         if channel == 'm':

@@ -160,7 +160,7 @@ def createArrays(features, branches, path_to_NeuralNet, faketype = 'DoubleFake',
         selection_failing = region.DF
 
     if faketype == 'nonprompt':
-        region = Selections.Region('MR_nonprompt',channel,'SR')
+        region = Selections.Region('AN_Feb',channel,'AN_Feb')
         selection_passing    = region.data
         selection_failing    = region.nonprompt
         selection_passing_MC = region.MC_contamination_pass
@@ -347,10 +347,10 @@ def train(features,branches,path_to_NeuralNet,newArrays = False, faketype = 'Dou
 
     # new version
     input  = Input((len(features),))
-    layer  = Dense(4096, activation=activation   , name='dense1', kernel_constraint=unit_norm())(input)
-    layer  = Dropout(0.4, name='dropout1')(layer)
+    layer  = Dense(2048, activation=activation   , name='dense1', kernel_constraint=unit_norm())(input)
+    layer  = Dropout(0.5, name='dropout1')(layer)
     layer  = BatchNormalization()(layer)
-    layer  = Dense(128, activation=activation   , name='dense2', kernel_constraint=unit_norm())(layer)
+    layer  = Dense(32, activation=activation   , name='dense2', kernel_constraint=unit_norm())(layer)
     layer  = Dropout(0.4, name='dropout2')(layer)
     layer  = BatchNormalization()(layer)
     # layer  = Dense(16, activation=activation   , name='dense3', kernel_constraint=unit_norm())(layer)
@@ -359,9 +359,9 @@ def train(features,branches,path_to_NeuralNet,newArrays = False, faketype = 'Dou
     # layer  = Dense(16, activation=activation   , name='dense4', kernel_constraint=unit_norm())(layer)
     # layer  = Dropout(0.4, name='dropout4')(layer)
     # layer  = BatchNormalization()(layer)
-    layer  = Dense(16, activation=activation   , name='dense5', kernel_constraint=unit_norm())(layer)
-    layer  = Dropout(0.2, name='dropout5')(layer)
-    layer  = BatchNormalization()(layer)
+    # layer  = Dense(16, activation=activation   , name='dense5', kernel_constraint=unit_norm())(layer)
+    # layer  = Dropout(0.2, name='dropout5')(layer)
+    # layer  = BatchNormalization()(layer)
     output = Dense(  1, activation='sigmoid', name='output', )(layer)
 
     # Define outputs of your model
@@ -371,7 +371,8 @@ def train(features,branches,path_to_NeuralNet,newArrays = False, faketype = 'Dou
     # opt = SGD(lr=0.0001, momentum=0.8)
     # opt = Adam(lr=0.001, decay=0.1, beta_1=0.9, beta_2=0.999, amsgrad=False)
     # opt = Adam(decay=0.1, beta_1=0.9, beta_2=0.999, amsgrad=False)
-    opt = 'Adam'
+    # opt = 'Adam'
+    opt = Adam(lr=0.01, decay=0.05, beta_1=0.9, beta_2=0.999, amsgrad=True)
 
     # compile and choose your loss function (binary cross entropy for a 1-0 classification problem)
     model.compile(optimizer=opt, loss='binary_crossentropy', metrics=['mae','acc'])
@@ -404,17 +405,17 @@ def train(features,branches,path_to_NeuralNet,newArrays = False, faketype = 'Dou
     # monitor = 'val_mae'
 
     # early stopping
-    es = EarlyStopping(monitor=monitor, mode='auto', verbose=1, patience=30, restore_best_weights=True)
+    es = EarlyStopping(monitor=monitor, mode='auto', verbose=1, patience=50, restore_best_weights=True)
 
     # reduce learning rate when at plateau, fine search the minimum
-    reduce_lr = ReduceLROnPlateau(monitor=monitor, mode='auto', factor=0.2, patience=10, min_lr=0.00001, cooldown=10, verbose=True)
+    reduce_lr = ReduceLROnPlateau(monitor=monitor, mode='auto', factor=0.2, patience=5, min_lr=0.00001, cooldown=10, verbose=True)
 
     # save the model every now and then
     filepath = path_to_NeuralNet + 'saved-model-{epoch:04d}_val_loss_{val_loss:.4f}_val_acc_{val_acc:.4f}.h5'
     save_model = ModelCheckpoint(filepath, monitor='val_acc', verbose=1, save_best_only=True, save_weights_only=False, mode='auto', period=1)
 
     # weight the events according to their displacement (favour high displacement)
-    weight = np.array(np.power(X['hnl_2d_disp'], 0.2))
+    weight = np.array(np.power(X['hnl_2d_disp'], 0.25))
 
     xx = np.asarray(xx)
     Y  = np.asarray(Y)
@@ -955,12 +956,12 @@ def get_branches_nonprompt2(features):
 if __name__ == '__main__':
 
     ## select here the channel you want to analyze
-    # channel = 'mmm'    
+    channel = 'mmm'    
     # channel = 'eee'    
     # channel = 'eem_OS'
     # channel = 'eem_SS'
     # channel = 'mem_OS'
-    channel = 'mem_SS'
+    # channel = 'mem_SS'
 
 
     ## select the dataset 
@@ -972,9 +973,9 @@ if __name__ == '__main__':
     if dataset == '2017':
         analysis_dir    = '/home/dehuazhu/SESSD/4_production/'
     if dataset == '2018':
-        analysis_dir    = '/mnt/StorageElement1/4_production/2018/'
+        # analysis_dir    = '/mnt/StorageElement1/4_production/2018/'
         # analysis_dir = '/home/dehuazhu/SESSD/4_production/2018/'
-        # analysis_dir = '/work/dezhu/4_production/2018/'
+        analysis_dir = '/work/dezhu/4_production/2018/'
 
 
     # define input parameters
