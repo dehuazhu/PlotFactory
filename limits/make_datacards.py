@@ -33,7 +33,7 @@ class dataCards(object):
     def printDataCards(self, signal_name):
         '''
             #############################
-            ## writes the DC for       ##
+           ## writes the DC for       ##
             ## combine for all signals ##
             #############################
         '''
@@ -180,7 +180,7 @@ class dataCards(object):
         for disp_bin in ['disp1','disp2','disp3']:
             fin_name = ''
             for fileName in os.listdir(in_folder): 
-                if disp_bin in fileName: fin_name = fileName
+                if ('money_'+disp_bin) in fileName: fin_name = fileName
             if fin_name == '': set_trace()
             fin = rt.TFile(in_folder + fin_name)
         # end 2017/2018 difference
@@ -289,6 +289,7 @@ class dataCards(object):
        
         # signals = ['M1_Vp707106781187', 'M10_Vp000547722557505', 'M4_Vp00290516780927', 'M10_Vp01', 'M5_Vp001', 'M8_Vp00151327459504', 'M5_Vp0707106781187', 'M5_Vp00145602197786', 'M4_Vp0707106781187', 'M11_Vp01', 'M8_Vp0316227766017', 'M5_Vp000316227766017', 'M10_Vp000756967634711', 'M20_Vp00316227766017', 'M2_Vp0248394846967', 'M3_Vp22360679775', 'M8_Vp000547722557505', 'M11_Vp00316227766017', 'M1_Vp212367605816', 'M3_Vp00707813534767', 'M10_Vp001', 'M20_Vp001', 'M5_Vp000547722557505', 'M7_Vp0316227766017', 'M2_Vp0110905365064', 'M6_Vp0316227766017', 'M8_Vp001', 'M6_Vp00202484567313', 'M1_Vp0949736805647', 'M2_Vp22360679775', 'M10_Vp000316227766017']
  
+        # set_trace()
         for signal in signals:
             self.printDataCards(signal)
 
@@ -297,12 +298,12 @@ class dataCards(object):
 
 if __name__ == '__main__':
     channels = []
-    channels.append('mmm')
+    # channels.append('mmm')
     # channels.append('mem_OS')
-    # channels.append('mem_SS')
-    # channels.append('eee')
-    # channels.append('eem_OS')
-    # channels.append('eem_SS')
+    channels.append('mem_SS')
+    channels.append('eee')
+    channels.append('eem_OS')
+    channels.append('eem_SS')
 
     for channel in channels:
         #original 2017
@@ -320,8 +321,8 @@ if __name__ == '__main__':
 
         # output_base = '/work/dezhu/3_figures/2_Limits/2018/%s/20191120_Aachen'%channel
         # output_base = '/work/dezhu/3_figures/2_Limits/2018/%s/20191125_SignalReweight'%(channel)
-        # output_base = '/work/dezhu/3_figures/2_Limits/2018/%s/20200123_AN_Feb'%(channel)
-        output_base = '/work/dezhu/3_figures/2_Limits/2018/%s/'%(channel)
+        output_base = '/work/dezhu/3_figures/2_Limits/2018/%s/20200123_AN_Feb'%(channel)
+        # output_base = '/work/dezhu/3_figures/2_Limits/2018/%s/2020'%(channel)
         
         output_folder = output_base + '/datacards/'
 
