@@ -236,9 +236,9 @@ def draw_limits2DWithPrompt(ExclusionLimits2D_low, ExclusionLimits2D_high, input
     leg.AddEntry(low_gr1, 'Expected #pm 1 #sigma', 'CFL')
     leg.AddEntry(low_gr2, 'Expected #pm 2 #sigma', 'CFL')
     leg.AddEntry(promptMuonGraph_exp, 'CMS [EXO-17-012]', 'L')
-    # leg.AddEntry(DelphiDisplaced_exp, 'DELPHI long-lived')
-    # leg.AddEntry(DelphiPrompt_exp, 'DELPHI prompt')
-    # leg.AddEntry(AtlasDisplacedMuonLNV_exp, 'ATLAS')
+    leg.AddEntry(DelphiDisplaced_exp, 'DELPHI long-lived')
+    leg.AddEntry(DelphiPrompt_exp, 'DELPHI prompt')
+    leg.AddEntry(AtlasDisplacedMuonLNV_exp, 'ATLAS')
 
     # leg.AddEntry(AtlasDisplacedMuonLNV_exp, 'ATLAS LNV')
     # leg.AddEntry(AtlasDisplacedMuonLNC_exp, 'ATLAS LNC')
@@ -250,7 +250,6 @@ def draw_limits2DWithPrompt(ExclusionLimits2D_low, ExclusionLimits2D_high, input
     # plotfactory.showlumi('N#rightarrow%s;  59.7 fb^{-1}  (13 TeV)'%(ch))
     plotfactory.showlumi('59.7 fb^{-1}  (13 TeV)')
     can.Update()
-    set_trace()
 
     if not os.path.isdir(output_dir + 'pdf'): os.mkdir(output_dir + 'pdf')
     if not os.path.isdir(output_dir + 'png'): os.mkdir(output_dir + 'png')
