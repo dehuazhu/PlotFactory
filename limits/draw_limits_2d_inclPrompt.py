@@ -51,7 +51,8 @@ def draw_limits2DWithPrompt(ExclusionLimits2D_low, ExclusionLimits2D_high, input
     #############################################################################
     '''
 
-    promptMuonDirectory     = '/Users/dehuazhu/SynologyDrive/PhD/7_Writing/1912_AnalysisNote_HNL/AN-19-272/1_Sections/6_Interpretation/figures/Limits/limitsMuonMixing.root'
+    # promptMuonDirectory     = '/Users/dehuazhu/SynologyDrive/PhD/7_Writing/1912_AnalysisNote_HNL/AN-19-272/1_Sections/6_Interpretation/figures/Limits/limitsMuonMixing.root'
+    promptMuonDirectory     = '/work/dezhu/3_figures/2_Limits/PromptAnalysis/limitsMuonMixing.root'
     promptMuonFile = rt.TFile(promptMuonDirectory)
     promptMuonGraph_ep2 = promptMuonFile.Get('expected_2sigmaUp')
     promptMuonGraph_ep1 = promptMuonFile.Get('expected_1sigmaUp')
@@ -59,7 +60,8 @@ def draw_limits2DWithPrompt(ExclusionLimits2D_low, ExclusionLimits2D_high, input
     promptMuonGraph_em1 = promptMuonFile.Get('expected_1sigmaDown')
     promptMuonGraph_em2 = promptMuonFile.Get('expected_2sigmaDown')
 
-    promptElectronDirectory = '/Users/dehuazhu/SynologyDrive/PhD/7_Writing/1912_AnalysisNote_HNL/AN-19-272/1_Sections/6_Interpretation/figures/Limits/limitsElectronMixing.root'
+    # promptElectronDirectory = '/Users/dehuazhu/SynologyDrive/PhD/7_Writing/1912_AnalysisNote_HNL/AN-19-272/1_Sections/6_Interpretation/figures/Limits/limitsElectronMixing.root'
+    promptElectronDirectory = '/work/dezhu/3_figures/2_Limits/PromptAnalysis/limitsElectronMixing.root'
     promptElectronFile = rt.TFile(promptElectronDirectory)
     promptElectronGraph_ep2 = promptMuonFile.Get('expected_2sigmaUp')
     promptElectronGraph_ep1 = promptMuonFile.Get('expected_1sigmaUp')
@@ -280,7 +282,7 @@ if __name__ == '__main__':
     # base_dir   = '/work/dezhu/3_figures/2_Limits/2018/%s/20191120_Aachen'%channel
     # base_dir   = '/work/dezhu/3_figures/2_Limits/2018/%s/20191121_RiccardoDatacards'%channel
     # base_dir   = '/work/dezhu/3_figures/2_Limits/2018/%s/20191125_SignalReweight'%channel
-    base_dir   = '/Users/dehuazhu/SynologyDrive/PhD/7_Writing/1912_AnalysisNote_HNL/AN-19-272/1_Sections/6_Interpretation/figures/Limits/%s/20191129_NewDispBin'%channel
+    # base_dir   = '/Users/dehuazhu/SynologyDrive/PhD/7_Writing/1912_AnalysisNote_HNL/AN-19-272/1_Sections/6_Interpretation/figures/Limits/%s/20191129_NewDispBin'%channel
     input_file = base_dir + '/output.txt'
 
     output_dir = base_dir + '/output/' 

@@ -13,8 +13,8 @@ def makeCombinedDataCards(channel, output_folder, in_folder_XXX, in_folder_Xem_O
         # make sure that we're talking about the same sample
         if channel == 'm': fileNameBase = re.sub('mmm.txt','',fileNameXXX)
         if channel == 'e': fileNameBase = re.sub('eee.txt','',fileNameXXX)
+        fileNameBase = re.sub('_reweighted_dc','',fileNameBase)
         if (fileNameBase not in fileNamesXem_OS[i]) or (fileNameBase not in fileNamesXem_SS[i]): 
-            set_trace()
             continue
 
         filePathXXX     = in_folder_XXX       + fileNameXXX
@@ -33,7 +33,7 @@ def makeCombinedDataCards(channel, output_folder, in_folder_XXX, in_folder_Xem_O
 
 if __name__ == '__main__':
     channels = []
-    # channels.append('m')
+    channels.append('m')
     channels.append('e')
 
     # datacardVersion = '20191129_NewDispBin'
